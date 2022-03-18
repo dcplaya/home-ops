@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: cloudflare/cloudflared
-      tag: "2022.3.2"
+      tag: "2022.3.3"
     replicaCount: 3
     # Tunnel ID should be unique per instance of running cloudflared
     tunnelID: "${CLOUDFLARE_TUNNEL_ID}"
