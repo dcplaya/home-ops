@@ -74,8 +74,6 @@ spec:
           nfs:
             server: "${NAS_ADDRESS}"
             path: /Backups/Kubernetes/${CLUSTER_NAME}/Applications/radarr-4k
-          # mountOptions:
-            # - nfsvers=4.2
         mountPath: /config/Backups
 
     ingress:
