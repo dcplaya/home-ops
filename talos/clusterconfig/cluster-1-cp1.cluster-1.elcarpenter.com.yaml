@@ -1,0 +1,118 @@
+version: v1alpha1
+debug: false
+persist: true
+machine:
+  type: controlplane
+  token: 1l0b2e.byxtnea5gn4gtmxf
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQakNCOGFBREFnRUNBaEFZeEpiRVgyaEVGVVBKTnc3UkFBMmlNQVVHQXl0bGNEQVFNUTR3REFZRFZRUUsKRXdWMFlXeHZjekFlRncweU1qQTVNREV3TlRFd01qRmFGdzB6TWpBNE1qa3dOVEV3TWpGYU1CQXhEakFNQmdOVgpCQW9UQlhSaGJHOXpNQ293QlFZREsyVndBeUVBaFBpUnhCQzBQSWdudFR3amF0dHA2WjlOS0lVQzZFUGUreU9pClp1d3BDZWlqWVRCZk1BNEdBMVVkRHdFQi93UUVBd0lDaERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUkKS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVOUhScEhLVFhaTEVRcENqRApLZzlhWXFYUVpaWXdCUVlESzJWd0EwRUFGdXk0blRrazBkM2lVZ1ZNYjN3aGNqRGVKc0U3U1hRckJPSFBKc1Y2ClkyZkZEUHBmSVZBSTVtR1Vsdk85WE9sZlh4YWt2anhDWWkrVEl2SWh3VjZZQlE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: LS0tLS1CRUdJTiBFRDI1NTE5IFBSSVZBVEUgS0VZLS0tLS0KTUM0Q0FRQXdCUVlESzJWd0JDSUVJRWx3NXJqTlovSnVjYXZ5WDZqQmswTXVrd0hsVGJDWEJkQWo1SG1YRVlBWgotLS0tLUVORCBFRDI1NTE5IFBSSVZBVEUgS0VZLS0tLS0K
+  certSANs:
+    - cluster-1.elcarpenter.com
+    - 10.200.1.1
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:v1.25.2
+    extraArgs:
+      feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true,MixedProtocolLBService=true,EphemeralContainers=true,ServerSideApply=true
+      rotate-server-certificates: "true"
+    defaultRuntimeSeccompProfileEnabled: true
+    nodeIP:
+      validSubnets:
+        - 10.200.1.0/24
+  network:
+    hostname: cp1.cluster-1.elcarpenter.com
+    interfaces:
+      - interface: eth0
+        mtu: 9000
+        dhcp: true
+    nameservers:
+      - 10.255.253.1
+    disableSearchDomain: true
+  install:
+    diskSelector:
+      size: <= 200GB
+    extraKernelArgs:
+      - talos.logging.kernel=udp://10.200.1.51:6050/
+    image: ghcr.io/siderolabs/installer:v1.2.3
+    bootloader: true
+    wipe: false
+  time:
+    disabled: false
+    servers:
+      - 10.255.253.1
+  sysctls:
+    fs.inotify.max_user_instances: "8192"
+    fs.inotify.max_user_watches: "1048576"
+  registries:
+    mirrors:
+      k8s.gcr.io:
+        endpoints:
+          - https://registry.k8s.io
+          - https://k8s.gcr.io
+  features:
+    rbac: true
+    stableHostname: true
+cluster:
+  id: 10tpC97Mh-dsMV0JeiA1dwA8yzTnRwgznEKFaXmZNhY=
+  secret: +jrCnG/UwZgnjNaXjafEuwNJ8dmdFpkZnJJa/P6Lw2k=
+  controlPlane:
+    endpoint: https://cluster-1.elcarpenter.com:6443
+  clusterName: cluster-1
+  network:
+    cni:
+      name: none
+    dnsDomain: cluster.local
+    podSubnets:
+      - 10.40.0.0/16
+    serviceSubnets:
+      - 10.41.0.0/16
+  token: bbxlyk.awvowmd50wp36agc
+  aescbcEncryptionSecret: Q/Rtp2HCfQrnrjnAD1brPQ7ME0lrrr/Xn40lojX84xc=
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpekNDQVRDZ0F3SUJBZ0lSQUlRc1FsQnUvamtCN3pxbWxRcURmb1V3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlNakE1TURFd05URXdNakZhRncwek1qQTRNamt3TlRFdwpNakZhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVM5ZXZLSHAwUnh1dGo3T29naXhwZEFKblFpSzl0cE93UXlOT2ZSQktpalU5Lzk3NTR4UTRiOWVSTEoKc3FhS3M4NG01N0ZSQW9RZldvMlhFVHU4SUJzMm8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGSGw3YkY0WnlRaGVGRndqYTdFVFlVVGNQbVMzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDd09WblMKQVVMbEIzdWVtbnRSZXRMVnZPbDhXWCtPaDMwc0pyb0g5Q1F6Z2dJaEFPQUxqYnJSblpQMjBJQVZXQ1ZQcFUzSQpON1B4VWI5TTYycUJOTXh2SjBwNwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSU1JWE44S1hPTS83MWh6MTdCRWNlc2hEVHlJZi9IS29RWHZxT0YzWlg0VjNvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFdlhyeWg2ZEVjYnJZK3pxSUlzYVhRQ1owSWl2YmFUc0VNalRuMFFTb28xUGYvZStlTVVPRwovWGtTeWJLbWlyUE9KdWV4VVFLRUgxcU5seEU3dkNBYk5nPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+  aggregatorCA:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJYakNDQVFXZ0F3SUJBZ0lRTWdsa1hnaEx4MXNqMkNGcHBYbFgrVEFLQmdncWhrak9QUVFEQWpBQU1CNFgKRFRJeU1Ea3dNVEExTVRBeU1Wb1hEVE15TURneU9UQTFNVEF5TVZvd0FEQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxRwpTTTQ5QXdFSEEwSUFCQll5bkdqWWRmY1VQM2NPdzlMbHE4a0FlVXJYb3JBNDE5TEh0VGM0eXd2MHdiR3R6N21uCnNMd0hPNUJPRTZWZCtURE1ZRnJSbHpFTjBtdTQ1N0xERUdhallUQmZNQTRHQTFVZER3RUIvd1FFQXdJQ2hEQWQKQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZApCZ05WSFE0RUZnUVU0OTlCZnE5elRma0NYUHVvWEgwc1o0cWptQTB3Q2dZSUtvWkl6ajBFQXdJRFJ3QXdSQUlnClp2Z1Byc3gzTXVJaC9tU2VWV25zQTFQalVSdHFIQWY1ZUJtWkNwS3dnY3NDSUNXOXNHVFdzQUVMZ3FSSXVVNjcKTzdkMzR4azZkeVc3V0JEU1pCdVdFRGdHCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSU5sSVRWV29hL21RaGlqNXEya0d6ZDE3bEE3TGVBbjVEU1VOSWN2ZnhMSytvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFRmpLY2FOaDE5eFEvZHc3RDB1V3J5UUI1U3RlaXNEalgwc2UxTnpqTEMvVEJzYTNQdWFldwp2QWM3a0U0VHBWMzVNTXhnV3RHWE1RM1NhN2puc3NNUVpnPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+  serviceAccount:
+    key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUVnaDRqUlY1aFJGa1RNZ054TXhVWWhVeGQ3Rkx6Q1RHY1lKU2NVRkNWRklvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFU0R5aTNKQkRhNTVnZTB2a0JvQ3kvS08zaXkxSG5scU9PVTRZeUdoMjk0azh3UjB3S1BIUwpmL1NsMm5lNmFjaEtzVnNDUk5pcTl5cHFLTVVHSjNucW1nPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+  apiServer:
+    image: k8s.gcr.io/kube-apiserver:v1.25.2
+    extraArgs:
+      feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+    certSANs:
+      - cluster-1.elcarpenter.com
+      - 10.200.1.1
+    disablePodSecurityPolicy: true
+  controllerManager:
+    image: k8s.gcr.io/kube-controller-manager:v1.25.2
+    extraArgs:
+      feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+  proxy:
+    disabled: true
+    image: k8s.gcr.io/kube-proxy:v1.25.2
+    extraArgs:
+      feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+  scheduler:
+    image: k8s.gcr.io/kube-scheduler:v1.25.2
+    extraArgs:
+      feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+  discovery:
+    enabled: true
+    registries:
+      kubernetes:
+        disabled: true
+      service:
+        disabled: true
+  etcd:
+    ca:
+      crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJmakNDQVNTZ0F3SUJBZ0lSQU13ZVRRekZhRkVIcHRub09JdzI1bDh3Q2dZSUtvWkl6ajBFQXdJd0R6RU4KTUFzR0ExVUVDaE1FWlhSalpEQWVGdzB5TWpBNU1ERXdOVEV3TWpGYUZ3MHpNakE0TWprd05URXdNakZhTUE4eApEVEFMQmdOVkJBb1RCR1YwWTJRd1dUQVRCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTTVUyQ3JyL3YzCk5TenlUWWJUMWp1bjBHaW5oc0s5OVZKRVlSTTRZZGZQNk9QQkRpb01ReDhhL1VEeEJ0ZzZIcXltcnpqQU54YTMKVnlWQytnTmNoQ3ZLbzJFd1h6QU9CZ05WSFE4QkFmOEVCQU1DQW9Rd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSApBd0VHQ0NzR0FRVUZCd01DTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkw0RDY0UUw3V21VCmNHVGd1YmViSS9SU2cwOUVNQW9HQ0NxR1NNNDlCQU1DQTBnQU1FVUNJUUQ0bFFsa0VvOXBmN1M4ekNQVWVhbWoKUTZ1UGRUaTRwYTdHZWdrdEdvMFRmd0lnUWF2S25QNnRvWGNmaXVYVlU2TkoxNmhiNEVWZXZIbEF1K0Y5SjdiTQp4RzA9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      key: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUNCMGU4a21xTVF1cG1SOFB2TVYrdmFkRHpKWVBXMEFtRm16T0xvbThBUFFvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFakZOZ3E2Lzc5elVzOGsyRzA5WTdwOUJvcDRiQ3ZmVlNSR0VUT0dIWHoramp3UTRxREVNZgpHdjFBOFFiWU9oNnNwcTg0d0RjV3QxY2xRdm9EWElRcnlnPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+    extraArgs:
+      election-timeout: "5000"
+    subnet: 10.200.1.0/24
+  coreDNS:
+    image: docker.io/coredns/coredns:1.10.0
+  extraManifests:
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/ha-install.yaml
+    - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml

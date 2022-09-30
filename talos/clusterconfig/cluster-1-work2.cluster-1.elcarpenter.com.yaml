@@ -1,0 +1,91 @@
+version: v1alpha1
+debug: false
+persist: true
+machine:
+  type: worker
+  token: 1l0b2e.byxtnea5gn4gtmxf
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQakNCOGFBREFnRUNBaEFZeEpiRVgyaEVGVVBKTnc3UkFBMmlNQVVHQXl0bGNEQVFNUTR3REFZRFZRUUsKRXdWMFlXeHZjekFlRncweU1qQTVNREV3TlRFd01qRmFGdzB6TWpBNE1qa3dOVEV3TWpGYU1CQXhEakFNQmdOVgpCQW9UQlhSaGJHOXpNQ293QlFZREsyVndBeUVBaFBpUnhCQzBQSWdudFR3amF0dHA2WjlOS0lVQzZFUGUreU9pClp1d3BDZWlqWVRCZk1BNEdBMVVkRHdFQi93UUVBd0lDaERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUkKS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVOUhScEhLVFhaTEVRcENqRApLZzlhWXFYUVpaWXdCUVlESzJWd0EwRUFGdXk0blRrazBkM2lVZ1ZNYjN3aGNqRGVKc0U3U1hRckJPSFBKc1Y2ClkyZkZEUHBmSVZBSTVtR1Vsdk85WE9sZlh4YWt2anhDWWkrVEl2SWh3VjZZQlE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: ""
+  certSANs:
+    - cluster-1.elcarpenter.com
+    - 10.200.1.1
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:v1.25.2
+    extraArgs:
+      feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true,MixedProtocolLBService=true,EphemeralContainers=true,ServerSideApply=true
+      rotate-server-certificates: "true"
+    defaultRuntimeSeccompProfileEnabled: true
+    nodeIP:
+      validSubnets:
+        - 10.200.1.0/24
+  network:
+    hostname: work2.cluster-1.elcarpenter.com
+    interfaces:
+      - interface: eth0
+        mtu: 9000
+        dhcp: true
+      - interface: eth1
+        vlans:
+          - routes: []
+            dhcp: true
+            vlanId: 2
+            mtu: 1500
+            dhcpOptions:
+              routeMetric: 2048
+          - routes: []
+            dhcp: true
+            vlanId: 100
+            mtu: 1500
+            dhcpOptions:
+              routeMetric: 4096
+        mtu: 9000
+        dhcp: false
+    nameservers:
+      - 10.255.253.1
+  install:
+    diskSelector:
+      size: <= 200GB
+    image: ghcr.io/siderolabs/installer:v1.2.3
+    bootloader: true
+    wipe: false
+  time:
+    disabled: false
+    servers:
+      - 10.255.253.1
+  registries:
+    mirrors:
+      k8s.gcr.io:
+        endpoints:
+          - https://registry.k8s.io
+          - https://k8s.gcr.io
+  features:
+    rbac: true
+    stableHostname: true
+cluster:
+  id: 10tpC97Mh-dsMV0JeiA1dwA8yzTnRwgznEKFaXmZNhY=
+  secret: +jrCnG/UwZgnjNaXjafEuwNJ8dmdFpkZnJJa/P6Lw2k=
+  controlPlane:
+    endpoint: https://cluster-1.elcarpenter.com:6443
+  network:
+    cni:
+      name: none
+    dnsDomain: cluster.local
+    podSubnets:
+      - 10.40.0.0/16
+    serviceSubnets:
+      - 10.41.0.0/16
+  token: bbxlyk.awvowmd50wp36agc
+  aescbcEncryptionSecret: ""
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpekNDQVRDZ0F3SUJBZ0lSQUlRc1FsQnUvamtCN3pxbWxRcURmb1V3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlNakE1TURFd05URXdNakZhRncwek1qQTRNamt3TlRFdwpNakZhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVM5ZXZLSHAwUnh1dGo3T29naXhwZEFKblFpSzl0cE93UXlOT2ZSQktpalU5Lzk3NTR4UTRiOWVSTEoKc3FhS3M4NG01N0ZSQW9RZldvMlhFVHU4SUJzMm8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGSGw3YkY0WnlRaGVGRndqYTdFVFlVVGNQbVMzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDd09WblMKQVVMbEIzdWVtbnRSZXRMVnZPbDhXWCtPaDMwc0pyb0g5Q1F6Z2dJaEFPQUxqYnJSblpQMjBJQVZXQ1ZQcFUzSQpON1B4VWI5TTYycUJOTXh2SjBwNwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: ""
+  discovery:
+    enabled: true
+    registries:
+      kubernetes:
+        disabled: true
+      service: {}
+  extraManifests:
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/ha-install.yaml
+    - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
