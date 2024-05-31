@@ -54,7 +54,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/kasm
-              tag: 1.15.0
+              tag: 1.120.20221218
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
