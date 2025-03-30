@@ -1,0 +1,211 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app coder
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  rollback:
+    recreate: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+
+    serviceAccount:
+      name: "coder"
+      create: true
+
+    defaultPodOptions:
+      automountServiceAccountToken: true
+      enableServiceLinks: true
+      hostname: "${CLUSTER_NAME}-code-server"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: &uid 1000 # Coder UID
+        runAsGroup: *uid
+        fsGroup: *uid
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [ 34, 10000 ]
+        seccompProfile: { type: RuntimeDefault }
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - "coder"
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      nodeSelector:
+        kubernetes.io/arch: "amd64"
+
+    controllers:
+      coder:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        # initContainers:
+        #   init-db:
+        #     image:
+        #       repository: ghcr.io/onedr0p/postgres-init
+        #       tag: 16
+        #     envFrom: &envFrom
+        #       - secretRef:
+        #           name: coder-secret
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: "4.98.2@sha256:9ed588a05d4e81aa464e753a409bc3b2b93267323d1c3975fbddf6f9aef84c26"
+              pullPolicy: IfNotPresent
+            # command: [ "dumb-init", "/bin/bash", "-c" ]
+            # args: [ "/home/linuxbrew/.linuxbrew/sbin/sshd -p 2222 || true; /usr/bin/code-server --auth none --disable-telemetry --user-data-dir /home/coder/.vscode --extensions-dir /home/coder/.vscode --bind-addr 0.0.0.0:8080 --port 8080 /home/coder" ]
+            env:
+              TZ: "${TIMEZONE}"
+              # AUTH: "none"
+              USER_DATA_DIR: "/home/coder/.vscode"
+              EXTENSIONS_DIR: "/home/coder/.vscode"
+              HOME: "/home/coder"
+              SSH_AUTH_SOCK: ""
+              CODER_PROMETHEUS_ENABLE: true # needs additional config, which I have not setup 
+              KUBERNETES_SERVICE_HOST: "cluster-2.${INGRESS_DOMAIN}"
+              KUBERNETES_SERVICE_PORT: 6443
+              SOPS_AGE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: "coder-secrets"
+                    key: "age.agekey"
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: &port 8080
+      ssh:
+        enabled: true
+        primary: false
+        controller: *app
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
+        annotations:
+          coredns.io/hostname: "vs-ssh.${INGRESS_DOMAIN}"
+          io.cilium/lb-ipam-ips: "${LB_CODER}"
+        ports:
+          http:
+            enabled: true
+            port: 22
+            targetPort: 2222
+            protocol: TCP
+          ssh2:
+            port: 22222
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+        globalMounts:
+        - subPath: "data"
+          path: "/home/coder"
+        - subPath: "ssh"
+          path: "/home/coder/.ssh" # override secret mount perms
+        - subPath: "nix-var"
+          path: "/nix/var"
+      misc:
+        # not backed up
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}-no-backup
+        globalMounts:
+        - subPath: "ignore"
+          path: "/home/coder/ignore"
+        - subPath: "brew"
+          path: "/home/linuxbrew"
+        - subPath: "nix"
+          path: "/nix/store"
+        - subPath: "cache"
+          path: "/home/coder/.cache"
+        - subPath: "local"
+          path: "/home/coder/.local"
+        - subPath: "mise"
+          path: "/home/coder/.local/share/mise"
+        - subPath: "go"
+          path: "/home/coder/go"
+        # - subPath: "bash_history"
+        #   path: "/home/coder/.bash_history"
+        # - subPath: "bashrc"
+        #   path: "/home/coder/.bashrc"
+        # - subPath: "bash_profile"
+        #   path: "/home/coder/.bash_profile"
+      tmp:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        globalMounts:
+        - subPath: "tmp"
+          path: "/tmp"
+          readOnly: false
+      secrets:
+        enabled: true
+        type: secret
+        name: "coder-secrets"
+        # defaultMode: 0600
+        advancedMounts:
+          coder:
+            app:
+            - subPath: "ssh-privkey"
+              path: "/home/coder/.ssh/id_ed25519"
+              readOnly: true
+            - subPath: "ssh-pubkey"
+              path: "/home/coder/.ssh/id_ed25519.pub"
+              readOnly: true
+      talos-admin:
+        enabled: true
+        type: secret
+        name: "talos"
+        defaultMode: 400
+        advancedMounts:
+          coder:
+            app:
+            - path: "/var/run/secrets/talos.dev"
+              readOnly: true
+            - path: "/home/coder/.talos"
+              readOnly: true
+    ingress:
+      app:
+        enabled: true
+        # className: "internal"
+        className: "external"
+        annotations:
+          external-dns/is-public: "true"
+          external-dns.alpha.kubernetes.io/target: "ingress-ext.${INGRESS_DOMAIN}"
+        hosts:
+        - host: &host "coder.${INGRESS_DOMAIN}"
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
+        tls:
+        - hosts:
+          - *host

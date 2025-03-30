@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app pgadmin
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      pgadmin:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 5050 # ${APP_UID}
+            runAsGroup: 5050 # ${APP_GID}
+            fsGroup: 5050 # ${APP_GID}
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: dpage/pgadmin4
+              tag: 9.1@sha256:bdebdfc4b165c10d0ad60e58f1d7ef41af6c881c9556ae331adaa35bba6dacf3
+            env:
+              PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
+              PGADMIN_CONFIG_AUTHENTICATION_SOURCES: "['ldap', 'internal']"
+              # PGADMIN_CONFIG_AUTHENTICATION_SOURCES: "['internal']"
+              PGADMIN_CONFIG_LDAP_AUTO_CREATE_USER: "True"
+              PGADMIN_CONFIG_LDAP_SERVER_URI: "'ldaps://lldap.${INGRESS_DOMAIN}:636'"
+              PGADMIN_CONFIG_LDAP_SEARCH_BASE_DN: "'ou=people,dc=elcarpenter,dc=com'"
+              PGADMIN_CONFIG_LDAP_SEARCH_FILTER: "'(uid=*)'"
+              PGADMIN_CONFIG_LDAP_USERNAME_ATTRIBUTE: "'uid'"
+              PGADMIN_CONFIG_LDAP_BIND_USER: "'uid=service_pgadmin,ou=people,dc=elcarpenter,dc=com'"
+              PGADMIN_CONFIG_LDAP_BIND_PASSWORD: "'${PGADMIN_LLDAP_PASSWORD}'"
+            envFrom:
+            - secretRef:
+                name: pgadmin-secret
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                memory: 500Mi
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: 80
+    ingress:
+      app:
+        enabled: true
+        className: "internal-nginx"
+        annotations:
+          hajimari.io/icon: mdi:database
+        hosts:
+        - host: &host "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
+        tls:
+        - hosts:
+          - *host
+    persistence:
+      config:
+        enabled: true
+        existingClaim: *app
+        globalMounts:
+        - path: /var/lib/pgadmin
+      server-json:
+        type: configMap
+        name: pgadmin-configmap
+        globalMounts:
+        - path: /pgadmin4/servers.json
+          subPath: servers.json
