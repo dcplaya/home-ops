@@ -4,10 +4,8 @@ bpf:
   masquerade: true
   # Ref: https://github.com/siderolabs/talos/issues/10002
   hostLegacyRouting: true
-#% if cilium_bgp_enabled %#
 bgpControlPlane:
   enabled: true
-#% endif %#
 cni:
   # Required for pairing with Multus CNI
   exclusive: false
@@ -27,7 +25,7 @@ hubble:
   enabled: false
 ipam:
   mode: kubernetes
-ipv4NativeRoutingCIDR: "#{ cluster_pod_cidr }#"
+ipv4NativeRoutingCIDR: ${NETWORK_K8S_POD_CIDR}
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
 kubeProxyReplacement: true
@@ -35,8 +33,9 @@ kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
   enabled: true
 loadBalancer:
+  acceleration: best-effort
   algorithm: maglev
-  mode: "#{ cilium_loadbalancer_mode }#"
+  mode: dsr
 localRedirectPolicy: true
 operator:
   dashboards:
