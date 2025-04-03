@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: ./k8s/clusters/cluster-2/manifests/network/external-dns/shared
-  prune: true
+  prune: false #Set To True
   sourceRef:
     kind: GitRepository
     name: home-ops
@@ -30,7 +30,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   path: ./k8s/clusters/cluster-2/manifests/network/external-dns/external
-  prune: true
+  prune: false #Set To True
   dependsOn:
   - name: externaldns-shared
   sourceRef:
@@ -58,7 +58,7 @@ spec:
 #     labels:
 #       app.kubernetes.io/name: *appname
 #   path: ./k8s/clusters/cluster-2/manifests/network/external-dns/powerdns
-#   prune: true
+#   prune: false #Set To True
 #   dependsOn:
 #   - name: externaldns-shared
 #   sourceRef:
@@ -85,7 +85,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   path: ./k8s/clusters/cluster-2/manifests/network/external-dns/unifi
-  prune: true
+  prune: false #Set To True
   dependsOn:
   - name: externaldns-shared
   sourceRef:

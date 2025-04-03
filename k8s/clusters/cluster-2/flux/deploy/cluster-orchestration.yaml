@@ -12,7 +12,7 @@ spec:
     - name: flux
     - name: cluster-crds
   path: ./k8s/clusters/cluster-2/flux/orchestration
-  prune: true
+  prune: false #Set To True
   wait: true
   sourceRef:
     kind: GitRepository

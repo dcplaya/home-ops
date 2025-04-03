@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./k8s/clusters/cluster-2/manifests/network/ingress-nginx/shared"
-  prune: true
+  prune: false #Set To True
   sourceRef:
     kind: GitRepository
     name: home-ops
@@ -34,7 +34,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./k8s/clusters/cluster-2/manifests/network/ingress-nginx/external"
-  prune: true
+  prune: false #Set To True
   sourceRef:
     kind: GitRepository
     name: home-ops
@@ -55,7 +55,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./k8s/clusters/cluster-2/manifests/network/ingress-nginx/internal"
-  prune: true
+  prune: false #Set To True
   sourceRef:
     kind: GitRepository
     name: home-ops
