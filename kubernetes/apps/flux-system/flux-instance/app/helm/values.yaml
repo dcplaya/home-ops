@@ -6,12 +6,12 @@ instance:
   cluster:
     networkPolicy: false
   components:
-    - source-controller
-    - kustomize-controller
-    - helm-controller
-    - notification-controller
+  - source-controller
+  - kustomize-controller
+  - helm-controller
+  - notification-controller
   sync:
     kind: GitRepository
     url: "https://github.com/dcplaya/home-ops.git"
-    ref: "refs/heads/Migrate-To-Cluster-Template-Style"
+    ref: "refs/heads/main"
     path: kubernetes/flux/cluster
