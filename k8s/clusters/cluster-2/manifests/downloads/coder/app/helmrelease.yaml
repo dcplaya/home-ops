@@ -96,11 +96,11 @@ spec:
               CODER_PROMETHEUS_ENABLE: true # needs additional config, which I have not setup 
               KUBERNETES_SERVICE_HOST: "cluster-2.${INGRESS_DOMAIN}"
               KUBERNETES_SERVICE_PORT: 6443
-              SOPS_AGE_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: "coder-secrets"
-                    key: "age.agekey"
+              # SOPS_AGE_KEY:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: "coder-secrets"
+              #       key: "age.agekey"
 
     service:
       app:
@@ -183,6 +183,9 @@ spec:
               readOnly: true
             - subPath: "ssh-pubkey"
               path: "/home/coder/.ssh/id_ed25519.pub"
+              readOnly: true
+            - subPath: "age.agekey"
+              path: "/home/coder/.config/sops/age/keys.txt"
               readOnly: true
       talos-admin:
         enabled: true
