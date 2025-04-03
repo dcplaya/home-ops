@@ -9,7 +9,7 @@ spec:
     - name: flux
   interval: 10m0s
   path: ./k8s/clusters/cluster-2/flux/vars
-  prune: true
+  prune: false #Set To True
   wait: true
   sourceRef:
     kind: GitRepository

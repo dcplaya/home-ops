@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./k8s/clusters/cluster-2/manifests/database/cloudnative-pg/app
-  prune: true
+  prune: false #Set To True
 #   dependsOn:
 #     - name: network-namespace
   sourceRef:
@@ -46,7 +46,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./k8s/clusters/cluster-2/manifests/database/cloudnative-pg/cluster
-  prune: true
+  prune: false #Set To True
 #   dependsOn:
 #     - name: network-namespace
   sourceRef:

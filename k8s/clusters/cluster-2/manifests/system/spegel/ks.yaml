@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./k8s/clusters/cluster-2/manifests/system/spegel/app"
-  prune: true
+  prune: false #Set To True
   sourceRef:
     kind: GitRepository
     name: home-ops

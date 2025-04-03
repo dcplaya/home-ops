@@ -9,7 +9,7 @@ spec:
   - name: kube-prometheus-stack
   interval: 5m
   path: "./k8s/clusters/cluster-2/manifests/flux-system"
-  prune: true
+  prune: false #Set To True
   wait: true
   sourceRef:
     kind: GitRepository

@@ -12,7 +12,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./k8s/clusters/cluster-2/manifests/system/node-feature-discovery/app
-  prune: true
+  prune: false #Set To True
 #   dependsOn:
 #     - name: network-namespace
   sourceRef:
@@ -40,7 +40,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./k8s/clusters/cluster-2/manifests/system/node-feature-discovery/rules
-  prune: true
+  prune: false #Set To True
   wait: true
   dependsOn:
     - name: node-feature-discovery
