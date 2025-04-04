@@ -621,6 +621,7 @@ controlPlane:
           allowedKubernetesNamespaces:
             - kube-system
             - downloads
+            - actions-runner-system
 
 worker:
   schematic:
