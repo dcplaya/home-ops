@@ -63,6 +63,9 @@ spec:
           - mountPath: /var/run/secrets/talos.dev
             name: talos
             readOnly: true
+        # Needed to allow the runner permissions to use /home/runner/_work folder
+        securityContext:
+          fsGroup: 123
         serviceAccountName: *name
         volumes:
         - name: talos
