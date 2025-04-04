@@ -37,7 +37,7 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
-  values:
-    manager:
-      devices:
-        gpu: true
+#   values:
+#     manager:
+#       devices:
+#         gpu: true
