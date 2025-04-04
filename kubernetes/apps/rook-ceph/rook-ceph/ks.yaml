@@ -59,6 +59,9 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/rook-ceph/rook-ceph/cluster
   postBuild:
+    substituteFrom:
+    - name: cluster-secrets
+      kind: Secret
     substitute:
       APP: *app
       GATUS_SUBDOMAIN: rook
