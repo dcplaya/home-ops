@@ -58,6 +58,10 @@ spec:
       osd_scrub_auto_repair = true
     cephClusterSpec:
       cephConfig:
+        resources:
+          osd:
+            requests:
+              cpu: 500m
         global:
           bdev_enable_discard: "true" # quote
           bdev_async_discard_threads: "1" # quote   4 caused nodes to overload CPU
