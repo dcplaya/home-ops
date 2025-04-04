@@ -10,22 +10,22 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    # - ../../../../components/gatus/guarded
-    - ../../../../components/volsync
+  # - ../../../../components/gatus/guarded
+  - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-    - name: intel-device-plugin-gpu
-      namespace: system
+  - name: rook-ceph-cluster
+    namespace: rook-ceph
+  - name: intel-device-plugin-gpu
+    namespace: kube-system
   interval: 1h
   path: ./kubernetes/apps/media/plex/app
   postBuild:
     substituteFrom:
-      - name: cluster-secrets
-        kind: Secret
+    - name: cluster-secrets
+      kind: Secret
     substitute:
       APP: *app
-      NAMESPACE: *namespace 
+      NAMESPACE: *namespace
       GATUS_PATH: /web/index.html
       VOLSYNC_CAPACITY: 400Gi
       VOLSYNC_CACHE_CAPACITY: 100Gi

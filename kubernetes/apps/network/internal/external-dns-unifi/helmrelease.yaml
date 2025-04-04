@@ -77,7 +77,8 @@ spec:
     # - --managed-record-types=CNAME
     # - --managed-record-types=SRV
     policy: sync
-    sources: [ "ingress", "service", "gateway-httproute" ]
+    # sources: [ "ingress", "service", "gateway-httproute" ]
+    sources: [ "ingress", "service" ]
     txtOwnerId: k8s.
     txtPrefix: default
     domainFilters: [ "${SECRET_DOMAIN}" ]
