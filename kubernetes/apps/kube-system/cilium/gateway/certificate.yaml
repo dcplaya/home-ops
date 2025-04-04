@@ -1,11 +1,11 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cert-manager.io/certificate_v1.json
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "${INGRESS_DOMAIN}"
+  name: "${SECRET_DOMAIN/./-}-production"
 spec:
-  secretName: "elcarpenter-com-tls"
+  secretName: "${SECRET_DOMAIN/./-}-production-tls"
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
@@ -14,4 +14,5 @@ spec:
   - "*.${INGRESS_DOMAIN}"
   - "${INGRESS_DOMAIN}"
   - "*.${CLUSTER_NAME}.${INGRESS_DOMAIN}"
+  # - "${CLUSTER_NAME}.${INGRESS_DOMAIN}"
   - "*.s3.${CLUSTER_NAME}.${INGRESS_DOMAIN}"

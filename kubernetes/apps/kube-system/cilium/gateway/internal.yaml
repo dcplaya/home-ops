@@ -34,4 +34,4 @@ spec:
     tls:
       certificateRefs:
       - kind: Secret
-        name: devbu-io-tls
+        name: "${SECRET_DOMAIN/./-}-production"
