@@ -179,6 +179,9 @@ spec:
             - subPath: "ssh-pubkey"
               path: "/home/coder/.ssh/id_ed25519.pub"
               readOnly: true
+            - subPath: "age.agekey"
+              path: "/home/coder/.config/sops/age/keys.txt"
+              readOnly: true
       talos-admin:
         enabled: true
         type: secret
@@ -194,7 +197,6 @@ spec:
     ingress:
       app:
         enabled: true
-        # className: "internal-nginx"
         className: "external-nginx"
         annotations:
           external-dns/is-public: "true"
