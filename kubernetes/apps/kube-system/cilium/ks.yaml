@@ -40,6 +40,10 @@ spec:
     namespace: cert-manager
   interval: 1h
   path: ./kubernetes/apps/kube-system/cilium/gateway
+  postBuild:
+    substituteFrom:
+    - name: cluster-secrets
+      kind: Secret
   prune: true
   sourceRef:
     kind: GitRepository
