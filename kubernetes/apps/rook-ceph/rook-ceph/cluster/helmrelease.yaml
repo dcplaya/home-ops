@@ -106,6 +106,10 @@ spec:
         osd:
           requests:
             cpu: "500m"
+        mon:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
       # The option to automatically remove OSDs that are out and are safe to destroy.
       removeOSDsIfOutAndSafeToRemove: true
       storage:
