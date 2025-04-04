@@ -82,14 +82,14 @@ spec:
         prometheusEndpoint: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
       mgr:
         modules:
-          - name: diskprediction_local
-            enabled: true
-          - name: insights
-            enabled: true
-          - name: pg_autoscaler
-            enabled: true
-          - name: rook
-            enabled: true
+        - name: diskprediction_local
+          enabled: true
+        - name: insights
+          enabled: true
+        - name: pg_autoscaler
+          enabled: true
+        - name: rook
+          enabled: true
       mon:
         count: 3
         allowMultiplePerNode: false
@@ -128,9 +128,6 @@ spec:
           - name: "/dev/disk/by-id/ata-ST18000NM000J-2TV103_ZR5061XS"
             config:
               metadataDevice: "/dev/disk/by-id/ata-VK0800GDJYA_BTWL341407WN800RGN"
-              
-
-
 
         - name: n100-02
           devices:
@@ -141,10 +138,6 @@ spec:
           - name: "/dev/disk/by-id/ata-ST18000NM000J-2TV103_ZR5060G7"
             config:
               metadataDevice: "/dev/disk/by-id/ata-INTEL_SSDSC2KB960G8_PHYF911600AW960CGN"
-
-
-
-
 
         - name: n100-04
           devices:
@@ -206,33 +199,33 @@ spec:
           # NVMe
           - name: "/dev/disk/by-id/nvme-ADATA_SX8200PNP_2K302L2E11RJ"
     cephBlockPools:
-      - name: ceph-blockpool-nvme
-        spec:
-          deviceClass: nvme
-          failureDomain: host
-          replicated:
-            size: 2
-        storageClass:
-          enabled: true
-          name: ceph-blockpool-nvme
-          isDefault: true
-          reclaimPolicy: Delete
-          allowVolumeExpansion: true
-          volumeBindingMode: Immediate
-          mountOptions: ["discard"]
-          parameters:
-            # TODO: Consider enabling compression on cluster rebuild
-            # compression_mode: aggressive
-            # compression_algorithm: zstd
-            imageFormat: "2"
-            imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-            csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/fstype: ext4
+    - name: ceph-blockpool-nvme
+      spec:
+        deviceClass: nvme
+        failureDomain: host
+        replicated:
+          size: 2
+      storageClass:
+        enabled: true
+        name: ceph-blockpool-nvme
+        isDefault: true
+        reclaimPolicy: Delete
+        allowVolumeExpansion: true
+        volumeBindingMode: Immediate
+        mountOptions: [ "discard" ]
+        parameters:
+          # TODO: Consider enabling compression on cluster rebuild
+          # compression_mode: aggressive
+          # compression_algorithm: zstd
+          imageFormat: "2"
+          imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
+          csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+          csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+          csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+          csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+          csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+          csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+          csi.storage.k8s.io/fstype: ext4
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
       name: csi-ceph-blockpool
@@ -290,11 +283,11 @@ spec:
         allowVolumeExpansion: true
         parameters:
           csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-          csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
           csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-          csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
           csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-          csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
           csi.storage.k8s.io/fstype: ext4
     cephFileSystemVolumeSnapshotClass:
       enabled: true
