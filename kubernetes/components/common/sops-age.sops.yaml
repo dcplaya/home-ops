@@ -1,27 +1,26 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: sops-age
+    name: sops-age
 stringData:
-  sops.agekey: ENC[AES256_GCM,data:qs5BPvU0VQ8478Vua9pBxrPrsr0LpsbPrxj2wnpxf4ot9JnVpQ5HScjIalLaBTgeuXxG+BTRO5xTe1F2/W5F7ilMTNhuf0uIWq0LEeMFBPl4VYqv4DWbkF+N1ma4JK3loJnjZA==,iv:s6rBxmTkcT4Lf7EYQJYLwxsw4qIQPe437sm7foaebZc=,tag:RNi8RFqt4IDYgay+u927OA==,type:str]
+    sops.agekey: ENC[AES256_GCM,data:5l0KXFM9n/PEu2NmneGeYr+xFu2c5EYGxiq9lsh4m7qlrsKMTyWjjTqI99SdRe4lhZQ9WVrnIUXqKW7JWZ++KNUB1vtvmj70Nf+ZzMO75Rt9WVc016LukCy6s8E+udWtkJQgaA==,iv:qp6a07BxxDBo9wnZ5MrIc5tbR9u12h+ld6WhVJS0m1k=,tag:rd9M4ltFadMbIqrDe5t+Sg==,type:str]
 sops:
-  kms: []
-  gcp_kms: []
-  azure_kv: []
-  hc_vault: []
-  age:
-    - recipient: age1vx8dy8603amp9yuplkgvxaxu37y47d6myfw3urw55n7uazvqe9lsurpkxa
-      enc: |
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjdlR4WU1BTXVvVHp4Zk4r
-        VzNhcVNLSzE0QU82TjFSSmpWakRUd3ZCajFzCjBTSFNTcm51K1JOL2t4ZnAwVk9L
-        a1ZlV2M3TUV1TUJoUUVReWp1RGFUNDgKLS0tIDNmMGk3YlhzWjV3YlE5TWRMMXBh
-        ckYrK2NVQTZ4NDRmck1KbnVhWkorRzgKsMrQELqZSdoLfb0Cp5Yjd/Re9RWbEG93
-        pJzQvNP8ifLiFFibkCmRAmgnblh1QDhTGBQBoT48Q2LNUXdVFbEAEA==
-        -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-03-28T20:57:43Z"
-  mac: ENC[AES256_GCM,data:2vjtCLTygFGAh41w2xjshvJ5InhTU2jJWuQpO1rvQX93mUfSj110iVLfkYAWLvflVJsWDFuv3K686dnRibmtuHRO6i/OCi6cRhe87x4aEgT08xc6JfDytAa+auGkhs9o0G9xxC0Y/HYF8V4qs20oNN/kEvCwX2T1HtIINrVDy78=,iv:u6tfoOPcAnYDb8ixkZnnveN0gspMidKnABy0E/LoROE=,tag:jjyHsW6T8lq/5m0c5767Gg==,type:str]
-  pgp: []
-  encrypted_regex: ^(data|stringData)$
-  mac_only_encrypted: true
-  version: 3.9.4
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1vx8dy8603amp9yuplkgvxaxu37y47d6myfw3urw55n7uazvqe9lsurpkxa
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuYitDNVdLMHVmZ05RVEQr
+            QXNzelFjc1JXTEdvUGZXNGVhUTV2T2FxNUdnCnJWSVFqYjRJOVpMTGNacHY3bU82
+            cjlUZGRGOW1yaXRRYlpmU0tiQ2lVYjgKLS0tIDl6OGwwTEMwSUFuVVBWOTJ2MFhp
+            WnEvOU9HNEJkTk4wVUlJME9rbUd0SHcKOpG7HYLCeMtiVUXimw74V+9f0/xMsaLG
+            vsWTw0HDevx8d6eVtYQGGuXoWJj8BzwqyukH7jBa22v1fDMPC9wodw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-04-04T00:33:20Z"
+    mac: ENC[AES256_GCM,data:M1ao2hxPmRlsQbRSm9IdYupfCaQrC08/XnCsJpOF3WFWT/fgxZZNU4DoDsUh965f5vyEzOob/v7pcsxIFz6MkohWTSjL+qO5UFjU4aJuUdn0QXEGf/BBloN9JeGEl5U0w5736i1JRnbauaLp3CoccPZtn6CDAZJGTJNvwlvuDwc=,iv:koJ0VZpnjzCjX9Rx6msXJ/1B5PRgf4INGid78XN9NUY=,tag:PzOjB8wPVeDk6Dm+/Ln4ww==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1
