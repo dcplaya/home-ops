@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "Meta Sync labels"
+name: Label Sync
 
 on:
   workflow_dispatch:
@@ -14,25 +14,17 @@ permissions:
   issues: write
 
 jobs:
-  labels:
-    name: Sync Labels
+  main:
+    name: Label Sync - Sync Labels
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
-        id: generate-token
-        with:
-          app_id: "${{ secrets.DCPLAYA_APP_ID }}"
-          private_key: "${{ secrets.DCPLAYA_APP_PRIVATE_KEY }}"
-
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          token: "${{ steps.generate-token.outputs.token }}"
+          sparse-checkout: .github/labels.yaml
 
       - name: Sync Labels
         uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
         with:
           config-file: .github/labels.yaml
-          token: "${{ steps.generate-token.outputs.token }}"
           delete-other-labels: true
