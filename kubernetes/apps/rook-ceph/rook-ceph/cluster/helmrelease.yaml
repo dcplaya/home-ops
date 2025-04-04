@@ -106,10 +106,19 @@ spec:
         osd:
           requests:
             cpu: "100m"
+            memory: 2Gi
         mon:
           requests:
-            cpu: "500m"
+            cpu: "100m"
             memory: "1Gi"
+        mgr:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        mgr-sidecar:
+          requests:
+            cpu: 50m
+            memory: 128Mi
       # The option to automatically remove OSDs that are out and are safe to destroy.
       removeOSDsIfOutAndSafeToRemove: true
       storage:
