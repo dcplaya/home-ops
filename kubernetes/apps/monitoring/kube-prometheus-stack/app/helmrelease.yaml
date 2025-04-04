@@ -44,7 +44,7 @@ spec:
     alertmanager:
       ingress:
         enabled: true
-        ingressClassName: internal
+        ingressClassName: internal-nginx
         hosts: [ "alertmanager.${INGRESS_DOMAIN}" ]
         pathType: Prefix
       alertmanagerSpec:
@@ -144,7 +144,7 @@ spec:
     prometheus:
       ingress:
         enabled: true
-        ingressClassName: internal
+        ingressClassName: internal-nginx
         pathType: Prefix
         hosts:
         - &host_prometheus prometheus.${INGRESS_DOMAIN}
