@@ -158,7 +158,7 @@ spec:
     ingress:
       app:
         enabled: true
-        className: "internal"
+        className: "internal-nginx"
         annotations:
           nginx.ingress.kubernetes.io/rewrite-target: /$1
         #   cert-manager.io/cluster-issuer: letsencrypt-production

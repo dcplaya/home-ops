@@ -93,9 +93,9 @@ spec:
               matchExpressions:
               - key: app.kubernetes.io/name
                 operator: In
-                values: ["plex"]
+                values: [ "plex" ]
             # Blank selector selects all namespaces. Null namespace selector locks it to the same namespace as the HR
-            namespaces: ["media", "downloads", "home-automation"]
+            namespaces: [ "media", "downloads", "home-automation" ]
             topologyKey: kubernetes.io/hostname
       nodeSelector:
         google.feature.node.kubernetes.io/coral: "true"
@@ -177,7 +177,7 @@ spec:
     ingress:
       app:
         enabled: true
-        className: "internal"
+        className: "internal-nginx"
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:

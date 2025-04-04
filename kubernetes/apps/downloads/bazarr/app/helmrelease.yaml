@@ -33,8 +33,8 @@ spec:
         runAsGroup: ${APP_GID}
         fsGroup: ${APP_GID}
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [34, 10000]
-        seccompProfile: {type: RuntimeDefault}
+        supplementalGroups: [ 34, 10000 ]
+        seccompProfile: { type: RuntimeDefault }
     controllers:
       bazarr:
         annotations:
@@ -68,7 +68,7 @@ spec:
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              capabilities: { drop: [ "ALL" ] }
             resources:
               requests:
                 cpu: "0.04"
@@ -119,7 +119,7 @@ spec:
       scripts:
         type: configMap
         name: bazarr-scripts
-        defaultMode: 0775
+        defaultMode: 775
         globalMounts:
         - readOnly: true
       tmp:
@@ -163,7 +163,7 @@ spec:
     ingress:
       app:
         enabled: true
-        className: "internal"
+        className: "internal-nginx"
         # annotations:
         #   external-dns.alpha.kubernetes.io/target: "ingress-int.${INGRESS_DOMAIN}"
         hosts:
@@ -177,5 +177,3 @@ spec:
         tls:
         - hosts:
           - *host
-
-
