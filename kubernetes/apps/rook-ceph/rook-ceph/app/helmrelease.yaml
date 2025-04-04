@@ -39,8 +39,6 @@ spec:
       # NOTE: needed to allow cephfs mounts to work reliably
       cephFSKernelMountOptions: ms_mode=prefer-secure
       # NOTE: Enable the driver and shapshotter if you want to use CephFS
-      enableCephfsDriver: false
-      enableCephfsSnapshotter: false
       enableLiveness: true
       serviceMonitor:
         enabled: true

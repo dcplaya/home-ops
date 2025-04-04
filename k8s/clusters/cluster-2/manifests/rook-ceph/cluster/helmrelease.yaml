@@ -202,9 +202,6 @@ spec:
           - name: "/dev/disk/by-id/ata-ST18000NM000J-2TV103_ZR5061XS"
             config:
               metadataDevice: "/dev/disk/by-id/ata-VK0800GDJYA_BTWL341407WN800RGN"
-              
-
-
 
         - name: n100-02
           devices:
@@ -215,10 +212,6 @@ spec:
           - name: "/dev/disk/by-id/ata-ST18000NM000J-2TV103_ZR5060G7"
             config:
               metadataDevice: "/dev/disk/by-id/ata-INTEL_SSDSC2KB960G8_PHYF911600AW960CGN"
-
-
-
-
 
         - name: n100-04
           devices:
