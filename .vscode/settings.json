@@ -22,5 +22,6 @@
     ],
     "sops.beta": false,
     "sops.creationEnabled": true,
-    "ansible.python.interpreterPath": "/bin/python"
+    "ansible.python.interpreterPath": "/bin/python",
+    "sops.binPath": "sops"
 }

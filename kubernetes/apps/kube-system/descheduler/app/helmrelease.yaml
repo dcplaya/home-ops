@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: kubernetes-sigs-descheduler-charts
+  namespace: kube-system # Required for Renovate lookups
+spec:
+  interval: 1h
+  url: https://kubernetes-sigs.github.io/descheduler
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app descheduler
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: *app
+      version: 0.32.2
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-sigs-descheduler-charts
+        namespace: flux-system
+      interval: 15m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    replicas: 1
+    kind: Deployment
+    deschedulerPolicyAPIVersion: descheduler/v1alpha2
+    deschedulerPolicy:
+      profiles:
+      - name: Default
+        pluginConfig:
+        - name: DefaultEvictor
+          args:
+            evictFailedBarePods: true
+            evictLocalStoragePods: true
+            evictSystemCriticalPods: true
+            nodeFit: true
+        - name: RemovePodsViolatingInterPodAntiAffinity
+        - name: RemovePodsViolatingNodeAffinity
+          args:
+            nodeAffinityType:
+            - requiredDuringSchedulingIgnoredDuringExecution
+        - name: RemovePodsViolatingNodeTaints
+        - name: RemovePodsViolatingTopologySpreadConstraint
+          args:
+            constraints:
+            - DoNotSchedule
+            - ScheduleAnyway
+        plugins:
+          balance:
+            enabled:
+            - RemovePodsViolatingTopologySpreadConstraint
+          deschedule:
+            enabled:
+            - RemovePodsViolatingInterPodAntiAffinity
+            - RemovePodsViolatingNodeAffinity
+            - RemovePodsViolatingNodeTaints
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+    leaderElection:
+      enabled: true
