@@ -38,8 +38,8 @@ spec:
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: openebs-hostpath
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: ceph-blockpool-nvme
         resources:
           requests:
             storage: 25Gi
@@ -49,22 +49,22 @@ spec:
     template:
       spec:
         containers:
-          - name: runner
-            image: ghcr.io/home-operations/actions-runner:2.323.0@sha256:6d878ca00ecd301a5e5dab006d3ea96083e92f64e364a578f7b42bbc47ba738e
-            command: ["/home/runner/run.sh"]
-            env:
-              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
-                value: "false"
-              - name: NODE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: status.hostIP
-            volumeMounts:
-              - mountPath: /var/run/secrets/talos.dev
-                name: talos
-                readOnly: true
+        - name: runner
+          image: ghcr.io/home-operations/actions-runner:2.323.0@sha256:6d878ca00ecd301a5e5dab006d3ea96083e92f64e364a578f7b42bbc47ba738e
+          command: [ "/home/runner/run.sh" ]
+          env:
+          - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+            value: "false"
+          - name: NODE
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          volumeMounts:
+          - mountPath: /var/run/secrets/talos.dev
+            name: talos
+            readOnly: true
         serviceAccountName: *name
         volumes:
-          - name: talos
-            secret:
-              secretName: *name
+        - name: talos
+          secret:
+            secretName: *name
