@@ -12,10 +12,14 @@ spec:
   # components:
   #   - ../../../../components/gatus/guarded
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+  - name: rook-ceph-cluster
+    namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/monitoring/kube-prometheus-stack/app
+  postBuild:
+    substituteFrom:
+    - name: cluster-secrets
+      kind: Secret
   prune: true
   retryInterval: 2m
   sourceRef:
@@ -39,14 +43,14 @@ spec:
   # components:
   #   - ../../../../components/gatus/guarded
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+  - name: rook-ceph-cluster
+    namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/monitoring/kube-prometheus-stack/addons
   postBuild:
     substituteFrom:
-      - name: cluster-secrets
-        kind: Secret
+    - name: cluster-secrets
+      kind: Secret
   prune: true
   retryInterval: 2m
   sourceRef:
