@@ -119,7 +119,7 @@ spec:
       scripts:
         type: configMap
         name: bazarr-scripts
-        defaultMode: 775
+        defaultMode: 0775
         globalMounts:
         - readOnly: true
       tmp:
