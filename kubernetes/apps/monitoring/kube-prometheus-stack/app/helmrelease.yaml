@@ -45,14 +45,14 @@ spec:
       ingress:
         enabled: true
         ingressClassName: internal-nginx
-        hosts: [ "alertmanager.${INGRESS_DOMAIN}" ]
+        hosts: [ "alertmanager.${SECRET_DOMAIN}" ]
         pathType: Prefix
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
           global:
             resolveTimeout: 5m
-        externalUrl: https://alertmanager.${INGRESS_DOMAIN}
+        externalUrl: https://alertmanager.${SECRET_DOMAIN}
         storage:
           volumeClaimTemplate:
             spec:
@@ -147,7 +147,7 @@ spec:
         ingressClassName: internal-nginx
         pathType: Prefix
         hosts:
-        - &host_prometheus prometheus.${INGRESS_DOMAIN}
+        - &host_prometheus prometheus.${SECRET_DOMAIN}
         tls:
         - hosts:
           - *host_prometheus
@@ -209,7 +209,7 @@ spec:
             targetLabel: nodename
           - action: replace
             regex: (.*)
-            replacement: $1.${CLUSTER_NAME}.${INGRESS_DOMAIN}:9100
+            replacement: $1.${CLUSTER_NAME}.${SECRET_DOMAIN}:9100
             sourceLabels:
             - kubernetes_node
             targetLabel: instance
