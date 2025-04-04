@@ -7,7 +7,7 @@ metadata:
 spec:
   allowFirstLastIPs: "No"
   blocks:
-    - cidr: '${NETWORK_BGP_SVC_CIDR}'
+  - cidr: 10.200.2.32/27
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cilium.io/ciliuml2announcementpolicy_v2alpha1.json
 apiVersion: cilium.io/v2alpha1
@@ -23,8 +23,6 @@ spec:
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
-
-
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/cilium.io/ciliumbgpadvertisement_v2alpha1.json
 apiVersion: "cilium.io/v2alpha1"
