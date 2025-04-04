@@ -13,8 +13,8 @@ spec:
   #   # - ../../../../components/gatus/guarded
   #   - ../../../../components/volsync
   dependsOn:
-    - name: kube-prometheus-stack
-      namespace: rook-ceph
+  - name: kube-prometheus-stack
+    namespace: monitoring
   interval: 1h
   path: ./kubernetes/apps/monitoring/grafana/app
   prune: true
