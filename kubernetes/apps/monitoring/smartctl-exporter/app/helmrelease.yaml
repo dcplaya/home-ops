@@ -63,3 +63,5 @@ spec:
       #   targetLabel: device
     prometheusRules:
       enabled: false
+    nodeSelector:
+      kubernetes.io/arch: "amd64"
