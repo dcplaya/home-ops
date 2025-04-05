@@ -157,27 +157,26 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
-      code-server:
-        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        hostnames:
+          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - matches:
-            - path:
-                type: PathPrefix
-                value: /code
-          - backendRefs:
+              - path:
+                  type: PathPrefix
+                  value: /code/
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    type: ReplacePrefixMatch
+                    replacePrefixMatch: /
+            backendRefs:
               - name: *app
                 port: *code-server-port
-
+          - backendRefs:
+              - name: *app
+                port: *port

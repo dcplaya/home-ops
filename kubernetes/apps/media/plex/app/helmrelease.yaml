@@ -99,8 +99,8 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: ${LB_PLEX}
         ports:
-          http:
-            port: 32400
+          https:
+            port: &port 32400
             # externalTrafficPolicy: Cluster
 
     persistence:
@@ -152,21 +152,15 @@ spec:
             app:
             - path: /mnt/unionfs/Media/TV
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "external-nginx"
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          external-dns.alpha.kubernetes.io/target: "ingress-ext.${INGRESS_DOMAIN}"
-        hosts:
-        - host: &host "plex.${INGRESS_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+        hostnames: 
+          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port

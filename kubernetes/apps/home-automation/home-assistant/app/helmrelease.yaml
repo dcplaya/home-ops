@@ -120,7 +120,7 @@ spec:
             protocol: UDP
             targetPort: 5353
           code-server:
-            port: 12321
+            port: &code-server-port 12321
 
     persistence:
       config:
@@ -143,29 +143,39 @@ spec:
             app:
             - path: /data
 
-    ingress:
-      app:
-        enabled: true
-        className: "external-nginx"
-        annotations:
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "ingress-ext.${INGRESS_DOMAIN}"
-        hosts:
-        - host: *host
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+    route:
       code-server:
-        className: "internal-nginx"
-        hosts:
-        - host: "hass-code.${INGRESS_DOMAIN}"
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: code-server
+        hostnames:
+          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+          - "home.${INGRESS_DOMAIN}"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /code/
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    type: ReplacePrefixMatch
+                    replacePrefixMatch: /
+            backendRefs:
+              - name: *app
+                port: *code-server-port
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+          - "home.${INGRESS_DOMAIN}"
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+

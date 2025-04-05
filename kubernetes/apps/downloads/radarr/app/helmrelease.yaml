@@ -144,20 +144,15 @@ spec:
             app:
             - path: /config/Backups
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "external-nginx"
-        annotations:
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "ingress-ext.${INGRESS_DOMAIN}"
-        hosts:
-        - host: *host
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+        hostnames: 
+          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
