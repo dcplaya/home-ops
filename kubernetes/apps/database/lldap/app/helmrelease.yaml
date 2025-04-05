@@ -100,20 +100,14 @@ spec:
         globalMounts:
         - path: /certs/
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "internal-nginx"
-        annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,192.168.0.0/16
-        hosts:
-        - host: &host "lldap-ui.${INGRESS_DOMAIN}"
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port

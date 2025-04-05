@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./certificate.yaml
   - ./helmrelease.yaml
+  - ./httproute.yaml
   - ./sub-volumes.yaml
   - ./clients.yaml
   - ./secret.sops.yaml

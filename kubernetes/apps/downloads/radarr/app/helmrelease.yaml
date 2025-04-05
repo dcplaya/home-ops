@@ -29,30 +29,6 @@ spec:
     global:
       nameOverride: *app
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: ${APP_UID}
-        runAsGroup: ${APP_GID}
-        fsGroup: ${APP_GID}
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [ 34, 10000 ]
-        seccompProfile: { type: RuntimeDefault }
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values: [ "plex" ]
-            # Blank selector selects all namespaces. Null namespace selector locks it to the same namespace as the HR
-            namespaces: [ "media", "downloads", "home-automation" ]
-            topologyKey: kubernetes.io/hostname
-            # nodeSelector:
-            #   google.feature.node.kubernetes.io/coral: "true"
-            #   intel.feature.node.kubernetes.io/gpu: "true"
-
     controllers:
       radarr:
         annotations:
@@ -106,6 +82,28 @@ spec:
                 cpu: 1m
                 # limits:
                 #   memory: 2Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [ "plex" ]
+            # Blank selector selects all namespaces. Null namespace selector locks it to the same namespace as the HR
+            namespaces: [ "media", "downloads", "home-automation" ]
+            topologyKey: kubernetes.io/hostname
+            # nodeSelector:
+            #   google.feature.node.kubernetes.io/coral: "true"
+            #   intel.feature.node.kubernetes.io/gpu: "true"
 
     service:
       app:

@@ -90,7 +90,7 @@ spec:
         #   io.cilium/lb-ipam-ips: "${LB_HYPERHDR}"
         ports:
           http:
-            port: 8090
+            port: &port 8090
           jsonserver:
             port: 19444
           protocolbuffer:
@@ -101,17 +101,14 @@ spec:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "internal-nginx"
-        hosts:
-        - host: &host "hyperhdr.${INGRESS_DOMAIN}"
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
