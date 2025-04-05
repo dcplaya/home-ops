@@ -42,11 +42,6 @@ spec:
     ### Component values
     ###
     alertmanager:
-      # ingress:
-      #   enabled: true
-      #   ingressClassName: internal-nginx
-      #   hosts: [ "alertmanager.${SECRET_DOMAIN}" ]
-      #   pathType: Prefix
       route:
         main:
           enabled: true
@@ -150,16 +145,6 @@ spec:
     ### Prometheus instance values
     ###
     prometheus:
-      # ingress:
-      #   enabled: true
-      #   ingressClassName: internal-nginx
-      #   pathType: Prefix
-      #   hosts:
-      #   - &host_prometheus prometheus.
-      #   tls:
-      #   - hosts:
-      #     - *host_prometheus
-
       route:
         main:
           enabled: true
