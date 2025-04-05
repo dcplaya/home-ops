@@ -105,7 +105,7 @@ spec:
         # annotations:
         #   io.cilium/lb-ipam-ips: "${LB_FRIGATE}"
         ports:
-          https:
+          http:
             port: *port
           rtsp:
             enabled: true
@@ -173,11 +173,13 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        kind: TLSRoute
+        hostnames:
+          - '{{ .Release.Name }}.${SECRET_DOMAIN}'
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: tls
         rules:
           - backendRefs:
               - name: *app
