@@ -5,14 +5,16 @@ kind: Gateway
 metadata:
   name: external
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname external.${INGRESS_DOMAIN}
+    external-dns/is-public: "true"
+    external-dns.alpha.kubernetes.io/target: &hostname external-ext.${INGRESS_DOMAIN}
 spec:
   gatewayClassName: cilium
   addresses:
   - type: IPAddress
     value: ${LB_GATEWAYAPI_EXTERNAL}
-  - type: IPAddress
-    value: ::ffff:${LB_GATEWAYAPI_EXTERNAL}
+  # IPv6
+  # - type: IPAddress
+  #   value: ::ffff:${LB_GATEWAYAPI_EXTERNAL}
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
