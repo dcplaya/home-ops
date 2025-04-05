@@ -69,3 +69,7 @@ rules:
   - apiGroups: ["cilium.io"]
     resources: ["*"]
     verbs: ["get", "list", "watch"]
+  # EMQx resources
+  - apiGroups: ["apps.emqx.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
