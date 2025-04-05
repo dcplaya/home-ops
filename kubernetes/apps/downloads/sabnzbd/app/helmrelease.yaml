@@ -26,33 +26,10 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    defaultPodOptions:
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #     - labelSelector:
-      #         matchExpressions:
-      #         - key: app.kubernetes.io/name
-      #           operator: In
-      #           values: ["plex"]
-      #       topologyKey: kubernetes.io/hostname
-      #       # Blank selector selects all namespaces. Null namespace selector locks it to the same namespace as the HR
-      #       namespaces: ["media", "downloads", "home-automation"]
-      nodeSelector:
-        kubernetes.io/arch: "amd64"
     controllers:
       sabnzbd:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          securityContext:
-            runAsUser: ${APP_UID}
-            runAsGroup: ${APP_GID}
-            runAsNonRoot: true
-            fsGroup: ${APP_GID}
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-            - 34
 
         containers:
           app:
@@ -84,12 +61,16 @@ spec:
               readiness: *probes
               startup:
                 enabled: false
-            # resources:
-            #   requests:
-            #     memory: "512Mi"
-            #     cpu: 200m
-            #   limits:
-            #     memory: "4G"
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      nodeSelector:
+        kubernetes.io/arch: "amd64"
 
     service:
       app:
