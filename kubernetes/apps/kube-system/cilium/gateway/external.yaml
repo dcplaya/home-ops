@@ -6,7 +6,7 @@ metadata:
   name: external
   annotations:
     external-dns/is-public: "true"
-    external-dns.alpha.kubernetes.io/target: &hostname external-ext.${INGRESS_DOMAIN}
+    external-dns.alpha.kubernetes.io/target: &hostname external.${INGRESS_DOMAIN}
 spec:
   gatewayClassName: cilium
   addresses:
