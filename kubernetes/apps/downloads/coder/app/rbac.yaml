@@ -51,6 +51,6 @@ rules:
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
   # Volsync resources
-  - apiGroups: ["volsync.backube.io"]
+  - apiGroups: ["volsync.backube"]
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
