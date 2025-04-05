@@ -72,7 +72,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: 8181
+            port: &port 8181
 
     persistence:
       config:
