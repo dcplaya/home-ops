@@ -90,7 +90,7 @@ spec:
         #   io.cilium/lb-ipam-ips: "${LB_HYPERHDR}"
         ports:
           http:
-            port: 8090
+            port: &port 8090
           jsonserver:
             port: 19444
           protocolbuffer:
