@@ -99,7 +99,7 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: ${LB_PLEX}
         ports:
-          https:
+          http:
             port: &port 32400
             # externalTrafficPolicy: Cluster
 
