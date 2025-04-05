@@ -30,15 +30,6 @@ spec:
       prowlarr:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          securityContext:
-            runAsUser: ${APP_UID}
-            runAsGroup: ${APP_GID}
-            runAsNonRoot: true
-            fsGroup: ${APP_GID}
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-            - 34
 
         containers:
           app:
@@ -67,6 +58,14 @@ spec:
                 memory: "256M"
               limits:
                 memory: "384M"
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:
