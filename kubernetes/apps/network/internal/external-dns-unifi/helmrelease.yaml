@@ -68,17 +68,9 @@ spec:
             port: http-webhook
           initialDelaySeconds: 10
           timeoutSeconds: 5
-    extraArgs:
-    - --ignore-ingress-tls-spec
-    # - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
-    # - --crd-source-kind=DNSEndpoint
-    # - --managed-record-types=A
-    # - --managed-record-types=AAAA
-    # - --managed-record-types=CNAME
-    # - --managed-record-types=SRV
+    triggerLoopOnEvent: true
     policy: sync
     sources: [ "ingress", "service", "gateway-httproute" ]
-    # sources: [ "ingress", "service" ]
     txtOwnerId: k8s.
     txtPrefix: default
     domainFilters: [ "${SECRET_DOMAIN}" ]
