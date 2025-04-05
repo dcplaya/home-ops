@@ -54,3 +54,7 @@ rules:
   - apiGroups: ["volsync.backube"]
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # Volume Snapshot resources
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshots", "volumesnapshotcontents", "volumesnapshotclasses"]
+    verbs: ["get", "list", "watch", "create", "update"]
