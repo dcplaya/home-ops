@@ -70,7 +70,7 @@ spec:
           timeoutSeconds: 5
     triggerLoopOnEvent: true
     policy: sync
-    sources: [ "ingress", "service", "gateway-httproute" ]
+    sources: [ "ingress", "service", "gateway-httproute", "gateway-tlsroute" ]
     txtOwnerId: k8s.
     txtPrefix: default
     domainFilters: [ "${SECRET_DOMAIN}" ]
