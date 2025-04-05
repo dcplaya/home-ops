@@ -64,4 +64,8 @@ rules:
     verbs: ["get", "list", "watch", "update", "delete"]
   - apiGroups: ["gateway.networking.k8s.io"]
     resources: ["*"]
-    verbs: ["get", "list", "watch"] 
+    verbs: ["get", "list", "watch"]
+  # Cilium resources
+  - apiGroups: ["cilium.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
