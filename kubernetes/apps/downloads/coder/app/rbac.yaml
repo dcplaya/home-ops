@@ -42,12 +42,15 @@ rules:
   - apiGroups: ["ceph.rook.io"]
     resources: ["*"]
     verbs: ["get", "list", "watch"]
-  # Ceph resources
+  # Talos resources
   - apiGroups: ["talos.dev"]
     resources: ["serviceaccounts"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
-  # Ceph resources
+  # ExternalDNS resources
   - apiGroups: ["externaldns.k8s.io"]
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
-
+  # Volsync resources
+  - apiGroups: ["volsync.backube.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
