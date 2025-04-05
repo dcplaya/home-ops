@@ -197,12 +197,12 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        hostnames: [ "{{ .Release.Name }}.${INGRESS_DOMAIN}" ]
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+        - name: external
+          namespace: kube-system
+          sectionName: https
         rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+        - backendRefs:
+          - name: coder-app
+            port: *port
