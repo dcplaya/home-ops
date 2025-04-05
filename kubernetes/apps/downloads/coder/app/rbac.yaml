@@ -58,3 +58,7 @@ rules:
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshots", "volumesnapshotcontents", "volumesnapshotclasses"]
     verbs: ["get", "list", "watch", "create", "update"]
+  # Ingress resources
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "update", "delete"]
