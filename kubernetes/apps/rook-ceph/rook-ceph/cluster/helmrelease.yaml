@@ -35,19 +35,6 @@ spec:
     monitoring:
       enabled: true
       createPrometheusRules: true
-    ingress:
-      dashboard:
-        ingressclassName: "internal-nginx"
-        # annotations:
-        #   nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        #   nginx.ingress.kubernetes.io/configuration-snippet: |
-        #     proxy_ssl_protocols TLSv1.3;
-        host:
-          name: &host "rook.${INGRESS_DOMAIN}"
-          path: "/"
-        tls:
-        - hosts:
-          - *host
     toolbox:
       enabled: true
     configOverride: |
@@ -355,12 +342,3 @@ spec:
         reclaimPolicy: Delete
         parameters:
           region: us-east-1
-      ingress:
-        enabled: true
-        ingressClassName: "internal-nginx"
-        host:
-          name: &host-s3 "s3.${INGRESS_DOMAIN}"
-          path: "/"
-        tls:
-        - hosts:
-          - *host-s3

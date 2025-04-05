@@ -101,19 +101,14 @@ spec:
             app:
             - path: /mnt/unionfs/downloads
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "internal-nginx"
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "ingress-int.${INGRESS_DOMAIN}"
-        hosts:
-        - host: *host
-          paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
-        tls:
-        - hosts:
-          - *host
+        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
