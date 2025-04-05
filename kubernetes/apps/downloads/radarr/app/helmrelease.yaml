@@ -118,6 +118,10 @@ spec:
       config:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
+      config-cache:
+        existingClaim: radarr-cache
+        globalMounts:
+          - path: /config/MediaCover
       tmp:
         type: emptyDir
       movies:
