@@ -16,7 +16,3 @@ spec:
         - name: emqx-dashboard
           namespace: home-automation
           port: 18083
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
