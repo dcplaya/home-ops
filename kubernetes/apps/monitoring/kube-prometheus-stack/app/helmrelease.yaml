@@ -42,11 +42,19 @@ spec:
     ### Component values
     ###
     alertmanager:
-      ingress:
-        enabled: true
-        ingressClassName: internal-nginx
-        hosts: [ "alertmanager.${SECRET_DOMAIN}" ]
-        pathType: Prefix
+      # ingress:
+      #   enabled: true
+      #   ingressClassName: internal-nginx
+      #   hosts: [ "alertmanager.${SECRET_DOMAIN}" ]
+      #   pathType: Prefix
+      route:
+        main:
+          enabled: true
+          hostnames: ["alertmanager.${SECRET_DOMAIN}"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
