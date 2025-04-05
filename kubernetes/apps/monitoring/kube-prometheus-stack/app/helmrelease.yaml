@@ -142,15 +142,24 @@ spec:
     ### Prometheus instance values
     ###
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: internal-nginx
-        pathType: Prefix
-        hosts:
-        - &host_prometheus prometheus.${SECRET_DOMAIN}
-        tls:
-        - hosts:
-          - *host_prometheus
+      # ingress:
+      #   enabled: true
+      #   ingressClassName: internal-nginx
+      #   pathType: Prefix
+      #   hosts:
+      #   - &host_prometheus prometheus.
+      #   tls:
+      #   - hosts:
+      #     - *host_prometheus
+
+      route:
+        main:
+          enabled: true
+          hostnames: ["prometheus.${SECRET_DOMAIN}"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
 
       prometheusSpec:
         image:
