@@ -125,7 +125,7 @@ spec:
           http:
             port: *port
           code-server:
-            port: 12321
+            port: &code-server-port 12321
 
     persistence:
       config:
@@ -155,27 +155,29 @@ spec:
             - path: /home/coder/.ssh/id_ed25519.pub
               subPath: id_ed25519.pub
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: "internal-nginx"
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: /$1
-        #   cert-manager.io/cluster-issuer: letsencrypt-production
-        #   external-dns.alpha.kubernetes.io/target: ingress.${INGRESS_DOMAIN}
-        #   external-dns/is-public: "false"
-        #   external-dns/powerdns: "true"
-        hosts:
-        - host: *host
-          paths:
-          - path: /(.*)
-            service:
-              identifier: app
-              port: http
-          - path: /code/(.*)
-            service:
-              identifier: app
-              port: code-server
-        tls:
-        - hosts:
-          - *host
+        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+      code-server:
+        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+            - path:
+                type: PathPrefix
+                value: /code
+          - backendRefs:
+              - name: *app
+                port: *code-server-port
+
