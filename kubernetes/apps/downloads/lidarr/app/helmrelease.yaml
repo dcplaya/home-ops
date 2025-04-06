@@ -34,8 +34,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/lidarr
-              tag: 2.4.3.4248
+              repository: ghcr.io/home-operations/lidarr
+              tag: 2.11.0.4610
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"

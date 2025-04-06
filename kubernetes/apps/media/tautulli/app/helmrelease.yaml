@@ -38,7 +38,7 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/tautulli
+              repository: ghcr.io/home-operations/tautulli
               tag: 2.15.1
               pullPolicy: IfNotPresent
             env:

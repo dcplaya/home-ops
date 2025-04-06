@@ -45,10 +45,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
-              tag: 2025.3.3@sha256:9e2a7177b4600653d6cb46dff01b1598189a5ae93be0b99242fbc039d32d79f1
-              # repository: homeassistant/home-assistant
-              # tag: 2024.12.0
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.4.1
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
