@@ -44,7 +44,7 @@ spec:
       extraVolumes:
       - name: init-user
         secret:
-          secretName: emqx-secrets
+          secretName: emqx-init-user-secret
   listenersServiceTemplate:
     metadata:
       annotations:
