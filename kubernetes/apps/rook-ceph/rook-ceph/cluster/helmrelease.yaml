@@ -309,12 +309,12 @@ spec:
           deviceClass: nvme
           failureDomain: host
           replicated:
-            size: 2
+            size: 3
         dataPool:
           deviceClass: nvme
           failureDomain: host
           replicated:
-            size: 2
+            size: 3
         preservePoolsOnDelete: false
         gateway:
           port: 80
@@ -324,16 +324,8 @@ spec:
               memory: 1Gi
             limits:
               memory: 3Gi
-          instances: 2
-          placement:
-            topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: ceph-rgw
-                  app.kubernetes.io/part-of: *cephObjectStoreName
+        instances: 1
+        priorityClassName: system-cluster-critical
         healthCheck:
           bucket:
             interval: 60s
