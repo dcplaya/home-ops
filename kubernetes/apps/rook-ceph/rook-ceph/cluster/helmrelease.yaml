@@ -309,12 +309,12 @@ spec:
           deviceClass: nvme
           failureDomain: host
           replicated:
-            size: 3
+            size: 2
         dataPool:
           deviceClass: nvme
           failureDomain: host
           replicated:
-            size: 3
+            size: 2
         preservePoolsOnDelete: false
         gateway:
           port: 80
