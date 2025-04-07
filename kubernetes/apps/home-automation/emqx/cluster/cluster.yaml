@@ -18,15 +18,6 @@ spec:
         bootstrap_file = "/opt/init-user.json"
         bootstrap_type = "plain"
       }
-      authorization {
-        sources = [
-          {
-            type = built_in_database
-            enable = true
-          }
-        ]
-        no_match: "deny"
-      }
   coreTemplate:
     metadata:
       annotations:
