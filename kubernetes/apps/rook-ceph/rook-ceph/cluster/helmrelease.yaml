@@ -123,15 +123,16 @@ spec:
           - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_71K0A0Q4FVGG"
             config:
               metadataDevice: "/dev/disk/by-id/ata-OCZ_INTREPID_3800_A22L7061515001100"
-        - name: work2
+
+        - name: n100-01
           devices:
           # HDDs
           - name: "/dev/disk/by-id/ata-ST16000NM005G-2KH133_ZL2EJL04"
             config:
-              metadataDevice: "/dev/disk/by-id/ata-VK0800GDJYA_BTWL341407WN800RGN"
+              metadataDevice: "/dev/disk/by-id/ata-INTEL_SSDSC2KB960G8_PHYF913601C3960CGN"
           - name: "/dev/disk/by-id/ata-ST18000NM000J-2TV103_ZR5061XS"
             config:
-              metadataDevice: "/dev/disk/by-id/ata-VK0800GDJYA_BTWL341407WN800RGN"
+              metadataDevice: "/dev/disk/by-id/ata-INTEL_SSDSC2KB960G8_PHYF913601C3960CGN"
 
         - name: n100-02
           devices:
