@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app whisper
+  name: &app wyoming-whisper
 spec:
   interval: 15m
   chartRef:
@@ -27,27 +27,26 @@ spec:
     keepHistory: false
   values:
     controllers:
-      whisper:
+      wyoming-whisper:
         annotations:
           reloader.stakater.com/auto: "true"
 
         containers:
           app:
             image:
-              repository: docker.io/ollama/ollama
-              tag: 0.6.4
+              repository: rhasspy/wyoming-whisper
+              tag: latest
               pullPolicy: IfNotPresent
+            args:
+            - --model
+            - tiny.en
+            - --language
+            - en
             env:
-              WHISPER__INSTANCE_NAME: Whisper
-              WHISPER__PORT: &port 11434
-              WHISPER__LOG_LEVEL: info
+              WYOMING_WHISPER__INSTANCE_NAME: Wyoming-Whisper
+              WYOMING_WHISPER__PORT: &port 10300
+              WYOMING_WHISPER__LOG_LEVEL: info
               TZ: ${TZ}
-              OLLAMA_HOST: 0.0.0.0
-              OLLAMA_ORIGINS: "*"
-              OLLAMA_MODELS: &modelPath "/models"
-              OLLAMA_KEEP_ALIVE: "24h"
-              OLLAMA_LOAD_TIMEOUT: "600"
-              OLLAMA_CONTEXT_LENGTH: "8192"
             resources:
               requests:
                 memory: "256M"
@@ -58,32 +57,11 @@ spec:
       app:
         controller: *app
         ports:
-          whisper:
+          wyoming-whisper:
             port: *port
+            protocol: TCP
 
     persistence:
       data:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
-        globalMounts:
-        - path: /root/.ollama
-      models:
-        enabled: true
-        existingClaim: ollama-models
-        advancedMounts:
-          whisper:
-            app:
-            - path: *modelPath
-
-    route:
-      app:
-        hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-        parentRefs:
-        - name: internal
-          namespace: kube-system
-          sectionName: https
-        rules:
-        - backendRefs:
-          - name: *app
-            port: *port
