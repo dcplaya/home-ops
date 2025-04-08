@@ -48,9 +48,8 @@ spec:
           app:
             image:
               repository: nocturno/hyper-hdr
-              tag: "latest"
-              # latest tag has both ARM and x86 images
-              pullPolicy: Always
+              tag: 21.0.0.0
+              pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
             probes:
@@ -100,6 +99,20 @@ spec:
       config:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
+      cert:
+        enabled: true
+        type: secret
+        name: hyperhdr-cert
+        # defaultMode: 0600
+        advancedMounts:
+          hyperhdr:
+            app:
+            - subPath: "tls.crt"
+              path: "/etc/letsencrypt/live/hyperhdr/fullchain.pem"
+              readOnly: true
+            - subPath: "tls.key"
+              path: "/etc/letsencrypt/live/hyperhdr/privkey.pem"
+              readOnly: true
 
     route:
       app:
