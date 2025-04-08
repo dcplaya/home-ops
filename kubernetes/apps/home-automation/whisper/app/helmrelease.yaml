@@ -34,13 +34,17 @@ spec:
         containers:
           app:
             image:
-              repository: onerahmet/openai-whisper-asr-webservice
-              tag: v1.8.2@sha256:ce030954e4d0d6abad8f13e853b1c12745cc81f3e2ccef96d64fda927600f71a
-              pullPolicy: IfNotPresent
+              repository: rhasspy/wyoming-whisper
+              tag: latest
+              pullPolicy: Always
+            args:
+            - --model
+            - base
+            - --language
+            - en
             env:
               WHISPER__INSTANCE_NAME: Whisper
-              WHISPER__PORT: &port 9000
-              WHISPER__APPLICATION_URL: &host "whisper.${INGRESS_DOMAIN}"
+              WHISPER__PORT: &port 10300
               WHISPER__LOG_LEVEL: info
               ASR_MODEL: small # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
               ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
@@ -56,23 +60,13 @@ spec:
         ports:
           whisper:
             port: *port
+            protocol: TCP
 
     persistence:
-      config:
+      data:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
-        globalMounts:
-        - path: /root/.cache/whisper
-
-    route:
-      app:
-        hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-        parentRefs:
-        - name: internal
-          namespace: kube-system
-          sectionName: https
-        rules:
-        - backendRefs:
-          - name: *app
-            port: *port
+      tmp:
+        enabled: true
+        type: emptyDir
+        medium: Memory
