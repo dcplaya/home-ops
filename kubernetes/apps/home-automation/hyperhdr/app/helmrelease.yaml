@@ -116,11 +116,13 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${INGRESS_DOMAIN}"]
+        kind: TLSRoute
+        hostnames:
+          - '{{ .Release.Name }}.${SECRET_DOMAIN}'
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: tls
         rules:
           - backendRefs:
               - name: *app
