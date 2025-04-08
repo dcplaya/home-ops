@@ -64,10 +64,10 @@ spec:
     service:
       app:
         controller: *app
-        # type: LoadBalancer
-        # annotations:
-        #   io.cilium/lb-ipam-ips: "${LB_HASS}"
-        # externalTrafficPolicy: Cluster
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.200.2.34
+        externalTrafficPolicy: Cluster
         ports:
           http:
             port: *port
