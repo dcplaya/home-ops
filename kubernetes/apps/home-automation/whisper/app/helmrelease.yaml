@@ -39,13 +39,12 @@ spec:
               pullPolicy: Always
             args:
             - --model
-            - tiny.en
+            - base
             - --language
             - en
             env:
               WHISPER__INSTANCE_NAME: Whisper
               WHISPER__PORT: &port 10300
-              WHISPER__APPLICATION_URL: &host "whisper.${INGRESS_DOMAIN}"
               WHISPER__LOG_LEVEL: info
               ASR_MODEL: small # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
               ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
@@ -67,15 +66,7 @@ spec:
       data:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
-    # route:
-    #   app:
-    #     hostnames:
-    #     - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-    #     parentRefs:
-    #     - name: internal
-    #       namespace: kube-system
-    #       sectionName: https
-    #     rules:
-    #     - backendRefs:
-    #       - name: *app
-    #         port: *port
+      tmp:
+        enabled: true
+        type: emptyDir
+        medium: Memory
