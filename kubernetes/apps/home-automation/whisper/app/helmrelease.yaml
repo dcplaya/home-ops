@@ -37,11 +37,6 @@ spec:
               repository: docker.io/ollama/ollama
               tag: 0.6.4
               pullPolicy: IfNotPresent
-            args:
-            - --model
-            - base
-            - --language
-            - en
             env:
               WHISPER__INSTANCE_NAME: Whisper
               WHISPER__PORT: &port 11434
