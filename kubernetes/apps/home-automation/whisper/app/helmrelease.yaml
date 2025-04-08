@@ -77,6 +77,6 @@ spec:
         enabled: true
         existingClaim: ollama-models
         advancedMounts:
-          ollama:
+          whisper:
             app:
             - path: *modelPath
