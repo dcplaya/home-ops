@@ -53,7 +53,7 @@ spec:
           app:
             image:
               repository: esphome/esphome
-              tag: 2025.3.2@sha256:7f0095c15c4b109828d3c9ef979cb567e0c4c383f754be768f32592343be35c7
+              tag: 2025.3
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
@@ -158,25 +158,25 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
         parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+        - name: internal
+          namespace: kube-system
+          sectionName: https
         rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /code/
-            filters:
-              - type: URLRewrite
-                urlRewrite:
-                  path:
-                    type: ReplacePrefixMatch
-                    replacePrefixMatch: /
-            backendRefs:
-              - name: *app
-                port: *code-server-port
-          - backendRefs:
-              - name: *app
-                port: *port
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /code/
+          filters:
+          - type: URLRewrite
+            urlRewrite:
+              path:
+                type: ReplacePrefixMatch
+                replacePrefixMatch: /
+          backendRefs:
+          - name: *app
+            port: *code-server-port
+        - backendRefs:
+          - name: *app
+            port: *port
