@@ -84,7 +84,7 @@ spec:
 
     persistence:
       config:
-        enabled: false
+        enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
 
     route:
