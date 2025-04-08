@@ -60,7 +60,6 @@ spec:
         ports:
           whisper:
             port: *port
-            protocol: TCP
 
     persistence:
       data:
