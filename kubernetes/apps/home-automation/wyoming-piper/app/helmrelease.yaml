@@ -38,8 +38,7 @@ spec:
               tag: latest
               pullPolicy: IfNotPresent
             args:
-            - --voice
-            - en-us-lessac-low
+            - --voice=en_US-lessac-medium
             env:
               TZ: "${TIMEZONE}"
               WYOMING_PIPER_DASHBOARD_USE_PING: true
