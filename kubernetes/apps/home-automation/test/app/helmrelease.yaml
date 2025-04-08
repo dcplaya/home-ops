@@ -25,7 +25,7 @@ spec:
       nameOverride: *app
 
     controllers:
-      home-assistant:
+      home-test:
         annotations:
           reloader.stakater.com/auto: "true"
 
@@ -81,8 +81,6 @@ spec:
             port: 5353
             protocol: UDP
             targetPort: 5353
-          code-server:
-            port: &code-server-port 12321
 
     persistence:
       config:
