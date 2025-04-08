@@ -34,13 +34,13 @@ spec:
         containers:
           app:
             image:
-              repository: esphome/esphome
-              tag: 2025.3.2@sha256:7f0095c15c4b109828d3c9ef979cb567e0c4c383f754be768f32592343be35c7
+              repository: onerahmet/openai-whisper-asr-webservice
+              tag: v1.8.2@sha256:ce030954e4d0d6abad8f13e853b1c12745cc81f3e2ccef96d64fda927600f71a
               pullPolicy: IfNotPresent
             env:
               WHISPER__INSTANCE_NAME: Whisper
               WHISPER__PORT: &port 9000
-              WHISPER__APPLICATION_URL: &host "esphome.${INGRESS_DOMAIN}"
+              WHISPER__APPLICATION_URL: &host "whisper.${INGRESS_DOMAIN}"
               WHISPER__LOG_LEVEL: info
               ASR_MODEL: small # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
               ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
