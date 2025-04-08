@@ -34,9 +34,9 @@ spec:
         containers:
           app:
             image:
-              repository: rhasspy/wyoming-whisper
-              tag: latest
-              pullPolicy: Always
+              repository: docker.io/ollama/ollama
+              tag: 0.6.4
+              pullPolicy: IfNotPresent
             args:
             - --model
             - base
@@ -44,10 +44,15 @@ spec:
             - en
             env:
               WHISPER__INSTANCE_NAME: Whisper
-              WHISPER__PORT: &port 10300
+              WHISPER__PORT: &port 11434
               WHISPER__LOG_LEVEL: info
-              ASR_MODEL: small # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
-              ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
+              TZ: ${TZ}
+              OLLAMA_HOST: 0.0.0.0
+              OLLAMA_ORIGINS: "*"
+              OLLAMA_MODELS: &modelPath "/models"
+              OLLAMA_KEEP_ALIVE: "24h"
+              OLLAMA_LOAD_TIMEOUT: "600"
+              OLLAMA_CONTEXT_LENGTH: "8192"
             resources:
               requests:
                 memory: "256M"
@@ -66,7 +71,12 @@ spec:
       data:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
-      tmp:
+        globalMounts:
+        - path: /root/.ollama
+      models:
         enabled: true
-        type: emptyDir
-        medium: Memory
+        existingClaim: ollama-models
+        advancedMounts:
+          whisper:
+            app:
+            - path: *modelPath
