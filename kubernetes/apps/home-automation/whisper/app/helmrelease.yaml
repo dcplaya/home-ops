@@ -74,3 +74,16 @@ spec:
           whisper:
             app:
             - path: *modelPath
+
+    route:
+      app:
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        parentRefs:
+        - name: internal
+          namespace: kube-system
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: *app
+            port: *port
