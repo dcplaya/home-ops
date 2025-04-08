@@ -56,26 +56,25 @@ spec:
       app:
         controller: *app
         ports:
-          whisper:
+          wyoming-piper:
             enabled: true
             primary: true
-            port: 10200
+            port: *port
             protocol: TCP
 
     persistence:
       data:
         enabled: true
         existingClaim: ${VOLSYNC_CLAIM}
-
-    route:
-      app:
-        hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-        parentRefs:
-        - name: internal
-          namespace: kube-system
-          sectionName: https
-        rules:
-        - backendRefs:
-          - name: *app
-            port: *port
+    # route:
+    #   app:
+    #     hostnames:
+    #     - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+    #     parentRefs:
+    #     - name: internal
+    #       namespace: kube-system
+    #       sectionName: tcp
+    #     rules:
+    #     - backendRefs:
+    #       - name: *app
+    #         port: *port
