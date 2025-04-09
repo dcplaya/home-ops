@@ -186,6 +186,42 @@ spec:
               readOnly: true
             - path: "/home/coder/.talos"
               readOnly: true
+      # CephFS folder mounts
+      backup:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-backups
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/backup
+      music:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-music
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/Media/Music/
+      movies:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-movies
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/Media/Movies/
+      tv:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-tv
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/Media/TV
+      downloads:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-downloads
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/downloads
 
     route:
       app:
