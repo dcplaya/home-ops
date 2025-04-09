@@ -3,6 +3,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+- ../../../../components/cephfs-mounts/backup.yaml
+- ../../../../components/cephfs-mounts/downloads-folder.yaml
+- ../../../../components/cephfs-mounts/movies-folder.yaml
+- ../../../../components/cephfs-mounts/music-folder.yaml
+- ../../../../components/cephfs-mounts/tv-folder.yaml
 - ./rbac.yaml
 - ./talos-serviceaccount.yaml
 - ./secret.sops.yaml
