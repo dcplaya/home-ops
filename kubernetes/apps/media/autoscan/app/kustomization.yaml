@@ -3,8 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../../components/cephfs-mounts/4kmovies-folder.yaml
-  - ../../../../components/cephfs-mounts/4ktv-folder.yaml
   - ../../../../components/cephfs-mounts/downloads-folder.yaml
   - ../../../../components/cephfs-mounts/movies-folder.yaml
   - ../../../../components/cephfs-mounts/music-folder.yaml
