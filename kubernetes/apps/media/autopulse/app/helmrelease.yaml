@@ -107,10 +107,9 @@ spec:
 
     persistence:
       app:
-        enabled: false
         type: emptyDir
         globalMounts:
-        - path: /app/data
+        - path: /data
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
