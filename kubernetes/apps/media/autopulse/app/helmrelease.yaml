@@ -41,7 +41,6 @@ spec:
             image:
               repository: docker.io/danonline/autopulse
               tag: v1.3.1
-            # command: [ "/bin/autopulse" ]
             env:
               TZ: ${TIMEZONE}
               AUTOPULSE__TRIGGERS_MANUAL_TYPE: manual
@@ -110,28 +109,28 @@ spec:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
         advancedMounts:
-          autoscan:
+          autopulse:
             app:
             - path: /mnt/unionfs/Media/Music/
       movies:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-movies
         advancedMounts:
-          autoscan:
+          autopulse:
             app:
             - path: /mnt/unionfs/Media/Movies/
       tv:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-tv
         advancedMounts:
-          autoscan:
+          autopulse:
             app:
             - path: /mnt/unionfs/Media/TV
       downloads:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-downloads
         advancedMounts:
-          autoscan:
+          autopulse:
             app:
             - path: /mnt/unionfs/downloads
     route:
