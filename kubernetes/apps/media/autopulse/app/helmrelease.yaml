@@ -43,10 +43,11 @@ spec:
               tag: v1.3.1
             env:
               TZ: ${TIMEZONE}
-              AUTOPULSE__TRIGGERS_MANUAL_TYPE: manual
-              AUTOPULSE__TARGETS_PLEX_TYPE: plex
-              AUTOPULSE__TARGETS_PLEX_REFRESH: true
-              AUTOPULSE__TARGETS_PLEX_ANALYZE: true
+              AUTOPULSE__APP__DATABASE_URL: sqlite://data/database.db
+              AUTOPULSE__TRIGGERS__MANUAL__TYPE: manual
+              AUTOPULSE__TARGETS__PLEX__TYPE: plex
+              AUTOPULSE__TARGETS__PLEX__REFRESH: true
+              AUTOPULSE__TARGETS__PLEX__ANALYZE: true
             envFrom: &envFrom
               - secretRef:
                   name: autopulse-secret
@@ -101,10 +102,10 @@ spec:
             port: &ui-port 2880
 
     persistence:
-      # app:
-      #   type: emptyDir
-      #   globalMounts:
-      #   - path: /app
+      app:
+        type: emptyDir
+        globalMounts:
+        - path: /data
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
