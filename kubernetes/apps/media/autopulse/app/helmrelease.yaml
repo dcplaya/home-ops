@@ -41,13 +41,41 @@ spec:
             image:
               repository: docker.io/danonline/autopulse
               tag: v1.3.1
-            command: ["/bin/autopulse"]
+            # command: [ "/bin/autopulse" ]
             env:
               TZ: ${TIMEZONE}
+              AUTOPULSE__TRIGGERS_MANUAL_TYPE: manual
+              AUTOPULSE__TARGETS_PLEX_TYPE: plex
+              AUTOPULSE__TARGETS_PLEX_REFRESH: true
+              AUTOPULSE__TARGETS_PLEX_ANALYZE: true
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          ui:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: ui-v1.3.1
+            env:
+              TZ: ${TIMEZONE}
+              FORCE_DEFAULT_SERVER_URL: true
+              DEFAULT_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
+              FORCE_AUTH: true
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ "ALL" ] }
             resources:
               requests:
                 cpu: 10m
@@ -67,21 +95,17 @@ spec:
         ports:
           http:
             port: &port 2875
+      ui:
+        controller: *app
+        ports:
+          ui:
+            port: &ui-port 2880
 
     persistence:
       app:
         type: emptyDir
         globalMounts:
-          - path: /app
-      config:
-        type: secret
-        name: autopulse-secret
-        globalMounts:
-          - path: /app/config.yaml
-            subPath: config.yaml
-            readOnly: true
-
-
+        - path: /app
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
@@ -110,17 +134,15 @@ spec:
           autoscan:
             app:
             - path: /mnt/unionfs/downloads
-
     route:
       app:
-        hostnames: 
-          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+        - name: external
+          namespace: kube-system
+          sectionName: https
         rules:
-          - backendRefs:
-              - name: *app
-                port: *port
-
+        - backendRefs:
+          - name: *app
+            port: *ui-port
