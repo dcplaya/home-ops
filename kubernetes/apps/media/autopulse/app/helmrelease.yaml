@@ -43,8 +43,8 @@ spec:
               tag: v1.3.1
             env:
               TZ: ${TIMEZONE}
-              PUID: 1000
-              PGID: 1000
+              # PUID: 1000
+              # PGID: 1000
               AUTOPULSE__APP__DATABASE_URL: sqlite://data/database.db
               AUTOPULSE__TRIGGERS__MANUAL__TYPE: manual
               AUTOPULSE__TARGETS__PLEX__TYPE: plex
@@ -68,8 +68,8 @@ spec:
               tag: ui-v1.3.1
             env:
               TZ: ${TIMEZONE}
-              PUID: 1000
-              PGID: 1000
+              # PUID: 1000
+              # PGID: 1000
               FORCE_DEFAULT_SERVER_URL: true
               DEFAULT_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
               FORCE_AUTH: true
@@ -85,13 +85,13 @@ spec:
                 cpu: 10m
               limits:
                 memory: 256Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+    # defaultPodOptions:
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 1000
+    #     runAsGroup: 1000
+    #     fsGroup: 1000
+    #     fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:
