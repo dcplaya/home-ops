@@ -101,10 +101,10 @@ spec:
             port: &ui-port 2880
 
     persistence:
-      app:
-        type: emptyDir
-        globalMounts:
-        - path: /app
+      # app:
+      #   type: emptyDir
+      #   globalMounts:
+      #   - path: /app
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
