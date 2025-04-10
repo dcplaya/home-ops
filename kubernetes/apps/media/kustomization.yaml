@@ -4,11 +4,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: media
 components:
-  - ../../components/common
-  - ../../components/repos/app-template
+- ../../components/common
+- ../../components/repos/app-template
 resources:
-  - ./autoscan/ks.yaml
-  - ./kometa/ks.yaml
-  - ./plex/ks.yaml
-  - ./plex-auto-languages/ks.yaml
-  - ./tautulli/ks.yaml
+- ./autoscan/ks.yaml
+- ./autopulse/ks.yaml
+- ./kometa/ks.yaml
+- ./plex/ks.yaml
+- ./plex-auto-languages/ks.yaml
+- ./tautulli/ks.yaml

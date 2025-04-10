@@ -1,0 +1,147 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app autopulse
+  namespace: media
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  rollback:
+    recreate: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+      fullnameOverride: *app
+
+    controllers:
+      autopulse:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        containers:
+          app:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: v1.3.1
+            env:
+              TZ: ${TIMEZONE}
+              AUTOPULSE__TRIGGERS_MANUAL_TYPE: manual
+              AUTOPULSE__TARGETS_PLEX_TYPE: plex
+              AUTOPULSE__TARGETS_PLEX_REFRESH: true
+              AUTOPULSE__TARGETS_PLEX_ANALYZE: true
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          ui:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: ui-v1.3.1
+            env:
+              TZ: ${TIMEZONE}
+              FORCE_DEFAULT_SERVER_URL: true
+              DEFAULT_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
+              FORCE_AUTH: true
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: &port 2875
+      ui:
+        controller: *app
+        ports:
+          ui:
+            port: &ui-port 2880
+
+    persistence:
+      app:
+        type: emptyDir
+        globalMounts:
+        - path: /app
+      music:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-music
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/Music/
+      movies:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-movies
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/Movies/
+      tv:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-tv
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/TV
+      downloads:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-downloads
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/downloads
+    route:
+      app:
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        parentRefs:
+        - name: external
+          namespace: kube-system
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: *app
+            port: *ui-port
