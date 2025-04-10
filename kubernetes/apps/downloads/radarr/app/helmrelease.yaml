@@ -33,14 +33,14 @@ spec:
       radarr:
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            envFrom: &envFrom
-              - secretRef:
-                  name: radarr-secret
+        # initContainers:
+        #   init-db:
+        #     image:
+        #       repository: ghcr.io/home-operations/postgres-init
+        #       tag: 17.4
+        #     envFrom: &envFrom
+        #       - secretRef:
+        #           name: radarr-secret
 
         containers:
           app:
@@ -59,7 +59,9 @@ spec:
               RADARR__LOG_LEVEL: info
               RADARR__UPDATE__BRANCH: develop
               RADARR__LOG__DBENABLED: "False"
-            envFrom: *envFrom
+            envFrom: &envFrom
+              - secretRef:
+                  name: radarr-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -90,20 +92,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values: [ "plex" ]
-            # Blank selector selects all namespaces. Null namespace selector locks it to the same namespace as the HR
-            namespaces: [ "media", "downloads", "home-automation" ]
-            topologyKey: kubernetes.io/hostname
-            # nodeSelector:
-            #   google.feature.node.kubernetes.io/coral: "true"
-            #   intel.feature.node.kubernetes.io/gpu: "true"
 
     service:
       app:
@@ -119,7 +107,7 @@ spec:
       config-cache:
         existingClaim: radarr-cache
         globalMounts:
-          - path: /config/MediaCover
+        - path: /config/MediaCover
       tmp:
         type: emptyDir
       movies:
@@ -146,13 +134,13 @@ spec:
 
     route:
       app:
-        hostnames: 
-          - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+        - name: external
+          namespace: kube-system
+          sectionName: https
         rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+        - backendRefs:
+          - name: *app
+            port: *port
