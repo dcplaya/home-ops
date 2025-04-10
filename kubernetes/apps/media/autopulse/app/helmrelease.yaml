@@ -72,6 +72,7 @@ spec:
               # PGID: 1000
               FORCE_DEFAULT_SERVER_URL: true
               DEFAULT_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
+              FORCE_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
               FORCE_AUTH: true
             envFrom: &envFrom
               - secretRef:
