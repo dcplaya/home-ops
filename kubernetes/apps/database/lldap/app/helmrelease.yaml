@@ -57,7 +57,9 @@ spec:
               LLDAP_LDAPS_OPTIONS__KEY_FILE: "/certs/tls.key"
               LLDAP_LDAPS_OPTIONS__ENABLED: "true"
               LLDAP_LDAPS_OPTIONS__PORT: &ldapsPort 636
-            envFrom: *envFrom
+            envFrom: &envFrom
+              - secretRef:
+                  name: lldap-secret
             resources:
               requests:
                 cpu: 5m
@@ -101,12 +103,12 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}-ui.${INGRESS_DOMAIN}"]
+        hostnames: [ "{{ .Release.Name }}-ui.${INGRESS_DOMAIN}" ]
         parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+        - name: internal
+          namespace: kube-system
+          sectionName: https
         rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+        - backendRefs:
+          - name: *app
+            port: *port
