@@ -107,6 +107,7 @@ spec:
 
     persistence:
       app:
+        enabled: false
         type: emptyDir
         globalMounts:
         - path: /app/data
