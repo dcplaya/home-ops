@@ -58,7 +58,7 @@ spec:
               LLDAP_LDAPS_OPTIONS__KEY_FILE: "/certs/tls.key"
               LLDAP_LDAPS_OPTIONS__ENABLED: "true"
               LLDAP_LDAPS_OPTIONS__PORT: &ldapsPort 636
-            envFrom: *envFrom
+            # envFrom: *envFrom
             resources:
               requests:
                 cpu: 5m
