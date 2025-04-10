@@ -28,7 +28,6 @@ spec:
   values:
     controllers:
       lldap:
-        replicas: 2
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
@@ -92,7 +91,8 @@ spec:
 
     persistence:
       data:
-        type: emptyDir
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
       cert:
         enabled: true
         type: secret
