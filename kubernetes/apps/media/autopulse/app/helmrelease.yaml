@@ -46,10 +46,12 @@ spec:
               # PUID: 1000
               # PGID: 1000
               AUTOPULSE__APP__DATABASE_URL: sqlite://data/database.db
-              AUTOPULSE__TRIGGERS__MANUAL__TYPE: manual
               AUTOPULSE__TARGETS__PLEX__TYPE: plex
               # AUTOPULSE__TARGETS__PLEX__REFRESH: true
               # AUTOPULSE__TARGETS__PLEX__ANALYZE: true
+              AUTOPULSE__TRIGGERS__MANUAL__TYPE: manual
+              AUTOPULSE__TRIGGERS__RADARR__TYPE: radarr
+              AUTOPULSE__TRIGGERS__SONARR__TYPE: sonarr
             envFrom: &envFrom
               - secretRef:
                   name: autopulse-secret
