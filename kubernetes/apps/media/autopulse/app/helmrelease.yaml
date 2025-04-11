@@ -110,9 +110,12 @@ spec:
 
     persistence:
       app:
-        type: emptyDir
-        globalMounts:
-        - path: /data
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /app/data
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
