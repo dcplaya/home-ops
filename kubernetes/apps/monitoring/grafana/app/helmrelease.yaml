@@ -198,6 +198,11 @@ spec:
           gnetId: 5342
           revision: 9
           datasource: Prometheus
+        # ceph-usage:
+        #   # renovate: depName="Ceph - Usage"
+        #   gnetId: 23246
+        #   revision: 1
+        #   datasource: Prometheus
 
       flux:
         flux-cluster:
@@ -243,6 +248,12 @@ spec:
           gnetId: 11454
           revision: 14
           datasource: Prometheus
+        kubernetes-pvc-stats:
+          # renovate: depName="Kubernetes PVC Stats"
+          gnetId: 23233
+          revision: 3
+          datasource: Prometheus
+
 
       nginx:
         nginx:
