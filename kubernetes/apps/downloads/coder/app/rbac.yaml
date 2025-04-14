@@ -73,3 +73,7 @@ rules:
   - apiGroups: ["apps.emqx.io"]
     resources: ["*"]
     verbs: ["get", "list", "watch"]
+  # Service monitoring resources
+  - apiGroups: ["monitoring.coreos.com"]
+    resources: ["servicemonitors"]
+    verbs: ["get", "list", "watch"]
