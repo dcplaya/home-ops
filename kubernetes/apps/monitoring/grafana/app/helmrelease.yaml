@@ -252,8 +252,9 @@ spec:
           # renovate: depName="Kubernetes PVC Stats"
           gnetId: 23233
           revision: 3
-          datasource: Prometheus
-
+          datasource:
+            - name: DS_VICTORIAMETRICS
+              value: Prometheus
 
       nginx:
         nginx:
@@ -262,6 +263,7 @@ spec:
         nginx-request-handling-performance:
           url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
           datasource: Prometheus
+
       unifi:
         unifi-insights:
           # renovate: depName="UniFi-Poller: Client Insights - Prometheus"
