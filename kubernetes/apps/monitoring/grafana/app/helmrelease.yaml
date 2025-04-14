@@ -251,7 +251,7 @@ spec:
         kubernetes-pvc-stats:
           # renovate: depName="Kubernetes PVC Stats"
           gnetId: 23233
-          revision: 3
+          revision: 4
           datasource:
             - name: DS_VICTORIAMETRICS
               value: Prometheus
