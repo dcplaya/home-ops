@@ -253,7 +253,9 @@ spec:
           gnetId: 23233
           revision: 4
           datasource:
-            - name: DS_VICTORIAMETRICS
+            # - name: DS_VICTORIAMETRICS
+            #   value: Prometheus
+            - name: DS_PROMETHEUS
               value: Prometheus
 
       nginx:
