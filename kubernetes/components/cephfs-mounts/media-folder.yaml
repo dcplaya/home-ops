@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ceph-filesystem-${APP}-4kmovies
+  name: ceph-filesystem-${APP}-media
 spec:
   accessModes:
     - ReadWriteMany
@@ -20,19 +20,19 @@ spec:
       # Required options from storageclass parameters need to be added in volumeAttributes
       "clusterID": "rook-ceph"
       "fsName": "ceph-filesystem"
-      "pool": "ceph-filesystem-erasurecoded"
+      "pool": "ceph-filesystem-ec-6-2"
       "staticVolume": "true"
-      "rootPath": /volumes/media/4KMovies
+      "rootPath": /volumes/media
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
-    volumeHandle: ceph-filesystem-${APP}-4kmovies
+    volumeHandle: ceph-filesystem-${APP}-media
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ceph-filesystem-${APP}-4kmovies
+  name: ceph-filesystem-${APP}-media
   labels:
     backup: "false"
 spec:
@@ -44,4 +44,4 @@ spec:
       storage: 124T
   volumeMode: Filesystem
   # volumeName should be same as PV name
-  volumeName: ceph-filesystem-${APP}-4kmovies
+  volumeName: ceph-filesystem-${APP}-media

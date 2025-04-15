@@ -195,26 +195,33 @@ spec:
             app:
             - path: /mnt/unionfs/backup
       music:
-        enabled: true
+        enabled: false
         existingClaim: ceph-filesystem-${APP}-music
         advancedMounts:
           coder:
             app:
             - path: /mnt/unionfs/Media/Music/
       movies:
-        enabled: true
+        enabled: false
         existingClaim: ceph-filesystem-${APP}-movies
         advancedMounts:
           coder:
             app:
             - path: /mnt/unionfs/Media/Movies/
       tv:
-        enabled: true
+        enabled: false
         existingClaim: ceph-filesystem-${APP}-tv
         advancedMounts:
           coder:
             app:
             - path: /mnt/unionfs/Media/TV
+      media:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-media
+        advancedMounts:
+          coder:
+            app:
+            - path: /mnt/unionfs/Media
       downloads:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-downloads
