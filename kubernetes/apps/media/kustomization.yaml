@@ -7,7 +7,6 @@ components:
 - ../../components/common
 - ../../components/repos/app-template
 resources:
-- ./autoscan/ks.yaml
 - ./autopulse/ks.yaml
 - ./kometa/ks.yaml
 - ./plex/ks.yaml
