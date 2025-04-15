@@ -45,8 +45,10 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/home-assistant
-              tag: 2025.4.2
+              #repository: ghcr.io/home-operations/home-assistant
+              #tag: 2025.4.2
+              repository: homeassistant/home-assistant
+              tag: 2025.4
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
