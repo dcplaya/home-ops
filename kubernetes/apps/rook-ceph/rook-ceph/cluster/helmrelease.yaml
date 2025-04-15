@@ -263,7 +263,7 @@ spec:
           erasureCoded:
             dataChunks: 6
             codingChunks: 2
-        - name: ec-4+2
+        - name: ec-4-2
           failureDomain: host
           deviceClass: hdd
           erasureCoded:
