@@ -244,8 +244,7 @@ spec:
     cephFileSystems:
     - name: &cephFileSystemName ceph-filesystem
       spec:
-        # Default is true. Setting to false will allow the ceph-operator to delete the pools when deleting the filesystem
-        preservePoolsOnDelete: true
+        preserveFilesystemOnDelete: true
         metadataPool:
           failureDomain: host
           deviceClass: nvme
