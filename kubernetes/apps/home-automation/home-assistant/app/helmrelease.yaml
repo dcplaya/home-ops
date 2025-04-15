@@ -61,10 +61,10 @@ spec:
             envFrom:
             - secretRef:
                 name: home-assistant-secrets
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false # needs to be false for samsung smartthings integration to install
-              capabilities: { drop: [ "ALL" ] }
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: false # needs to be false for samsung smartthings integration to install
+            #   capabilities: { drop: [ "ALL" ] }
             resources:
               requests:
                 memory: "512M"
@@ -82,12 +82,12 @@ spec:
                 memory: 512Mi
 
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   fsGroup: 1000
+      #   fsGroupChangePolicy: OnRootMismatch
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
