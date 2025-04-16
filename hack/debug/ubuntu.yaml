@@ -23,13 +23,13 @@ spec:
     #   readOnly: false
     securityContext:
       privileged: true
-      # resources:
-      #   requests:
-      #     memory: "640Mi"
-      #     cpu: "250m"
-      #   limits:
-      #     memory: "4096Mi"
-      #     cpu: "2000m"
+    resources:
+      requests:
+        memory: "640Mi"
+        cpu: "250m"
+      limits:
+        memory: "4096Mi"
+        cpu: "2000m"
   volumes:
   - name: root
     hostPath:
