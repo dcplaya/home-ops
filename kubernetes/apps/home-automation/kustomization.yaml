@@ -11,7 +11,6 @@ resources:
 - ./esphome/ks.yaml
 - ./frigate/ks.yaml
 - ./home-assistant/ks.yaml
-- ./test/ks.yaml
 - ./hyperhdr/ks.yaml
 - ./wyoming-whisper/ks.yaml
 - ./wyoming-piper/ks.yaml
