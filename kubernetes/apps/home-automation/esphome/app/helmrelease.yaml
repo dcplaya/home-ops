@@ -53,7 +53,7 @@ spec:
           app:
             image:
               repository: esphome/esphome
-              tag: 2025.3
+              tag: 2025.4
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
