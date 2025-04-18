@@ -8,4 +8,4 @@ components:
   - ../../components/repos/app-template
 resources:
   - ./echo/ks.yaml
-  - ./cephMigration/ks.yaml
+  - ./cephmigration/ks.yaml

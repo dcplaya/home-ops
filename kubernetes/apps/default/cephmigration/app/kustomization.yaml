@@ -12,5 +12,5 @@ generatorOptions:
     kustomize.toolkit.fluxcd.io/substitute: disabled
 labels:
 - pairs:
-    app.kubernetes.io/name: cephMigration
-    app.kubernetes.io/instance: cephMigration
+    app.kubernetes.io/name: cephmigration
+    app.kubernetes.io/instance: cephmigration
