@@ -30,7 +30,7 @@ spec:
       nameOverride: *app
 
     controllers:
-      cephMigration:
+      cephmigration:
         annotations:
           reloader.stakater.com/auto: "true"
 
@@ -65,7 +65,7 @@ spec:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-media
         advancedMounts:
-          cephMigration:
+          cephmigration:
             app:
             - path: /mnt/unionfs/Media
 
