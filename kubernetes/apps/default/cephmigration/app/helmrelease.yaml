@@ -41,7 +41,7 @@ spec:
               tag: latest
               pullPolicy: Always
             command: [ "/bin/bash", "-c" ]
-            args: [ apt-get update && apt-get install -y gdisk smartmontools hdparm sysstat iperf3 lvm2 python3 && echo "Go to sleep now!" && sleep infinity ]
+            args: [ apt-get update && apt-get install -y gdisk smartmontools hdparm sysstat iperf3 lvm2 python3 python3-pip && echo "Go to sleep now!" && sleep infinity ]
             env:
               TZ: "${TIMEZONE}"
 
