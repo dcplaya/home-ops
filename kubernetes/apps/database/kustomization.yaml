@@ -7,6 +7,4 @@ components:
   - ../../components/common
   - ../../components/repos/app-template
 resources:
-  - ./cloudnative-pg/ks.yaml
   - ./lldap/ks.yaml
-  - ./pgadmin/ks.yaml
