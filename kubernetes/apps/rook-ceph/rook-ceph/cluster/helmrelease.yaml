@@ -114,15 +114,15 @@ spec:
         config:
           osdsPerDevice: "1"
         nodes:
-        - name: work1
-          devices:
-          # HDDs
-          - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_6180A056FVGG"
-            config:
-              metadataDevice: "/dev/disk/by-id/ata-OCZ_INTREPID_3800_A22L7061515001100"
-          - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_71K0A0Q4FVGG"
-            config:
-              metadataDevice: "/dev/disk/by-id/ata-OCZ_INTREPID_3800_A22L7061515001100"
+        # - name: work1
+        #   devices:
+        #   # HDDs
+        #   - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_6180A056FVGG"
+        #     config:
+        #       metadataDevice: "/dev/disk/by-id/ata-OCZ_INTREPID_3800_A22L7061515001100"
+        #   - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_71K0A0Q4FVGG"
+        #     config:
+        #       metadataDevice: "/dev/disk/by-id/ata-OCZ_INTREPID_3800_A22L7061515001100"
 
         - name: n100-01
           devices:
