@@ -2,24 +2,11 @@
 clusterName: &cluster cluster-2
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.4
+talosVersion: v1.10.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.31.1
 
 # Image URL rendered on https://factory.talos.dev
-# customization:
-#     extraKernelArgs:
-#         - net.ifnames=0
-#     systemExtensions:
-#         officialExtensions:
-#             #- siderolabs/tailscale
-#             - siderolabs/util-linux-tools
-#             # - siderolabs/nut-client
-#             # - siderolabs/stargz-snapshotter
-
-
-# Raspi Hash
-# talosImageURL:factory.talos.dev/installer/1302eca2c7075b3419d4a7421915a760f254ca339a827d3cb65b2d37208d4e54:v1.7.0
 
 endpoint: https://cluster-2.${secret_domain}:6443
 # domain: cluster-2.${secret_domain}
@@ -341,8 +328,18 @@ controlPlane:
     topology.kubernetes.io/zone: m
   schematic:
     customization:
-      # extraKernelArgs:
-      # - net.ifnames=0
+      extraKernelArgs: &kernelArgs
+      - -selinux                            # Less security, faster puter
+      - i915.enable_guc=3                   # Alder Lake CPU / iGPU
+      - apparmor=0                          # Less security, faster puter
+      - init_on_alloc=0                     # Less security, faster puter
+      - init_on_free=0                      # Less security, faster puter
+      - intel_iommu=on                      # PCI Passthrough
+      - iommu=pt                            # PCI Passthrough
+      - mitigations=off                     # Less security, faster puter
+      - security=none                       # Less security, faster puter
+      - sysctl.kernel.kexec_load_disabled=1 # Alder Lake CPU / iGPU
+      - talos.auditd.disabled=1             # Less security, faster puter
       systemExtensions:
         officialExtensions: &extensions
           - siderolabs/amd-ucode
@@ -484,6 +481,7 @@ controlPlane:
 worker:
   schematic:
     customization:
+      extraKernelArgs:  *kernelArgs
       systemExtensions:
         officialExtensions: *extensions
   patches:
