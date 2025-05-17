@@ -2,7 +2,7 @@
 clusterName: &cluster cluster-2
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.0
+talosVersion: v1.9.6
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.31.1
 
@@ -37,7 +37,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -83,7 +83,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -119,7 +119,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -155,7 +155,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -191,7 +191,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -227,7 +227,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -263,7 +263,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -299,7 +299,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -328,18 +328,18 @@ controlPlane:
     topology.kubernetes.io/zone: m
   schematic:
     customization:
-      extraKernelArgs: &kernelArgs
-      - -selinux                            # Less security, faster puter
-      - i915.enable_guc=3                   # Alder Lake CPU / iGPU
-      - apparmor=0                          # Less security, faster puter
-      - init_on_alloc=0                     # Less security, faster puter
-      - init_on_free=0                      # Less security, faster puter
-      - intel_iommu=on                      # PCI Passthrough
-      - iommu=pt                            # PCI Passthrough
-      - mitigations=off                     # Less security, faster puter
-      - security=none                       # Less security, faster puter
-      - sysctl.kernel.kexec_load_disabled=1 # Alder Lake CPU / iGPU
-      - talos.auditd.disabled=1             # Less security, faster puter
+      # extraKernelArgs: &kernelArgs
+      # - -selinux                            # Less security, faster puter
+      # - i915.enable_guc=3                   # Alder Lake CPU / iGPU
+      # - apparmor=0                          # Less security, faster puter
+      # - init_on_alloc=0                     # Less security, faster puter
+      # - init_on_free=0                      # Less security, faster puter
+      # - intel_iommu=on                      # PCI Passthrough
+      # - iommu=pt                            # PCI Passthrough
+      # - mitigations=off                     # Less security, faster puter
+      # - security=none                       # Less security, faster puter
+      # - sysctl.kernel.kexec_load_disabled=1 # Alder Lake CPU / iGPU
+      # - talos.auditd.disabled=1             # Less security, faster puter
       systemExtensions:
         officialExtensions: &extensions
           - siderolabs/amd-ucode
@@ -481,7 +481,7 @@ controlPlane:
 worker:
   schematic:
     customization:
-      extraKernelArgs:  *kernelArgs
+      # extraKernelArgs:  *kernelArgs
       systemExtensions:
         officialExtensions: *extensions
   patches:
