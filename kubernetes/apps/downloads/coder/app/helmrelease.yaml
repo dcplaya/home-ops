@@ -30,8 +30,7 @@ spec:
       nameOverride: *app
 
     serviceAccount:
-      name: "coder"
-      create: true
+      coder: {}
 
     defaultPodOptions:
       automountServiceAccountToken: true

@@ -57,5 +57,4 @@ spec:
         - path: /host/opt/cni/bin
 
     serviceAccount:
-      create: true
-      name: multus
+      multus: {}
