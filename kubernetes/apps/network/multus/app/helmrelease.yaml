@@ -21,6 +21,9 @@ spec:
         pod:
           hostNetwork: true
 
+        serviceAccount:
+          identifier: multus
+
         initContainers:
           cni-plugins:
             image:

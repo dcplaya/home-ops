@@ -64,6 +64,9 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
+        serviceAccount:
+          identifier: coder
+
         containers:
           app:
             image:
