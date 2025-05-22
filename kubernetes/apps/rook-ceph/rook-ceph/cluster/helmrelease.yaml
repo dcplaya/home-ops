@@ -138,11 +138,11 @@ spec:
           devices:
           # HDDs
           - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_6180A056FVGG"
-            config:
-              metadataDevice: "/dev/disk/by-id/ata-NGFF_2280_512GB_SSD_2024072900782-part1"
+            # config:
+            #   metadataDevice: "/dev/disk/by-id/ata-NGFF_2280_512GB_SSD_2024072900782-part1"
           - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_71K0A0Q4FVGG"
-            config:
-              metadataDevice: "/dev/disk/by-id/ata-NGFF_2280_512GB_SSD_2024072900782-part2"
+            # config:
+            #   metadataDevice: "/dev/disk/by-id/ata-NGFF_2280_512GB_SSD_2024072900782-part2"
 
         - name: n100-04
           devices:
