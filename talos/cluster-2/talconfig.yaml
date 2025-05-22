@@ -134,8 +134,8 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: r8169
-        hardwareAddr: e8:ff:1e:d4:66:*
+      - driver: ixgbe
+        hardwareAddr: d4:20:00:b1:d7:*
     dhcp: false
     vlans:
     - *vlan2002
