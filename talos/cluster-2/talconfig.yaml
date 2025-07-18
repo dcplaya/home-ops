@@ -2,7 +2,7 @@
 clusterName: &cluster cluster-2
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.6
+talosVersion: v1.10.5
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.31.1
 
@@ -227,11 +227,34 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
     wwid: eui.0000000001000000e4d25c1d68035501
+  # volumes:
+  #   - name: EPHEMERAL
+  #     provisioning:
+  #       maxSize: 250GB
+  # userVolumes:
+  # - name: ceph-hdd01-metadata
+  #   provisioning:
+  #     minSize: 100GB
+  #     maxSize: 256GB
+  #     grow: true
+  #     diskSelector:
+  #       match: disk.size > 500u * GB && disk.size < 550u * GB
+  #   filesystem:
+  #     type: xfs
+  # - name: ceph-hdd02-metadata
+  #   provisioning:
+  #     minSize: 100GB
+  #     maxSize: 256GB
+  #     grow: true
+  #     diskSelector:
+  #       match: disk.size > 500u * GB && disk.size < 550u * GB
+  #   filesystem:
+  #     type: xfs
   networkInterfaces:
   - interface: bond0
     bond:
