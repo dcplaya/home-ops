@@ -37,7 +37,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -83,7 +83,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -119,7 +119,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: true
   disableSearchDomain: true
   installDiskSelector:
@@ -155,7 +155,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -191,7 +191,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -286,7 +286,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
@@ -322,7 +322,7 @@ nodes:
   #             - siderolabs/intel-ucode
   #             - siderolabs/realtek-firmware
   #             - siderolabs/thunderbolt
-  talosImageURL: factory.talos.dev/installer/595d1a41dfce0564794a4e4129cecd71bf902ccc3e360ee0da2c8849988e9dea
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
   controlPlane: false
   disableSearchDomain: true
   installDiskSelector:
