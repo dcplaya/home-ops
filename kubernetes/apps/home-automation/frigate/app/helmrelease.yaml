@@ -82,9 +82,15 @@ spec:
     service:
       app:
         controller: *app
+        type: ClusterIP
         ports:
-          http:
+          http-auth:
             port: *port
+            targetPort: *port
+          http:
+            primary: true
+            port: &http 5000
+            targetPort: *http
           rtsp:
             enabled: true
             port: 8554
@@ -160,4 +166,4 @@ spec:
         rules:
         - backendRefs:
           - name: *app
-            port: *port
+            port: *http
