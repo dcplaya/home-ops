@@ -160,7 +160,7 @@ spec:
         hostnames:
         - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
         parentRefs:
-        - name: external
+        - name: internal
           namespace: kube-system
           sectionName: https
         rules:
