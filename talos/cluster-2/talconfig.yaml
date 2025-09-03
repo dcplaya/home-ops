@@ -407,6 +407,12 @@ controlPlane:
         advertisedSubnets:
           - 10.200.2.0/24
 
+  # Disable Talos taking control of CoreDNS
+  - |-
+    cluster:
+      coreDNS:
+        disabled: true
+
   # Configure containerd
   - &containerdPatch |-
     machine:
