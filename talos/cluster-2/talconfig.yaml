@@ -2,7 +2,7 @@
 clusterName: &cluster cluster-2
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.5
+talosVersion: v1.11.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.31.1
 
@@ -135,7 +135,7 @@ nodes:
       downdelay: 200
       deviceSelectors:
       - driver: igc
-        hardwareAddr: a8:b8:e0:08:2b:*
+        hardwareAddr: a8:b8:e0:01:0e:*
     dhcp: false
     vlans:
     - *vlan2002
@@ -302,7 +302,7 @@ nodes:
       downdelay: 200
       deviceSelectors:
       - driver: igc
-        hardwareAddr: a8:b8:e0:04:fa:*
+        hardwareAddr: a8:b8:e0:08:2b:*
     dhcp: false
     vlans:
     - *vlan2002
@@ -449,7 +449,6 @@ controlPlane:
           featureGates:
             ImageVolume: true
           serializeImagePulls: false
-        extraConfig:
           maxPods: 200
         nodeIP:
           validSubnets:
