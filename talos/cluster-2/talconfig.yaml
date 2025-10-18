@@ -4,7 +4,7 @@ clusterName: &cluster cluster-2
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.11.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.31.1
+kubernetesVersion: v1.32.8
 
 # Image URL rendered on https://factory.talos.dev
 
@@ -135,7 +135,7 @@ nodes:
       downdelay: 200
       deviceSelectors:
       - driver: igc
-        hardwareAddr: a8:b8:e0:01:0e:*
+        hardwareAddr: a8:b8:e0:04:fa:*
     dhcp: false
     vlans:
     - *vlan2002
