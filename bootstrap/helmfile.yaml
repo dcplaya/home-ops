@@ -54,7 +54,7 @@ releases:
   namespace: cert-manager
   atomic: true
   chart: jetstack/cert-manager
-  version: v1.19.0
+  version: v1.19.1
   values: [ '/home/carpenam/GitProjects/home-ops/kubernetes/apps/cert-manager/cert-manager/app/helm/values.yaml' ]
   needs: [ 'kube-system/spegel' ]
 
