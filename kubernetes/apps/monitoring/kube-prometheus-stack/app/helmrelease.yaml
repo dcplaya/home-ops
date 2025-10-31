@@ -158,7 +158,7 @@ spec:
         image:
           registry: quay.io
           repository: prometheus/prometheus
-          tag: v3.7.2
+          tag: v3.7.3
         enableAdminAPI: true
         enableFeatures:
         - auto-gomaxprocs
