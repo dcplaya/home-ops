@@ -37,6 +37,15 @@ spec:
       createPrometheusRules: true
     toolbox:
       enabled: true
+    route:
+      dashboard:
+        host:
+          name: rook.${SECRET_DOMAIN}
+          path: /
+          pathType: PathPrefix
+        parentRefs:
+        - name: envoy-internal
+          namespace: network
     configOverride: |
       [osd]
       osd_max_backfills = 6
