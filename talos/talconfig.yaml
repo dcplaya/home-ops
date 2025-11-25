@@ -11,82 +11,166 @@ additionalApiServerCertSans: &sans
   - "cluster.elcarpenter.com"
 additionalMachineCertSans: *sans
 
-clusterPodNets: ["10.42.0.0/16"]
-clusterSvcNets: ["10.43.0.0/16"]
+clusterPodNets: [ "10.42.0.0/16" ]
+clusterSvcNets: [ "10.43.0.0/16" ]
 
 # Disable built-in CNI to use Cilium
 cniConfig:
   name: none
 
 nodes:
-  - hostname: "n100-01"
-    ipAddress: "10.200.2.11"
-    installDisk: "/dev/disk/by-id/nvme-Apacer_AS2280P4_512GB_N32339112883"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "00:e0:4c:08:07:31"
-        dhcp: false
-        addresses:
-          - "10.200.2.11/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.200.2.1"
-        mtu: 1500
-        vip:
-          ip: "10.200.2.10"
-  - hostname: "n100-02"
-    ipAddress: "10.200.2.12"
-    installDisk: "/dev/disk/by-id/nvme-Apacer_AS2280P4_512GB_N32339112870"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "00:e0:4c:08:06:35"
-        dhcp: false
-        addresses:
-          - "10.200.2.12/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.200.2.1"
-        mtu: 1500
-        vip:
-          ip: "10.200.2.10"
-  - hostname: "n100-03"
-    ipAddress: "10.200.2.13"
-    installDisk: "/dev/disk/by-id/nvme-WDC_PC_SN730_SDBQNTY-256G-1001_200955804009"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "a8:b8:e0:04:fa:96"
-        dhcp: false
-        addresses:
-          - "10.200.2.13/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.200.2.1"
-        mtu: 1500
-        vip:
-          ip: "10.200.2.10"
+- hostname: "n100-01"
+  ipAddress: "10.200.2.11"
+  installDisk: "/dev/disk/by-id/nvme-Apacer_AS2280P4_512GB_N32339112883"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: true
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "00:e0:4c:08:07:31"
+    dhcp: false
+    addresses:
+    - "10.200.2.11/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+    vip:
+      ip: "10.200.2.10"
+- hostname: "n100-02"
+  ipAddress: "10.200.2.12"
+  installDisk: "/dev/disk/by-id/nvme-Apacer_AS2280P4_512GB_N32339112870"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: true
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "00:e0:4c:08:06:35"
+    dhcp: false
+    addresses:
+    - "10.200.2.12/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+    vip:
+      ip: "10.200.2.10"
+- hostname: "n100-03"
+  ipAddress: "10.200.2.13"
+  installDisk: "/dev/disk/by-id/nvme-WDC_PC_SN730_SDBQNTY-256G-1001_200955804009"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: true
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:04:fa:96"
+    dhcp: false
+    addresses:
+    - "10.200.2.13/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+    vip:
+      ip: "10.200.2.10"
+- hostname: "n100-04"
+  ipAddress: "10.200.2.14"
+  installDisk: "/dev/disk/by-id/nvme-GV-128_2280_0013413003989"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: false
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:04:f5:db"
+    dhcp: false
+    addresses:
+    - "10.200.2.14/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+- hostname: "n100-05"
+  ipAddress: "10.200.2.15"
+  installDisk: "/dev/disk/by-id/nvme-H10_HBRPEKNX0101A_NVMe_INTEL_256GB_PHTE9121016M256D-1"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: false
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:04:fa:a9"
+    dhcp: false
+    addresses:
+    - "10.200.2.15/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+- hostname: "n100-06"
+  ipAddress: "10.200.2.16"
+  installDisk: "/dev/disk/by-id/nvme-INTEL_HBRPEKNX0101AH_PHTE14000036256D-1"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: false
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:04:fa:9a"
+    dhcp: false
+    addresses:
+    - "10.200.2.16/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+- hostname: "n100-07"
+  ipAddress: "10.200.2.17"
+  installDisk: "/dev/disk/by-id/nvme-H10_HBRPEKNX0101A_NVMe_INTEL_256GB_BTTE90320FN0256D-1"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: false
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:08:2b:19"
+    dhcp: false
+    addresses:
+    - "10.200.2.17/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
+- hostname: "n100-08"
+  ipAddress: "10.200.2.18"
+  installDisk: "/dev/disk/by-id/nvme-KBG50ZNV256G_KIOXIA_135PH3TSQMKK"
+  machineSpec:
+    secureboot: false
+  talosImageURL: factory.talos.dev/installer/6283eac21dabbcb3ffffcea234a5e0de77e016f1398fa64fafb34c0a4fa16904
+  controlPlane: false
+  networkInterfaces:
+  - deviceSelector:
+      hardwareAddr: "a8:b8:e0:04:fa:8d"
+    dhcp: false
+    addresses:
+    - "10.200.2.18/24"
+    routes:
+    - network: "0.0.0.0/0"
+      gateway: "10.200.2.1"
+    mtu: 1500
 
 # Global patches
 patches:
-  - "@./patches/global/machine-files.yaml"
-  - "@./patches/global/machine-kubelet.yaml"
-  - "@./patches/global/machine-network.yaml"
-  - "@./patches/global/machine-sysctls.yaml"
-  - "@./patches/global/machine-time.yaml"
+- "@./patches/global/machine-files.yaml"
+- "@./patches/global/machine-kubelet.yaml"
+- "@./patches/global/machine-network.yaml"
+- "@./patches/global/machine-sysctls.yaml"
+- "@./patches/global/machine-time.yaml"
 
 # Controller patches
 controlPlane:
   patches:
-    - "@./patches/controller/cluster.yaml"
-
+  - "@./patches/controller/cluster.yaml"
