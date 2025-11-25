@@ -18,7 +18,7 @@ spec:
     name: *app
     namespace: *namespace
   interval: 1h
-  path: ./kubernetes/apps/volsync/volsync-system/app
+  path: ./kubernetes/apps/volsync-system/volsync/app
   postBuild:
     substituteFrom:
     - name: cluster-secrets
