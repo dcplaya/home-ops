@@ -92,7 +92,7 @@ spec:
         - name: rook
           enabled: true
       mon:
-        count: 3
+        count: 1
         allowMultiplePerNode: false
       network:
         connections:
