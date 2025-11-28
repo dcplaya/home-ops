@@ -52,11 +52,6 @@ spec:
       osd_recovery_max_active_hdd = 16
       # Default is false. Set to true to auto repair inconsensistencies on EC & bluestore pools
       osd_scrub_auto_repair = true
-      # [global]
-      # auth cluster required = none
-      # auth service required = none
-      # auth client required = none
-      # auth supported = none
     cephClusterSpec:
       cephConfig:
         global:
@@ -92,7 +87,7 @@ spec:
         - name: rook
           enabled: true
       mon:
-        count: 1
+        count: 3
         allowMultiplePerNode: false
       network:
         connections:
