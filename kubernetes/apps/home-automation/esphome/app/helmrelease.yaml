@@ -157,8 +157,7 @@ spec:
 
     route:
       app:
-        hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        hostnames: [ "{{ .Release.Name }}.${SECRET_DOMAIN}" ]
         parentRefs:
         - name: envoy-internal
           namespace: network
