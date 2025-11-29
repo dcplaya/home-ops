@@ -1,0 +1,180 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app home-assistant
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+
+    controllers:
+      home-assistant:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"multus-iot",
+                "namespace": "network",
+                "ips": ["10.10.100.11/24"],
+                "mac": "48:c3:71:7c:c5:27"
+              }]
+            # DO NOT ENABLE
+            # Enabling this adds an extra default route to the container. My IoT network is locked down tight and results in failed external DNS lookups
+            # k8s.v1.cni.cncf.io/networks: home-automation-iot-dhcp
+            secret.reloader.stakater.com/reload: home-assistant-secrets
+
+        containers:
+          app:
+            image:
+              #repository: ghcr.io/home-operations/home-assistant
+              #tag: 2025.4.2
+              repository: homeassistant/home-assistant
+              tag: 2025.11
+              pullPolicy: IfNotPresent
+            env:
+              TZ: "${TIMEZONE}"
+              HASS__INSTANCE_NAME: Home-Assistant
+              HASS__PORT: &port 8123
+              HASS__APPLICATION_URL: &host "home.${INGRESS_DOMAIN}"
+              HASS__LOG_LEVEL: info
+              HASS_HTTP_TRUSTED_PROXY_1: 10.0.0.0/8
+              # HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
+            envFrom:
+            - secretRef:
+                name: home-assistant-secrets
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: false # needs to be false for samsung smartthings integration to install
+            #   capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                memory: "512M"
+              limits:
+                memory: "6000M"
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.105.1@sha256:2d48970bd2084aa34a522d772b6a437981ea80407465b3bf7958553985c570e1
+            args: [ "--auth", "none", "--user-data-dir", "/config/.vscode", "--extensions-dir", "/config/.vscode", "--port", "12321", "/config" ]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   fsGroup: 1000
+      #   fsGroupChangePolicy: OnRootMismatch
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [ "multus" ]
+            topologyKey: kubernetes.io/hostname
+            namespaceSelector: {}
+
+    service:
+      app:
+        controller: *app
+        # type: LoadBalancer
+        # annotations:
+        #   io.cilium/lb-ipam-ips: "${LB_HASS}"
+        # externalTrafficPolicy: Cluster
+        ports:
+          http:
+            port: *port
+          mdns-tcp:
+            enabled: true
+            port: 5353
+            protocol: TCP
+            targetPort: 5353
+          mdns-udp:
+            enabled: true
+            port: 5353
+            protocol: UDP
+            targetPort: 5353
+          code-server:
+            port: &code-server-port 12321
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+      backup:
+        enabled: false
+        existingClaim: ceph-filesystem-home-assistant-backups
+        advancedMounts:
+          home-assistant:
+            app:
+            # HASS backups to lowercase folder
+            - path: /config/backups
+              # subPath: ./Kubernetes/${CLUSTER_NAME}/Applications/home-assistant
+      matter-server-data:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          home-assistant:
+            app:
+            - path: /data
+
+    route:
+      code-server:
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        - "home.${INGRESS_DOMAIN}"
+        parentRefs:
+        - name: envoy-internal
+          namespace: network
+          sectionName: https
+        rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /code/
+          filters:
+          - type: URLRewrite
+            urlRewrite:
+              path:
+                type: ReplacePrefixMatch
+                replacePrefixMatch: /
+          backendRefs:
+          - name: *app
+            port: *code-server-port
+      app:
+        hostnames:
+        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
+        - "home.${INGRESS_DOMAIN}"
+        parentRefs:
+        - name: envoy-external
+          namespace: network
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: *app
+            port: *port

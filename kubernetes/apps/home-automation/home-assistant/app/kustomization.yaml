@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../../components/cephfs-mounts/backup.yaml
+  - ./secret-home-assistant.sops.yaml
+  - ./secret.sops.yaml
+  - ./helmrelease.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/name: home-assistant
+      app.kubernetes.io/instance: home-assistant
