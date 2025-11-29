@@ -146,8 +146,8 @@ spec:
     route:
       code-server:
         hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-        - "home.${INGRESS_DOMAIN}"
+        - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        - "home.${SECRET_DOMAIN}"
         parentRefs:
         - name: envoy-internal
           namespace: network
@@ -168,8 +168,8 @@ spec:
             port: *code-server-port
       app:
         hostnames:
-        - "{{ .Release.Name }}.${INGRESS_DOMAIN}"
-        - "home.${INGRESS_DOMAIN}"
+        - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        - "home.${SECRET_DOMAIN}"
         parentRefs:
         - name: envoy-external
           namespace: network
