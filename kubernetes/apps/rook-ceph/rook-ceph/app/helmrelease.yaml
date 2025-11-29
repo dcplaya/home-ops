@@ -41,7 +41,7 @@ spec:
       # NOTE: Enable the driver and shapshotter if you want to use CephFS
       enableLiveness: true
       serviceMonitor:
-        enabled: true
+        enabled: false
     enableDiscoveryDaemon: true
     image:
       repository: ghcr.io/rook/ceph
