@@ -36,9 +36,9 @@ spec:
     # Options: `ERROR`, `WARNING`, `INFO`, `DEBUG`
     logLevel: INFO
     csi:
-      rookUseCsiOperator: false
-      enableRbdDriver: false
-      enableCephfsDriver: false
+      rookUseCsiOperator: true
+      enableRbdDriver: true
+      enableCephfsDriver: true
       # NOTE: needed to allow cephfs mounts to work reliably
       cephFSKernelMountOptions: ms_mode=prefer-secure
       # NOTE: Enable the driver and shapshotter if you want to use CephFS
