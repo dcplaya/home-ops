@@ -5,6 +5,7 @@ namespace: network
 
 components:
 - ../../components/sops
+- ../../components/repos/app-template
 
 resources:
 - ./namespace.yaml
