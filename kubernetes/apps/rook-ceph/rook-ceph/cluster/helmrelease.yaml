@@ -273,7 +273,7 @@ spec:
             codingChunks: 2
         metadataServer:
           activeCount: 1
-          activeStandby: true
+          activeStandby: false
           priorityClassName: system-cluster-critical
           placement:
             topologySpreadConstraints:
