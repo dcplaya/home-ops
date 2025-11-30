@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: database
+components:
+- ../../components/namespace
+- ../../components/sops
+- ../../components/repos/app-template
+
+# resources:
+# - ./lldap/ks.yaml
