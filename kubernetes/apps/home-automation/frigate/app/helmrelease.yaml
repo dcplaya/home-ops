@@ -1,0 +1,169 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app frigate
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  rollback:
+    recreate: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+      fullnameOverride: *app
+
+    controllers:
+      frigate:
+        annotations:
+          reloader.stakater.com/auto: "true"
+          configmap.reloader.stakater.com/reload: "frigate-config"
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.16.2@sha256:4041ad318224500cf9513c513b1bb927d9dd252f63bbd3d11c92006c1172c86c
+              # tag: 0.12.1
+              pullPolicy: IfNotPresent
+            env:
+              TZ: "${TIMEZONE}"
+              FRIGATE__INSTANCE_NAME: Frigate
+              FRIGATE__PORT: &port 8971
+              FRIGATE__APPLICATION_URL: &host "frigate.${SECRET_DOMAIN}"
+              FRIGATE__LOG_LEVEL: info
+            envFrom:
+            - secretRef:
+                name: frigate-secrets
+            resources:
+              requests:
+                memory: 2G
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 9G
+            securityContext:
+              privileged: true
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: 5000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+
+    defaultPodOptions:
+      nodeSelector:
+        google.feature.node.kubernetes.io/coral: "true"
+        intel.feature.node.kubernetes.io/gpu: "true"
+
+    service:
+      app:
+        controller: *app
+        type: ClusterIP
+        ports:
+          http-auth:
+            port: *port
+            targetPort: *port
+          http:
+            primary: true
+            port: &http 5000
+            targetPort: *http
+          rtsp:
+            enabled: true
+            port: 8554
+          go2rtc:
+            enabled: true
+            port: 1984
+          srtp:
+            enabled: false
+            port: 8443
+          webrtc:
+            enabled: true
+            port: 8555
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+        advancedMounts:
+          frigate:
+            app:
+            - path: /config
+              subPath: config
+            - path: /data
+              subPath: data
+      cert:
+        enabled: true
+        type: secret
+        name: frigate-cert
+        # defaultMode: 0600
+        advancedMounts:
+          frigate:
+            app:
+            - subPath: "tls.crt"
+              path: "/etc/letsencrypt/live/frigate/fullchain.pem"
+              readOnly: true
+            - subPath: "tls.key"
+              path: "/etc/letsencrypt/live/frigate/privkey.pem"
+              readOnly: true
+      media:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-security-footage
+        advancedMounts:
+          frigate:
+            app:
+            - path: /media
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/bus/usb
+        hostPathType: Directory
+        advancedMounts:
+          frigate:
+            app:
+            - path: /dev/bus/usb
+      cache:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 4Gi
+        advancedMounts:
+          frigate:
+            app:
+            - path: /dev/shm
+
+    route:
+      app:
+        hostnames:
+        - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        parentRefs:
+        - name: envoy-internal
+          namespace: network
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: *app
+            port: *http

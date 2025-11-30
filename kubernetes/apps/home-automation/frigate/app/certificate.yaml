@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${SECRET_DOMAIN}-frigate"
+spec:
+  secretName: "frigate-cert"
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "frigate.${SECRET_DOMAIN}"
+  dnsNames:
+  - "frigate.${SECRET_DOMAIN}"
