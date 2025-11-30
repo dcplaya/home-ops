@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "${INGRESS_DOMAIN}-hyperhdr"
+  name: "${SECRET_DOMAIN}-hyperhdr"
 spec:
   secretName: "hyperhdr-cert"
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "hyperhdr.${INGRESS_DOMAIN}"
+  commonName: "hyperhdr.${SECRET_DOMAIN}"
   dnsNames:
-  - "hyperhdr.${INGRESS_DOMAIN}"
+  - "hyperhdr.${SECRET_DOMAIN}"
