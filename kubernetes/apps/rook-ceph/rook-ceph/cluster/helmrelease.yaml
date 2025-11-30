@@ -244,67 +244,67 @@ spec:
       deletionPolicy: Delete
     # NOTE: After disabling the filesystem, the filesystem can be removed with the following commands:
     # ceph fs fail ceph-filesystem && ceph fs rm ceph-filesystem --yes-i-really-mean-it
-    cephFileSystems:
-    - name: &cephFileSystemName ceph-filesystem
-      spec:
-        preserveFilesystemOnDelete: true
-        metadataPool:
-          failureDomain: host
-          deviceClass: nvme
-          replicated:
-            size: 3
-        dataPools:
-        - name: data0
-          failureDomain: host
-          deviceClass: hdd
-          replicated:
-            size: 3
-        - name: erasurecoded
-          failureDomain: host
-          deviceClass: hdd
-          erasureCoded:
-            dataChunks: 6
-            codingChunks: 2
-        - name: ec-4-2
-          failureDomain: host
-          deviceClass: hdd
-          erasureCoded:
-            dataChunks: 4
-            codingChunks: 2
-        metadataServer:
-          activeCount: 1
-          activeStandby: true
-          priorityClassName: system-cluster-critical
-          placement:
-            topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: ceph-mds
-                  app.kubernetes.io/part-of: *cephFileSystemName
-          resources:
-            requests:
-              cpu: 100m
-              memory: 1Gi
-            limits:
-              memory: 4Gi
-      storageClass:
-        enabled: true
-        isDefault: false
-        name: ceph-filesystem
-        pool: erasurecoded
-        reclaimPolicy: Delete
-        allowVolumeExpansion: true
-        parameters:
-          csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-          csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
-          csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-          csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
-          csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-          csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-          csi.storage.k8s.io/fstype: ext4
+    cephFileSystems: {}
+    # - name: &cephFileSystemName ceph-filesystem
+    #   spec:
+    #     preserveFilesystemOnDelete: true
+    #     metadataPool:
+    #       failureDomain: host
+    #       deviceClass: nvme
+    #       replicated:
+    #         size: 3
+    #     dataPools:
+    #     - name: data0
+    #       failureDomain: host
+    #       deviceClass: hdd
+    #       replicated:
+    #         size: 3
+    #     - name: erasurecoded
+    #       failureDomain: host
+    #       deviceClass: hdd
+    #       erasureCoded:
+    #         dataChunks: 6
+    #         codingChunks: 2
+    #     - name: ec-4-2
+    #       failureDomain: host
+    #       deviceClass: hdd
+    #       erasureCoded:
+    #         dataChunks: 4
+    #         codingChunks: 2
+    #     metadataServer:
+    #       activeCount: 1
+    #       activeStandby: true
+    #       priorityClassName: system-cluster-critical
+    #       placement:
+    #         topologySpreadConstraints:
+    #         - maxSkew: 1
+    #           topologyKey: kubernetes.io/hostname
+    #           whenUnsatisfiable: DoNotSchedule
+    #           labelSelector:
+    #             matchLabels:
+    #               app.kubernetes.io/name: ceph-mds
+    #               app.kubernetes.io/part-of: *cephFileSystemName
+    #       resources:
+    #         requests:
+    #           cpu: 100m
+    #           memory: 1Gi
+    #         limits:
+    #           memory: 4Gi
+    #   storageClass:
+    #     enabled: true
+    #     isDefault: false
+    #     name: ceph-filesystem
+    #     pool: erasurecoded
+    #     reclaimPolicy: Delete
+    #     allowVolumeExpansion: true
+    #     parameters:
+    #       csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+    #       csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+    #       csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+    #       csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+    #       csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+    #       csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+    #       csi.storage.k8s.io/fstype: ext4
     cephFileSystemVolumeSnapshotClass:
       enabled: true
       name: csi-ceph-filesystem
