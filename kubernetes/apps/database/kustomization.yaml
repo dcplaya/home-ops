@@ -8,5 +8,5 @@ components:
 - ../../components/sops
 - ../../components/repos/app-template
 
-# resources:
-# - ./lldap/ks.yaml
+resources:
+- ./lldap/ks.yaml
