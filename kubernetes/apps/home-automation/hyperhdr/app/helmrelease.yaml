@@ -1,0 +1,128 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app hyperhdr
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+      fullnameOverride: *app
+
+    controllers:
+      hyperhdr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          annotations:
+            # DO NOT ENABLE
+            # Enabling this adds an extra default route to the container. My IoT network is locked down tight and results in failed external DNS lookups
+            # k8s.v1.cni.cncf.io/networks: home-automation-iot-dhcp
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"multus-iot",
+                "namespace": "network",
+                "ips": ["10.10.100.13/24"],
+                "mac": "aa:e9:02:a4:7e:68"
+              }]
+
+        containers:
+          app:
+            image:
+              repository: nocturno/hyper-hdr
+              tag: 21.0.0.0
+              pullPolicy: IfNotPresent
+            env:
+              TZ: America/Los_Angeles
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                memory: "1024M"
+              limits:
+                memory: "6000M"
+
+    defaultPodOptions:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [ "multus" ]
+            topologyKey: kubernetes.io/hostname
+            namespaceSelector: {}
+
+    service:
+      app:
+        controller: *app
+        type: LoadBalancer
+        # annotations:
+        #   traefik.ingress.kubernetes.io/service.serversscheme: https
+        #   io.cilium/lb-ipam-ips: "${LB_HYPERHDR}"
+        ports:
+          http:
+            port: &port 8092
+          jsonserver:
+            port: 19444
+          protocolbuffer:
+            port: 19445
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+      cert:
+        enabled: true
+        type: secret
+        name: hyperhdr-cert
+        # defaultMode: 0600
+        advancedMounts:
+          hyperhdr:
+            app:
+            - subPath: "tls.crt"
+              path: "/etc/letsencrypt/live/hyperhdr/fullchain.pem"
+              readOnly: true
+            - subPath: "tls.key"
+              path: "/etc/letsencrypt/live/hyperhdr/privkey.pem"
+              readOnly: true
+
+    route:
+      app:
+        hostnames:
+        - '{{ .Release.Name }}.${SECRET_DOMAIN}'
+        parentRefs:
+        - name: envoy-internal
+          namespace: network
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: *app
+            port: *port
