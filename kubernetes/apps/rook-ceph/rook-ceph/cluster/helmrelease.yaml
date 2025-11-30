@@ -46,6 +46,13 @@ spec:
         parentRefs:
         - name: envoy-internal
           namespace: network
+    # security:
+    #   cephx:
+    #     daemon:
+    #       keyRotationPolicy: KeyGeneration
+    #       keyGeneration: 2
+    #   keyRotation:
+    #     enabled: true
     configOverride: |
       [osd]
       osd_max_backfills = 6
@@ -306,7 +313,7 @@ spec:
           csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
           csi.storage.k8s.io/fstype: ext4
     cephFileSystemVolumeSnapshotClass:
-      enabled: true
+      enabled: false
       name: csi-ceph-filesystem
       isDefault: false
       deletionPolicy: Delete
