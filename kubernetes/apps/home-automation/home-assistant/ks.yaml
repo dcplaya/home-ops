@@ -9,21 +9,21 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    # - ../../../../components/gatus/guarded
-    - ../../../../components/volsync
+  # components:
+  #   # - ../../../../components/gatus/guarded
+  #   - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+  - name: rook-ceph-cluster
+    namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/home-automation/home-assistant/app
   postBuild:
     substituteFrom:
-      - name: cluster-secrets
-        kind: Secret
+    - name: cluster-secrets
+      kind: Secret
     substitute:
       APP: *app
-      NAMESPACE: *namespace 
+      NAMESPACE: *namespace
       GATUS_PATH: /web/index.html
       VOLSYNC_CAPACITY: 50Gi
       VOLSYNC_CLAIM: home-assistant
