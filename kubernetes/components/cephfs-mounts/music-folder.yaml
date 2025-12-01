@@ -13,7 +13,7 @@ spec:
     driver: rook-ceph.cephfs.csi.ceph.com 
     nodeStageSecretRef:
       # node stage secret name
-      name: rook-csi-cephfs-node-user
+      name: rook-csi-cephfs-node
       # node stage secret namespace where above secret is created
       namespace: rook-ceph
     volumeAttributes:
