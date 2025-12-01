@@ -1,27 +1,31 @@
 ---
-apiVersion: k8s.cni.cncf.io/v1
+apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
   name: multus-iot
 spec:
   config: |-
     {
-      "cniVersion": "1.1.0",
+      "cniVersion": "0.3.1",
       "name": "multus-iot",
       "plugins": [
         {
           "type": "macvlan",
-          "master": "bond0.30",
+          "master": "bond0.100",
           "mode": "bridge",
+          "capabilities": {
+            "ips": true
+          },
           "ipam": {
             "type": "static",
             "routes": [
-              {"dst": "0.0.0.0/0", "gw": "10.10.100.1"}
+              { "dst": "10.10.100.0/24", "gw": "10.10.100.1" }
             ]
           }
         },
         {
-          "type": "sbr"
-        }
+          "capabilities": { "mac": true },
+          "type": "tuning"
+        }        
       ]
     }
