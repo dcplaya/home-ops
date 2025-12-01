@@ -20,7 +20,7 @@ spec:
       # Required options from storageclass parameters need to be added in volumeAttributes
       "clusterID": "rook-ceph"
       "fsName": "ceph-filesystem"
-      "pool": "ceph-filesystem-erasurecoded"
+      "pool": "ceph-filesystem-ec-4-2"
       "staticVolume": "true"
       "rootPath": /volumes/backups/Kubernetes/${CLUSTER_NAME}/Applications/${APP}
     # volumeHandle can be anything, need not to be same
