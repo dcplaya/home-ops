@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: kubernetes-sigs-nfd-charts
+  namespace: kube-system
+spec:
+  interval: 30m
+  url: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+  timeout: 3m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: node-feature-discovery
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: node-feature-discovery
+      version: 0.18.3
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-sigs-nfd-charts
+        namespace: kube-system
+      interval: 10m
+  install:
+    crds: CreateReplace
+  upgrade:
+    timeout: 15m
+    crds: CreateReplace
+  values:
+    master:
+      #   config:
+      #     enableTaints: true          # Allows NFD to taint worker nodes
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: In
+                values: [ "" ]
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: In
+                values: [ "" ]
+
+    worker:
+      config:
+        core:
+          labelSources:
+          - "pci"
+          - "system"
+          - "usb"
+      tolerations:
+      - key: storage-node
+        operator: Exists
+        effect: "NoSchedule"
+      resources:
+        requests:
+          # cpu: 150m
+          memory: 64Mi
+        limits:
+          memory: 512Mi
+
+    prometheus:
+      enable: true
