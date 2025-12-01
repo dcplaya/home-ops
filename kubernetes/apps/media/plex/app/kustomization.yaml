@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../../../components/cephfs-mounts/backup.yaml
+- ../../../../components/cephfs-mounts/downloads-folder.yaml
+- ../../../../components/cephfs-mounts/movies-folder.yaml
+- ../../../../components/cephfs-mounts/music-folder.yaml
+- ../../../../components/cephfs-mounts/tv-folder.yaml
+- ./pvc.yaml
+- ./helmrelease.yaml
+configMapGenerator:
+- name: plex-loki-rules
+  files:
+  - plex.yaml=./resources/lokirule.yaml
+  options:
+    labels:
+      loki_rule: "true"
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+labels:
+- pairs:
+    app.kubernetes.io/name: plex
+    app.kubernetes.io/instance: plex
