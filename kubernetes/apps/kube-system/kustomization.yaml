@@ -4,12 +4,13 @@ kind: Kustomization
 namespace: kube-system
 
 components:
-  - ../../components/sops
+- ../../components/sops
 
 resources:
-  - ./namespace.yaml
-  - ./cilium/ks.yaml
-  - ./coredns/ks.yaml
-  - ./metrics-server/ks.yaml
-  - ./reloader/ks.yaml
-  - ./spegel/ks.yaml
+- ./namespace.yaml
+- ./cilium/ks.yaml
+- ./coredns/ks.yaml
+- ./intel-device-plugin-gpu/ks.yaml
+- ./metrics-server/ks.yaml
+- ./reloader/ks.yaml
+- ./spegel/ks.yaml
