@@ -8,7 +8,7 @@ components:
 - ../../components/repos/app-template
 - ../../components/sops
 
-# resources:
+resources:
 # - ./autopulse/ks.yaml
 # - ./kometa/ks.yaml
 - ./plex/ks.yaml
