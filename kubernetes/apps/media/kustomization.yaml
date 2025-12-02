@@ -9,7 +9,7 @@ components:
 - ../../components/sops
 
 resources:
-# - ./autopulse/ks.yaml
+- ./autopulse/ks.yaml
 - ./kometa/ks.yaml
 - ./plex/ks.yaml
 # - ./plex-auto-languages/ks.yaml

@@ -1,0 +1,158 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app autopulse
+  namespace: media
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  rollback:
+    recreate: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      nameOverride: *app
+      fullnameOverride: *app
+
+    controllers:
+      autopulse:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        containers:
+          app:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: v1.4.0
+            env:
+              TZ: ${TIMEZONE}
+              # PUID: 1000
+              # PGID: 1000
+              AUTOPULSE__APP__DATABASE_URL: sqlite://data/database.db
+              AUTOPULSE__TARGETS__PLEX__TYPE: plex
+              # AUTOPULSE__TARGETS__PLEX__REFRESH: true
+              # AUTOPULSE__TARGETS__PLEX__ANALYZE: true
+              AUTOPULSE__TRIGGERS__MANUAL__TYPE: manual
+              AUTOPULSE__TRIGGERS__RADARR__TYPE: radarr
+              AUTOPULSE__TRIGGERS__SONARR__TYPE: sonarr
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          ui:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: ui-v1.3.1
+            env:
+              TZ: ${TIMEZONE}
+              # PUID: 1000
+              # PGID: 1000
+              FORCE_DEFAULT_SERVER_URL: true
+              DEFAULT_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
+              FORCE_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
+              FORCE_AUTH: true
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities: { drop: [ "ALL" ] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+    # defaultPodOptions:
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 1000
+    #     runAsGroup: 1000
+    #     fsGroup: 1000
+    #     fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: &port 2875
+      ui:
+        controller: *app
+        ports:
+          ui:
+            port: &ui-port 2880
+
+    persistence:
+      app:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /app/data
+      music:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-music
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/Music/
+      movies:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-movies
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/Movies/
+      tv:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-tv
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/Media/TV
+      downloads:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-downloads
+        advancedMounts:
+          autopulse:
+            app:
+            - path: /mnt/unionfs/downloads
+    route:
+      app:
+        hostnames:
+        - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        parentRefs:
+        - name: envoy-external
+          namespace: network
+          sectionName: https
+        rules:
+        - backendRefs:
+          - name: autopulse-ui
+            port: *ui-port
