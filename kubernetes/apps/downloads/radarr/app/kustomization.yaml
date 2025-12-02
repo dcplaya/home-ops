@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./secret.sops.yaml
+  - ./pvc.yaml
+  - ../../../../components/cephfs-mounts/backup.yaml
+  - ../../../../components/cephfs-mounts/downloads-folder.yaml
+  - ../../../../components/cephfs-mounts/movies-folder.yaml
+  - ./helmrelease.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/name: radarr
+      app.kubernetes.io/instance: radarr
