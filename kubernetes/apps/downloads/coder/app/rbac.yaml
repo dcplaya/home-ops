@@ -1,0 +1,83 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: &app coder
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k9s
+subjects:
+- kind: ServiceAccount
+  name: *app
+  namespace: downloads          # Namespace where service account is created
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: k9s
+rules:
+  # Grants RO access to cluster resources node and namespace
+  - apiGroups: ["", "apps", "batch", "storage.k8s.io"]  # "" indicates the core API group
+    # resources: ["nodes", "namespaces", "pods", ]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # Grants RO access to RBAC resources
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "roles", "clusterrolebindings", "rolebindings"]
+    verbs: ["get", "list", "watch"]
+  # Grants RO access to CRD resources
+  - apiGroups: ["apiextensions.k8s.io"] 
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "create", "update", "delete", "patch"]
+  # Grants RO access to metric server (if present)
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["nodes", "pods"]
+    verbs: ["get", "list", "watch"]
+  # Grants access to flux.cd resources
+  - apiGroups: ["source.toolkit.fluxcd.io", "kustomize.toolkit.fluxcd.io", "helm.toolkit.fluxcd.io", "notification.toolkit.fluxcd.io", "image.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # Ceph resources
+  - apiGroups: ["ceph.rook.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+  # Talos resources
+  - apiGroups: ["talos.dev"]
+    resources: ["serviceaccounts"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # ExternalDNS resources
+  - apiGroups: ["externaldns.k8s.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # Volsync resources
+  - apiGroups: ["volsync.backube"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+  # Volume Snapshot resources
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshots", "volumesnapshotcontents", "volumesnapshotclasses"]
+    verbs: ["get", "list", "watch", "create", "update"]
+  # Ingress & GatewayAPI resources
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "update", "delete"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+  # Cilium resources
+  - apiGroups: ["cilium.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+  # EMQx resources
+  - apiGroups: ["apps.emqx.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+  # Service monitoring resources
+  - apiGroups: ["monitoring.coreos.com"]
+    resources: ["servicemonitors"]
+    verbs: ["get", "list", "watch"]
+  # Pod disruption budgets (PDB)
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
