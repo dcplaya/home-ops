@@ -38,7 +38,7 @@ spec:
               tag: v0.6.2
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               LLDAP_HTTP_PORT: &port 80
               LLDAP_HTTP_URL: "https://lldap-ui.${SECRET_DOMAIN}"
               LLDAP_LDAP_PORT: &ldapPort 389

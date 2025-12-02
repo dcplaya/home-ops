@@ -56,7 +56,7 @@ spec:
               tag: 2025.11
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               ESPHOME_DASHBOARD_USE_PING: true
               ESPHOME__INSTANCE_NAME: ESPHome
               ESPHOME__PORT: &port 6052

@@ -44,7 +44,7 @@ spec:
               # tag: 0.12.1
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               FRIGATE__INSTANCE_NAME: Frigate
               FRIGATE__PORT: &port 8971
               FRIGATE__APPLICATION_URL: &host "frigate.${SECRET_DOMAIN}"

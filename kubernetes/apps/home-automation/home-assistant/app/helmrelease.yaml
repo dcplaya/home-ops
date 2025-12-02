@@ -51,7 +51,7 @@ spec:
               tag: 2025.11
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               HASS__INSTANCE_NAME: Home-Assistant
               HASS__PORT: &port 8123
               HASS__APPLICATION_URL: &host "home.${INGRESS_DOMAIN}"
