@@ -20,7 +20,6 @@ spec:
       # Required options from storageclass parameters need to be added in volumeAttributes
       "clusterID": "rook-ceph"
       "fsName": "ceph-filesystem"
-      "pool": "ceph-filesystem-erasurecoded"
       "staticVolume": "true"
       "rootPath": /volumes/media/Movies
     # volumeHandle can be anything, need not to be same
