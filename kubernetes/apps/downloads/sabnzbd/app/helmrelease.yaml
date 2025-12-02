@@ -38,7 +38,7 @@ spec:
               tag: 4.5.5
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               SABNZBD__PORT: &port 8080
               NZBGET__APPLICATION_URL: &host "sabnzbd.${SECRET_DOMAIN}"
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
