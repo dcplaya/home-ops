@@ -39,7 +39,7 @@ spec:
               tag: 1.42.2.10156
               pullPolicy: IfNotPresent
             env:
-              TZ: "${TIMEZONE}"
+              TZ: America/Los_Angeles
               # PUID: "1000"
               # PGID: "100"
               ADVERTISE_IP: "https://plex.${INGRESS_DOMAIN}:443,https://plex.${INGRESS_DOMAIN},https://${LB_PLEX}:32400"
