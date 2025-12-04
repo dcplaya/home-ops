@@ -145,7 +145,7 @@ spec:
             - path: /cache # ESPHome auto detect a folder at `/cache` and will use that instead
       deploy-key:
         type: secret
-        name: esphome-deploykey
+        name: esphome-secret
         defaultMode: 256
         advancedMounts:
           esphome:
