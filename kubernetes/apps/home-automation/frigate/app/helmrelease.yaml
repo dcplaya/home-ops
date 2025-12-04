@@ -51,7 +51,7 @@ spec:
               FRIGATE__LOG_LEVEL: info
             envFrom:
             - secretRef:
-                name: frigate-secrets
+                name: frigate-secret
             resources:
               requests:
                 memory: 2G
