@@ -3,7 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ./secret.sops.yaml
+- ./externalsecret.yaml
 - ../../../../components/cephfs-mounts/downloads-folder.yaml
 - ../../../../components/cephfs-mounts/movies-folder.yaml
 - ../../../../components/cephfs-mounts/music-folder.yaml
