@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
 - ./certificate.yaml
 - ../../../../components/cephfs-mounts/security-footage.yaml
-- ./secret.sops.yaml
+- ./externalsecret.yaml
 - ./helmrelease.yaml
 generatorOptions:
   disableNameSuffixHash: true
