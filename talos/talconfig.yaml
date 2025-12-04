@@ -266,3 +266,4 @@ patches:
 controlPlane:
   patches:
   - "@./patches/controller/cluster.yaml"
+  - "@./patches/global/machine-service-accounts.yaml"
