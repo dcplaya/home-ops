@@ -13,7 +13,7 @@ spec:
   #   # - ../../../../components/gatus/guarded
   #   - ../../../../components/volsync
   interval: 1h
-  path: /kubernetes/apps/media/kometa/app
+  path: /kubernetes/apps/observability/gatu/app
   postBuild:
     substituteFrom:
     - name: cluster-secrets
