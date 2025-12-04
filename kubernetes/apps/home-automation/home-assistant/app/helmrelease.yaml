@@ -40,7 +40,7 @@ spec:
             # DO NOT ENABLE
             # Enabling this adds an extra default route to the container. My IoT network is locked down tight and results in failed external DNS lookups
             # k8s.v1.cni.cncf.io/networks: home-automation-iot-dhcp
-            secret.reloader.stakater.com/reload: home-assistant-secrets
+            secret.reloader.stakater.com/reload: home-assistant-secret
 
         containers:
           app:
@@ -60,7 +60,7 @@ spec:
               # HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             envFrom:
             - secretRef:
-                name: home-assistant-secrets
+                name: home-assistant-secret
             # securityContext:
             #   allowPrivilegeEscalation: false
             #   readOnlyRootFilesystem: false # needs to be false for samsung smartthings integration to install
