@@ -38,11 +38,11 @@ endpoints:
   alerts:
   - type: pushover
 
-external-endpoints:
-- name: Heartbeat
-  group: buddy
-  token: ${BUDDY_HEARTBEAT_TOKEN}
-  heartbeat:
-    interval: 5m
-  alerts:
-  - type: pushover
+# external-endpoints:
+# - name: Heartbeat
+#   group: buddy
+#   token: ${BUDDY_HEARTBEAT_TOKEN}
+#   heartbeat:
+#     interval: 5m
+#   alerts:
+#   - type: pushover
