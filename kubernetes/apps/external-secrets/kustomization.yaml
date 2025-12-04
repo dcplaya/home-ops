@@ -8,6 +8,6 @@ components:
 - ../../components/repos/app-template
 - ../../components/sops
 
-# resources:
-# -./external-secrets/ks.yaml
-# - ./onepassword/ks.yaml
+resources:
+- ./external-secrets/ks.yaml
+- ./onepassword/ks.yaml
