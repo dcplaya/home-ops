@@ -37,7 +37,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              capabilities: { drop: [ "ALL" ] }
             resources:
               requests:
                 cpu: 10m
@@ -45,10 +45,10 @@ spec:
                 memory: 100Mi
         statefulset:
           volumeClaimTemplates:
-            - name: config
-              storageClass: ceph-blockpool-nvme
-              accessMode: ReadWriteOnce
-              size: 5Gi
+          - name: config
+            storageClass: ceph-blockpool-nvme
+            accessMode: ReadWriteOnce
+            size: 5Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -58,12 +58,12 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        type: LoadBalancer
+        # type: LoadBalancer
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "mqtt.${SECRET_DOMAIN}"
           gatus.home-operations.com/endpoint: |-
             group: services
-          # lbipam.cilium.io/ips: ${LB_MQTT}
+          lbipam.cilium.io/ips: ${LB_MQTT}
         ports:
           mqtt:
             port: 1883
@@ -83,5 +83,5 @@ spec:
         type: configMap
         identifier: config
         globalMounts:
-          - path: /mosquitto/config/mosquitto.conf
-            subPath: mosquitto.conf
+        - path: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
