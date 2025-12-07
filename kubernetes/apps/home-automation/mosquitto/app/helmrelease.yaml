@@ -58,12 +58,13 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        # type: LoadBalancer
+        type: LoadBalancer
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "mqtt.${SECRET_DOMAIN}"
           gatus.home-operations.com/endpoint: |-
             group: services
-          lbipam.cilium.io/ips: ${LB_MQTT}
+          lbipam.cilium.io/ips: 10.200.2.59
+          externalTrafficPolicy: Local
         ports:
           mqtt:
             port: 1883
