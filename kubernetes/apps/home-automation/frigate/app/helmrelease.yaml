@@ -82,27 +82,24 @@ spec:
     service:
       app:
         controller: *app
-        type: ClusterIP
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.200.2.61
         ports:
-          http-auth:
-            port: *port
-            targetPort: *port
           http:
-            primary: true
-            port: &http 5000
-            targetPort: *http
-          rtsp:
-            enabled: true
-            port: 8554
+            appProtocol: kubernetes.io/wss
+            port: 5000
           go2rtc:
-            enabled: true
+            primary: true
             port: 1984
-          srtp:
-            enabled: false
-            port: 8443
-          webrtc:
-            enabled: true
+          rtsp:
+            port: 8554
+          webrtc-tcp:
             port: 8555
+            protocol: TCP
+          webrtc-udp:
+            port: 8555
+            protocol: UDP
 
     persistence:
       config:
