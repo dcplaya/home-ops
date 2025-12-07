@@ -154,6 +154,9 @@ spec:
 
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 401"]
         hostnames:
         - "{{ .Release.Name }}.${SECRET_DOMAIN}"
         parentRefs:
@@ -161,6 +164,19 @@ spec:
           namespace: network
           sectionName: https
         rules:
-        - backendRefs:
-          - name: *app
-            port: *port
+          - # Ref: https://forums.plex.tv/t/external-srt-subtitles-are-not-working-w-reverse-proxy/886540
+            backendRefs:
+              - identifier: app
+                port: *port
+            filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  remove:
+                    - Range
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /library/streams
+          - backendRefs:
+              - identifier: app
+                port: *port
