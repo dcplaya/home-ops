@@ -151,16 +151,24 @@ spec:
           frigate:
             app:
             - path: /dev/shm
-
     route:
       app:
         hostnames:
-        - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
         parentRefs:
-        - name: envoy-internal
-          namespace: network
-          sectionName: https
+          - name: envoy-internal
+            namespace: network
         rules:
-        - backendRefs:
-          - name: *app
-            port: *http
+          - backendRefs:
+              - identifier: frigate
+                port: 5000
+      go2rtc:
+        hostnames:
+          - frigate-go2rtc.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: frigate
+                port: 1984
