@@ -82,7 +82,7 @@ spec:
         enabled: true
         urlPrefix: /
         ssl: false
-        prometheusEndpoint: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+        prometheusEndpoint: http://kube-prometheus-stack-prometheus.observability.svc:9090
       mgr:
         modules:
         # - name: diskprediction_local
