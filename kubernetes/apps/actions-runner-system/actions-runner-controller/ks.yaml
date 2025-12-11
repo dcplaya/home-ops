@@ -34,8 +34,6 @@ spec:
       app.kubernetes.io/name: actions-runner-controller
   dependsOn:
     - name: actions-runner-controller
-    - name: openebs
-      namespace: openebs
   interval: 1h
   path: "./kubernetes/apps/actions-runner-system/actions-runner-controller/runners"
   prune: true
