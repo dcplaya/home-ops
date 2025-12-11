@@ -14,4 +14,4 @@ resources:
 - ./kube-prometheus-stack/ks.yaml
 - ./silence-operator/ks.yaml
 - ./smartctl-exporter/ks.yaml
-- ./unppoller/ks.yaml
+- ./unpoller/ks.yaml
