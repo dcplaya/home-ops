@@ -1,68 +1,30 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app frigate
+  name: frigate
 spec:
-  interval: 15m
   chartRef:
     kind: OCIRepository
-    name: app-template
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    crds: CreateReplace
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-      strategy: uninstall
-  rollback:
-    recreate: true
-    cleanupOnFail: true
-  uninstall:
-    keepHistory: false
+    name: frigate
+  interval: 30m
   values:
-    global:
-      nameOverride: *app
-      fullnameOverride: *app
-
     controllers:
       frigate:
         annotations:
           reloader.stakater.com/auto: "true"
-          configmap.reloader.stakater.com/reload: "frigate-config"
-
         containers:
           app:
             image:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.16.3@sha256:cf4305d9f1c673d71c4d0fab30ca56ca05ac91168711a74ee7867a4691a7ad02
-              # tag: 0.12.1
-              pullPolicy: IfNotPresent
-            env:
-              TZ: America/Los_Angeles
-              FRIGATE__INSTANCE_NAME: Frigate
-              FRIGATE__PORT: &port 8971
-              FRIGATE__APPLICATION_URL: &host "frigate.${SECRET_DOMAIN}"
-              FRIGATE__LOG_LEVEL: info
             envFrom:
-            - secretRef:
-                name: frigate-secret
-            resources:
-              requests:
-                memory: 2G
-              limits:
-                gpu.intel.com/i915: 1
-                memory: 9G
-            securityContext:
-              privileged: true
+              - secretRef:
+                  name: frigate-secret
             probes:
               liveness: &probes
-                enabled: true
+                enabled: false
                 custom: true
                 spec:
                   httpGet:
@@ -73,12 +35,16 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-
+            resources:
+              requests:
+                cpu: 200m
+                memory: 2Gi
+              limits:
+                memory: 8Gi
     defaultPodOptions:
       nodeSelector:
         google.feature.node.kubernetes.io/coral: "true"
         intel.feature.node.kubernetes.io/gpu: "true"
-
     service:
       frigate:
         type: LoadBalancer
@@ -99,7 +65,6 @@ spec:
           webrtc-udp:
             port: 8555
             protocol: UDP
-
     persistence:
       config:
         enabled: true
@@ -145,28 +110,33 @@ spec:
         enabled: true
         type: emptyDir
         medium: Memory
-        sizeLimit: 4Gi
+        sizeLimit: 2Gi
+      tmpfs:
+        type: emptyDir
         advancedMounts:
           frigate:
             app:
-            - path: /dev/shm
+              - path: /tmp
+                subPath: tmp
     route:
       frigate:
         hostnames:
-          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - frigate.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
+
         rules:
           - backendRefs:
               - identifier: frigate
                 port: 5000
       go2rtc:
         hostnames:
-          - frigate-go2rtc.${SECRET_DOMAIN}"
+          - frigate-go2rtc.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
+
         rules:
           - backendRefs:
               - identifier: frigate
