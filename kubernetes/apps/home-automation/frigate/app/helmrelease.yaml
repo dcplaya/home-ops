@@ -80,8 +80,7 @@ spec:
         intel.feature.node.kubernetes.io/gpu: "true"
 
     service:
-      app:
-        controller: *app
+      frigate:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.200.2.61
@@ -152,7 +151,7 @@ spec:
             app:
             - path: /dev/shm
     route:
-      app:
+      frigate:
         hostnames:
           - "{{ .Release.Name }}.${SECRET_DOMAIN}"
         parentRefs:
