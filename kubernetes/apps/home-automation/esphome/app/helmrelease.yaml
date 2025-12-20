@@ -167,9 +167,6 @@ spec:
           - path:
               type: PathPrefix
               value: /code/
-          - path:
-              type: PathPrefix
-              value: /coder/
           filters:
           - type: URLRewrite
             urlRewrite:
