@@ -8,3 +8,4 @@ resources:
 - ./sub-volumes.yaml
 - ./clients.yaml
 - ./secret.sops.yaml
+- ./grafanadashboard.yaml
