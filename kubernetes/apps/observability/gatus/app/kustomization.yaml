@@ -10,7 +10,6 @@ resources:
 configMapGenerator:
 - name: gatus-configmap
   files:
-  - buddy.yaml=./resources/buddy.yaml
   - config.yaml=./resources/config.yaml
 generatorOptions:
   disableNameSuffixHash: true

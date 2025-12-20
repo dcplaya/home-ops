@@ -1,10 +1,10 @@
 argcomplete==3.6.3
-cachetools==6.2.2
+cachetools==6.2.4
 certifi==2025.11.12
 charset-normalizer==3.4.4
 click==8.3.1
 durationpy==0.10
-google-auth==2.43.0
+google-auth==2.45.0
 idna==3.11
 kubernetes==34.1.0
 oauthlib==3.3.1
@@ -19,6 +19,6 @@ requests==2.32.5
 requests-oauthlib==2.0.0
 rsa==4.9.1
 six==1.17.0
-urllib3==2.6.0
+urllib3==2.6.2
 userpath==1.9.2
 websocket-client==1.9.0
