@@ -20,7 +20,6 @@ spec:
             env:
               TZ: America/Los_Angeles
               UP_UNIFI_DEFAULT_ROLE: home-ops
-              UP_UNIFI_DEFAULT_URL: https://unifi.${SECRET_DOMAIN}
               UP_PROMETHEUS_HTTP_LISTEN: 0.0.0.0:80
               UP_INFLUXDB_DISABLE: true
             envFrom:
