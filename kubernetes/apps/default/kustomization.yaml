@@ -7,6 +7,7 @@ components:
 - ../../components/namespace
 - ../../components/repos/app-template
 - ../../components/sops
+
 resources:
 - ./atuin/ks.yaml
 - ./echo/ks.yaml
