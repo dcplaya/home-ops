@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-  - ../../../../components/volsync/replicationsource.yaml
+  - ../../../../components/volsync-sync-only/
   dependsOn:
   - name: rook-ceph-cluster
     namespace: rook-ceph
