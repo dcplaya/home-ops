@@ -8,7 +8,7 @@ spec:
   sourcePVC: ${APP}
   trigger:
     schedule: 0 * * * *
-  kopia:
+  restic:
     accessModes:
       - ${VOLSYNC_SNAP_ACCESSMODES:=ReadWriteOnce}
     cacheAccessModes:
