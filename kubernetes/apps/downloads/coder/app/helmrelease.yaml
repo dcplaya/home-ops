@@ -90,6 +90,9 @@ spec:
                   secretKeyRef:
                     name: "coder-secrets"
                     key: "age.agekey"
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret-env"
 
     service:
       app:
