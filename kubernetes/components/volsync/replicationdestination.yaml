@@ -26,7 +26,5 @@ spec:
       runAsGroup: ${VOLSYNC_PGID:=1000}
       fsGroup: ${VOLSYNC_PGID:=1000}
     repository: ${APP}-volsync-secret
-    sourceIdentity:
-      sourceName: ${APP}
     storageClassName: ${VOLSYNC_STORAGECLASS:=ceph-blockpool-nvme}
     volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}
