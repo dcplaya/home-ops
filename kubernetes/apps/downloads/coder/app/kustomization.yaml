@@ -11,7 +11,7 @@ resources:
 - ../../../../components/cephfs-mounts/media-folder.yaml
 - ./rbac.yaml
 - ./talos-serviceaccount.yaml
-- ./secret.sops.yaml
+- ./externalsecret.yaml
 - ./pvc.yaml
 - ./helmrelease.yaml
 generatorOptions:
