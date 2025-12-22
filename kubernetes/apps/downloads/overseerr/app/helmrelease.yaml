@@ -34,8 +34,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/sct/overseerr
-              tag: 1.34.0
+              repository: ghcr.io/seerr-team/seerr
+              tag: develop@sha256:36cd35d318b092fb87fcefd36553d14391798754709260324cfe5479b11e38c7
               pullPolicy: IfNotPresent
             env:
               TZ: America/Los_Angeles
@@ -43,21 +43,31 @@ spec:
               OVERSEERR__PORT: &port 5055
               OVERSEERR__APPLICATION_URL: &host-cluster "overseerr.${SECRET_DOMAIN}"
               OVERSEERR__LOG_LEVEL: info
+            # envFrom:
+            #   - secretRef:
+            #       name: "{{ .Release.Name }}-secret"
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                  httpGet:
+                    path: /api/v1/status
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
-                memory: "256M"
+                cpu: 10m
               limits:
-                memory: "2048M"
+                memory: 2Gi
 
     defaultPodOptions:
       securityContext:
@@ -92,6 +102,9 @@ spec:
 
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 200"]
         hostnames:
         - "{{ .Release.Name }}.${SECRET_DOMAIN}"
         - "request.${SECRET_DOMAIN}"
