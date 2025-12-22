@@ -4,8 +4,10 @@ kind: Kustomization
 namespace: default
 
 components:
-  - ../../components/sops
+- ../../components/namespace
+- ../../components/repos/app-template
+- ../../components/sops
 
 resources:
-  - ./namespace.yaml
-  - ./echo/ks.yaml
+- ./atuin/ks.yaml
+- ./echo/ks.yaml
