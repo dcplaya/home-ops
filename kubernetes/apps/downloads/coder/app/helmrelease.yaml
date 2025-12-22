@@ -88,11 +88,11 @@ spec:
               SOPS_AGE_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: "coder-secrets"
+                    name: "coder-secret"
                     key: "age.agekey"
             envFrom:
-              - secretRef:
-                  name: "{{ .Release.Name }}-secret-env"
+            - secretRef:
+                name: "{{ .Release.Name }}-secret-env"
 
     service:
       app:
@@ -165,7 +165,7 @@ spec:
       secrets:
         enabled: true
         type: secret
-        name: "coder-secrets"
+        name: "coder-secret"
         # defaultMode: 0600
         advancedMounts:
           coder:
