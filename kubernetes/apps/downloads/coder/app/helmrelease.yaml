@@ -85,6 +85,7 @@ spec:
               CODER_PROMETHEUS_ENABLE: true # needs additional config, which I have not setup
               KUBERNETES_SERVICE_HOST: "cluster-2.${SECRET_DOMAIN}"
               KUBERNETES_SERVICE_PORT: 6443
+              ATUIN_SYNC_ADDRESS: https://atuin.${SECRET_DOMAIN}
               SOPS_AGE_KEY:
                 valueFrom:
                   secretKeyRef:
