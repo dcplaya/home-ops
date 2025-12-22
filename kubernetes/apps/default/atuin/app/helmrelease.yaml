@@ -20,9 +20,9 @@ spec:
             env:
               ATUIN_HOST: "0.0.0.0"
               ATUIN_PORT: &port 80
-              ATUIN_OPEN_REGISTRATION: "true"
+              ATUIN_OPEN_REGISTRATION: "false"
               ATUIN_DB_URI: sqlite:///config/atuin.db
-              TZ: America/New_York
+              TZ: America/Los_Angeles
             command:
               - atuin
               - server
@@ -66,7 +66,7 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.${SECRET_DOMAIN}"
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
     persistence:
       config:
