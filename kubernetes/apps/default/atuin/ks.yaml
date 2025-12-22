@@ -13,6 +13,9 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/default/atuin/app
   postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
     substitute:
       APP: atuin
       VOLSYNC_CAPACITY: 5Gi
