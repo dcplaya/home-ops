@@ -9,9 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # components:
-  # #   # - ../../../../components/gatus/guarded
-  # - ../../../../components/volsync
+  components:
+  - ../../../../components/volsync-sync-only/
   dependsOn:
   - name: rook-ceph-cluster
     namespace: rook-ceph
