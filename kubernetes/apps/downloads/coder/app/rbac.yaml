@@ -57,7 +57,7 @@ rules:
   # Volume Snapshot resources
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshots", "volumesnapshotcontents", "volumesnapshotclasses"]
-    verbs: ["get", "list", "watch", "create", "update"]
+    verbs: ["get", "list", "patch", "watch", "create", "update", "delete"]
   # Ingress & GatewayAPI resources
   - apiGroups: ["networking.k8s.io"]
     resources: ["*"]
