@@ -27,7 +27,7 @@ rules:
     resources: ["clusterroles", "roles", "clusterrolebindings", "rolebindings"]
     verbs: ["get", "list", "watch"]
   # Grants RO access to CRD resources
-  - apiGroups: ["apiextensions.k8s.io"] 
+  - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list", "watch", "create", "update", "delete", "patch"]
   # Grants RO access to metric server (if present)
@@ -37,7 +37,7 @@ rules:
   # Grants access to flux.cd resources
   - apiGroups: ["source.toolkit.fluxcd.io", "kustomize.toolkit.fluxcd.io", "helm.toolkit.fluxcd.io", "notification.toolkit.fluxcd.io", "image.toolkit.fluxcd.io"]
     resources: ["*"]
-    verbs: ["get", "list", "watch", "create", "update", "delete"]
+    verbs: ["get", "list", "patch", "watch", "create", "update", "delete"]
   # Ceph resources
   - apiGroups: ["ceph.rook.io"]
     resources: ["*"]
