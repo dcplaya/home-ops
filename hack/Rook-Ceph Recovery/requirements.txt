@@ -6,7 +6,7 @@ click==8.3.1
 durationpy==0.10
 google-auth==2.47.0
 idna==3.11
-kubernetes==34.1.0
+kubernetes==35.0.0
 oauthlib==3.3.1
 packaging==25.0
 pipx==1.8.0
