@@ -19,6 +19,7 @@ spec:
     substitute:
       APP: atuin
       VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_CACHE_CAPACITY: 5Gi
   prune: true
   sourceRef:
     kind: GitRepository
