@@ -48,7 +48,7 @@ spec:
               #repository: ghcr.io/home-operations/home-assistant
               #tag: 2025.4.2
               repository: homeassistant/home-assistant
-              tag: 2026.1
+              tag: 2026.2
               pullPolicy: IfNotPresent
             env:
               TZ: America/Los_Angeles
