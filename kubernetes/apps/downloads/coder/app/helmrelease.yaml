@@ -71,7 +71,7 @@ spec:
           app:
             image:
               repository: ghcr.io/coder/code-server
-              tag: "4.108.1@sha256:867b9a9dedd68f1b46e308cad9525e419db7b0ce0c83831f6a350f37ee7ff6fd"
+              tag: "4.108.2@sha256:31ad23cda720476e7eb3371a9b02fd7a5738843f6ef43beef97e9edf1960fc47"
               pullPolicy: IfNotPresent
             # command: [ "dumb-init", "/bin/bash", "-c" ]
             # args: [ "/home/linuxbrew/.linuxbrew/sbin/sshd -p 2222 || true; /usr/bin/code-server --auth none --disable-telemetry --user-data-dir /home/coder/.vscode --extensions-dir /home/coder/.vscode --bind-addr 0.0.0.0:8080 --port 8080 /home/coder" ]
@@ -86,8 +86,6 @@ spec:
               KUBERNETES_SERVICE_HOST: "cluster-2.${SECRET_DOMAIN}"
               KUBERNETES_SERVICE_PORT: 6443
               ATUIN_SYNC_ADDRESS: https://atuin.${SECRET_DOMAIN}
-              ATUIN_DAEMON_ENABLED: "true"
-              ATUIN_DAEMON_SOCKET: "/tmp/atuin.sock"
               SOPS_AGE_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -96,23 +94,6 @@ spec:
             envFrom:
             - secretRef:
                 name: "{{ .Release.Name }}-secret-env"
-
-          atuin-daemon:
-            image:
-              repository: ghcr.io/atuinsh/atuin
-              tag: 18.3.0 # Use the latest stable
-            command: ["atuin", "daemon"]
-            env:
-              ATUIN_LOG_LEVEL: info
-            securityContext:
-              runAsUser: *uid
-              runAsGroup: *uid
-            resources:
-              requests:
-                cpu: 10m
-                memory: 32Mi
-              limits:
-                memory: 128Mi
 
     service:
       app:
@@ -254,26 +235,6 @@ spec:
           coder:
             app:
             - path: /mnt/unionfs/downloads
-      atuin-socket:
-        enabled: true
-        type: emptyDir
-        medium: Memory
-        advancedMounts:
-          coder:
-            app:
-              - path: /tmp/atuin.sock
-                subPath: atuin.sock
-            atuin-daemon:
-              - path: /tmp/atuin.sock
-                subPath: atuin.sock
-      atuin-data:
-        enabled: true
-        existingClaim: ${VOLSYNC_CLAIM}-no-backup
-        advancedMounts:
-          coder:
-            atuin-daemon:
-              - path: /home/coder/.local/share/atuin
-                subPath: atuin-data
 
     route:
       app:
