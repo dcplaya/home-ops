@@ -258,13 +258,22 @@ spec:
         enabled: true
         type: emptyDir
         medium: Memory
-        globalMounts:
-          - container: app
-            path: /tmp/atuin.sock
-            subPath: atuin.sock
-          - container: atuin-daemon
-            path: /tmp/atuin.sock
-            subPath: atuin.sock
+        advancedMounts:
+          coder:
+            app:
+              - path: /tmp/atuin.sock
+                subPath: atuin.sock
+            atuin-daemon:
+              - path: /tmp/atuin.sock
+                subPath: atuin.sock
+      atuin-data:
+        enabled: true
+        existingClaim: ${VOLSYNC_CLAIM}-no-backup
+        advancedMounts:
+          coder:
+            atuin-daemon:
+              - path: /home/coder/.local/share/atuin
+                subPath: atuin-data
 
     route:
       app:
