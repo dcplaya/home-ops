@@ -80,6 +80,13 @@ spec:
         existingClaim: ${VOLSYNC_CLAIM}
         globalMounts:
         - path: /opt/data
+      backup:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-backups
+        advancedMounts:
+          maintainerr:
+            app:
+            - path: /config/backup
 
     route:
       app:
