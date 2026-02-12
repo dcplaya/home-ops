@@ -53,7 +53,7 @@ spec:
               RADARR__LOG__DBENABLED: "False"
             envFrom: &envFrom
               - secretRef:
-                  name: radarr-secret
+                  name: radarr
             probes:
               liveness: &probes
                 enabled: true
