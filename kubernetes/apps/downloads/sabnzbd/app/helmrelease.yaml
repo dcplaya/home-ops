@@ -45,7 +45,7 @@ spec:
                 sabnzbd, sabnzbd.downloads, sabnzbd.downloads.svc, sabnzbd.downloads.svc.cluster, sabnzbd.downloads.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
             envFrom:
             - secretRef:
-                name: sabnzbd-api-keys
+                name: sabnzbd
             probes:
               liveness: &probes
                 enabled: false
