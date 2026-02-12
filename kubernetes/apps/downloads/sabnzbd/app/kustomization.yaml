@@ -5,8 +5,7 @@ kind: Kustomization
 resources:
   - ../../../../components/cephfs-mounts/backup.yaml
   - ../../../../components/cephfs-mounts/downloads-folder.yaml
-  - ./secret.sops.yaml
-  # - ./pvc.yaml
+  - ./externalsecret.yaml
   - ./helmrelease.yaml
 generatorOptions:
   disableNameSuffixHash: true
