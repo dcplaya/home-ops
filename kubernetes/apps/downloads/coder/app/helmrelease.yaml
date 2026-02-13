@@ -193,9 +193,9 @@ spec:
             - path: "/home/coder/.talos"
               readOnly: true
       # CephFS folder mounts
-      backup:
+      backup-main-folder:
         enabled: true
-        existingClaim: ceph-filesystem-${APP}-backups
+        existingClaim: ceph-filesystem-${APP}-backups-main-folder
         advancedMounts:
           coder:
             app:
