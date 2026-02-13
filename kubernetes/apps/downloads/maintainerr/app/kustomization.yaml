@@ -11,5 +11,5 @@ generatorOptions:
     kustomize.toolkit.fluxcd.io/substitute: disabled
 labels:
   - pairs:
-      app.kubernetes.io/name: lidarr
-      app.kubernetes.io/instance: lidarr
+      app.kubernetes.io/name: maintainerr
+      app.kubernetes.io/instance: maintainerr
