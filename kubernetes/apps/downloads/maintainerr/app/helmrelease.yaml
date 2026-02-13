@@ -86,7 +86,7 @@ spec:
         advancedMounts:
           maintainerr:
             app:
-            - path: /config/backup
+            - path: /mnt/backup
 
     route:
       app:
