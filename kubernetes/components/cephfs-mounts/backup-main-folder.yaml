@@ -43,4 +43,4 @@ spec:
       storage: 5T
   volumeMode: Filesystem
   # volumeName should be same as PV name
-  volumeName: ceph-filesystem-${APP}-backups
+  volumeName: ceph-filesystem-${APP}-backups-main-folder
