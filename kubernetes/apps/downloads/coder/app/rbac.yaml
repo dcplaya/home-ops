@@ -22,6 +22,9 @@ rules:
     # resources: ["nodes", "namespaces", "pods", ]
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update", "patch"]
   # Grants RO access to RBAC resources
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "roles", "clusterrolebindings", "rolebindings"]
