@@ -5,8 +5,10 @@ namespace: flux-system
 
 components:
   - ../../components/sops
+  - ../../components/repos/app-template
 
 resources:
   - ./namespace.yaml
   - ./flux-instance/ks.yaml
   - ./flux-operator/ks.yaml
+  - ./flux-capacitor/ks.yaml
