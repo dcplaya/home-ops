@@ -194,13 +194,14 @@ spec:
           devices:
           # HDDs
           - name: "/dev/disk/by-id/ata-ST16000NM001G-2KK103_ZL2N7J9V"
-            config:
-              metadataDevice: "/dev/disk/by-id/nvme-SAMSUNG_MZVKW512HMJP-000H1_S34CNX0J600772"
+            # config:
+            #   metadataDevice: "/dev/disk/by-id/nvme-SAMSUNG_MZVKW512HMJP-000H1_S34CNX0J600772"
           - name: "/dev/disk/by-id/ata-TOSHIBA_MG08ACA16TE_6180A067FVGG"
-            config:
-              metadataDevice: "/dev/disk/by-id/nvme-SAMSUNG_MZVKW512HMJP-000H1_S34CNX0J600772"
+            # config:
+            #   metadataDevice: "/dev/disk/by-id/nvme-SAMSUNG_MZVKW512HMJP-000H1_S34CNX0J600772"
           # NVMe
           - name: "/dev/disk/by-id/nvme-INTEL_SSDPEKNW010T8_BTNH933518TQ1P0B"
+          - name: "/dev/disk/by-id/nvme-SAMSUNG_MZVKW512HMJP-000H1_S34CNX0J600772"
 
         - name: n100-08
           devices:
