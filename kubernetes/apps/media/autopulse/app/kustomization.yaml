@@ -8,6 +8,7 @@ resources:
 - ../../../../components/cephfs-mounts/movies-folder.yaml
 - ../../../../components/cephfs-mounts/music-folder.yaml
 - ../../../../components/cephfs-mounts/tv-folder.yaml
+- ../../../../components/cephfs-mounts/backup.yaml
 - ./helmrelease.yaml
 generatorOptions:
   disableNameSuffixHash: true
