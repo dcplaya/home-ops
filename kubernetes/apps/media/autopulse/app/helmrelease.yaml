@@ -148,7 +148,7 @@ spec:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-backups-main-folder
         advancedMounts:
-          coder:
+          autopulse:
             app:
             - path: /backups
     route:

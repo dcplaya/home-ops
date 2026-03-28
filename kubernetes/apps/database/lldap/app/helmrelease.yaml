@@ -95,7 +95,7 @@ spec:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-backups-main-folder
         advancedMounts:
-          coder:
+          lldap:
             app:
             - path: /backups
 
