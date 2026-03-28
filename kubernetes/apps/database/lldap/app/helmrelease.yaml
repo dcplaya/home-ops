@@ -93,7 +93,7 @@ spec:
         - path: /certs/
       backup-main-folder:
         enabled: true
-        existingClaim: ceph-filesystem-${APP}
+        existingClaim: ceph-filesystem-${APP}-backups
         advancedMounts:
           lldap:
             app:
