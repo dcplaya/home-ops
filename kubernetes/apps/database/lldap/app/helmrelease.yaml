@@ -91,6 +91,13 @@ spec:
         name: lldap-cert
         globalMounts:
         - path: /certs/
+      backup-main-folder:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-backups-main-folder
+        advancedMounts:
+          coder:
+            app:
+            - path: /backups
 
     route:
       app:

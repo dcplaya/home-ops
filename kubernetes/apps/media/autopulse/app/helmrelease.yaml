@@ -144,6 +144,13 @@ spec:
           autopulse:
             app:
             - path: /mnt/unionfs/downloads
+      backup-main-folder:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-backups-main-folder
+        advancedMounts:
+          coder:
+            app:
+            - path: /backups
     route:
       app:
         hostnames:
