@@ -5,7 +5,7 @@ charset-normalizer==3.4.6
 click==8.3.1
 durationpy==0.10
 google-auth==2.49.1
-idna==3.11
+idna==3.13
 kubernetes==35.0.0
 oauthlib==3.3.1
 packaging==26.0
