@@ -8,7 +8,7 @@ google-auth==2.49.1
 idna==3.11
 kubernetes==35.0.0
 oauthlib==3.3.1
-packaging==26.0
+packaging==26.2
 pipx==1.11.0
 platformdirs==4.9.4
 pyasn1==0.6.3
