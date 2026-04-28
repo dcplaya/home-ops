@@ -2,7 +2,7 @@ argcomplete==3.6.3
 cachetools==7.0.6
 certifi==2026.4.22
 charset-normalizer==3.4.6
-click==8.3.1
+click==8.3.3
 durationpy==0.10
 google-auth==2.49.1
 idna==3.13
