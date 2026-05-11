@@ -1,0 +1,81 @@
+# File: globe_base.yaml (Hosted on GitHub)
+
+esp8266:
+  board: esp01_1m
+  framework:
+    version: recommended
+  restore_from_flash: true
+
+logger:
+
+web_server:
+  port: 80
+
+api:
+  encryption:
+    key: ${api_encryption_key}
+
+ota:
+  - platform: esphome
+    password: ${ota_password}
+
+wifi:
+  ssid: ${wifi_ssid}
+  password: ${wifi_password}
+  domain: ${wifi_domain}
+
+  ap:
+    ssid: "${device_name} Fallback"
+    password: ${ota_password}
+
+captive_portal:
+
+output:
+  - platform: esp8266_pwm
+    id: output_green
+    pin: GPIO12
+    frequency: 1000Hz
+
+  - platform: esp8266_pwm
+    id: output_red
+    pin: GPIO4
+    frequency: 1000Hz
+
+  - platform: esp8266_pwm
+    id: output_blue
+    pin: GPIO14
+    frequency: 1000Hz
+
+  - platform: esp8266_pwm
+    id: output_wwhite
+    pin: GPIO13
+    max_power: 0.65
+    frequency: 1000Hz
+
+  - platform: esp8266_pwm
+    id: output_cwhite
+    pin: GPIO5
+    max_power: 0.65
+    frequency: 1000Hz
+
+light:
+  - platform: rgbww
+    name: ${friendly_name}
+    id: light_rgb
+    red: output_red
+    green: output_green
+    blue: output_blue
+    cold_white: output_cwhite
+    warm_white: output_wwhite
+    cold_white_color_temperature: 5000 K
+    warm_white_color_temperature: 2000 K
+
+    default_transition_length: 0.5s
+
+    restore_mode: RESTORE_DEFAULT_ON
+
+    effects:
+      - strobe:
+      - flicker:
+      - random:
+      - pulse:
