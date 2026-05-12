@@ -36,7 +36,7 @@ esphome:
   comment: ${device_description} (${friendly_name})
   project:
     name: "dcplaya.mj_sd01_advanced"
-    version: "1.4.2"
+    version: "1.4.3"
 
 #########################################################
 ##        Networking & Services                        ##
@@ -259,7 +259,7 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO15
-      inverted: True
+      inverted: False
       mode: INPUT_PULLUP
     name: ${friendly_name} Main Button
     id: main_button_internal
