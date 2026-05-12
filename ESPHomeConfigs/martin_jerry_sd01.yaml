@@ -1,0 +1,599 @@
+# ##################################################################
+# Martin Jerry Dimmer MJ-SD01 - Advanced Smart/Dumb Dimmer
+# Description: This ESPHome package transforms the MJ-SD01 into
+# a highly versatile smart switch. It features a toggleable "Smart
+# Bulb Mode" to decouple the physical buttons and keep smart bulbs
+# constantly powered. It utilizes native connection tracking to
+# provide a bulletproof local-control failsafe if Home Assistant
+# goes offline. It also features advanced physical button actions
+# (single, double, triple click, and hold) using strict multi-click
+# timing to prevent ghost events, emitting native Home Assistant
+# events for flexible automation.
+#
+# Hardware Pinout:
+# D3 GPIO0: up button (inverted, input_pullup)
+# TX GPIO1: down button (inverted, input_pullup)
+# RX GPIO3: led5 (inverted)
+# D2 GPIO4: red led (inverted)
+# D1 GPIO5: led4 (inverted)
+# D6 GPIO12: led3 (inverted)
+# D7 GPIO13: pwm
+# D5 GPIO14: led2 (inverted)
+# D8 GPIO15: main button (input_pullup)
+# D0 GPIO16: blue led + relay + led1 (inverted)
+# ##################################################################
+
+#########################################################
+##        Core & Base Configuration                    ##
+#########################################################
+esp8266:
+  board: esp01_1m
+  framework:
+    version: recommended
+
+esphome:
+  name: ${device_name}
+  comment: ${device_description} (${friendly_name})
+  project:
+    name: "dcplaya.mj_sd01_advanced"
+    version: "1.4.0"
+
+#########################################################
+##        Networking & Services                        ##
+#########################################################
+wifi:
+  ssid: ${wifi_ssid}
+  password: ${wifi_password}
+  domain: ${wifi_domain}
+  min_auth_mode: WPA2
+  ap:
+    ssid: "${device_name} Fallback"
+    password: "FallbackPassword"
+
+captive_portal:
+
+logger:
+
+ota:
+  platform: esphome
+  password: ${ota_password}
+
+web_server:
+  port: 80
+
+api:
+  encryption:
+    key: ${api_encryption_key}
+
+  on_client_connected:
+    - lambda: |-
+        if (client_info.find("Home Assistant") != std::string::npos) {
+          id(ha_is_connected) = true;
+          ESP_LOGI("api_tracker", "Home Assistant connected!");
+        }
+  on_client_disconnected:
+    - lambda: |-
+        if (client_info.find("Home Assistant") != std::string::npos) {
+          id(ha_is_connected) = false;
+          ESP_LOGI("api_tracker", "Home Assistant disconnected!");
+        }
+
+  services:
+    - service: sync_smart_brightness
+      variables:
+        ha_brightness: float
+      then:
+        - if:
+            condition:
+              - switch.is_on: smart_mode
+            then:
+              - lambda: |-
+                  float val = ha_brightness / 100.0;
+                  bool is_on = val > 0.01;
+                  if (is_on && val > 0.19) { id(led2).turn_on(); } else { id(led2).turn_off(); }
+                  if (is_on && val > 0.39) { id(led3).turn_on(); } else { id(led3).turn_off(); }
+                  if (is_on && val > 0.59) { id(led4).turn_on(); } else { id(led4).turn_off(); }
+                  if (is_on && val > 0.79) { id(led5).turn_on(); } else { id(led5).turn_off(); }
+
+#########################################################
+##        Hardware Outputs                             ##
+#########################################################
+output:
+  - platform: gpio
+    pin: GPIO3
+    inverted: true
+    id: led5
+  - platform: gpio
+    pin: GPIO5
+    inverted: true
+    id: led4
+  - platform: gpio
+    pin: GPIO12
+    inverted: true
+    id: led3
+  - platform: gpio
+    pin: GPIO14
+    inverted: true
+    id: led2
+  - platform: esp8266_pwm
+    pin: GPIO13
+    id: pwm
+    power_supply: relay
+    min_power: ${pwm_min_power}
+    zero_means_zero: true
+
+power_supply:
+  - id: relay
+    pin:
+      number: GPIO16
+      inverted: True
+    enable_time: ${no_delay}
+    keep_on_time: ${no_delay}
+
+#########################################################
+##        Global Variables                             ##
+#########################################################
+globals:
+  - id: ha_is_connected
+    type: bool
+    initial_value: 'false'
+
+#########################################################
+##        Configuration Numbers                        ##
+#########################################################
+number:
+  - platform: template
+    name: "Power Cycle Count"
+    id: cycle_count
+    optimistic: true
+    min_value: 1
+    max_value: 10
+    step: 1
+    initial_value: 5
+    entity_category: config
+
+#########################################################
+##        Configuration Switches                       ##
+#########################################################
+switch:
+  - platform: template
+    name: "Smart Bulb Mode"
+    id: smart_mode
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    entity_category: config
+    turn_on_action:
+      - light.turn_on:
+          id: dimmer
+          brightness: 1.0
+    turn_off_action:
+      - script.execute: update_indicator_leds
+
+  - platform: template
+    name: "Execute Power Cycle"
+    id: cycle_enable
+    optimistic: true
+    entity_category: config
+    turn_on_action:
+      - script.execute: execute_power_cycle
+    turn_off_action:
+      - script.stop: execute_power_cycle
+      - light.turn_on:
+          id: dimmer
+          brightness: 1.0
+
+#########################################################
+##        Scripts                                      ##
+#########################################################
+script:
+  - id: update_indicator_leds
+    then:
+      - if:
+          condition:
+            or:
+              - switch.is_off: smart_mode
+              - lambda: |-
+                  return !id(ha_is_connected);
+          then:
+            - lambda: |-
+                float val = id(dimmer).remote_values.get_brightness();
+                bool is_on = id(dimmer).remote_values.is_on();
+                if (is_on && val > 0.19) { id(led2).turn_on(); } else { id(led2).turn_off(); }
+                if (is_on && val > 0.39) { id(led3).turn_on(); } else { id(led3).turn_off(); }
+                if (is_on && val > 0.59) { id(led4).turn_on(); } else { id(led4).turn_off(); }
+                if (is_on && val > 0.79) { id(led5).turn_on(); } else { id(led5).turn_off(); }
+
+  - id: adjust_dimmer
+    parameters:
+      step: float
+    then:
+      - lambda: |-
+          float current_val = id(dimmer).remote_values.get_brightness();
+          float new_val = clamp(current_val + step, 0.01f, 1.0f);
+          auto call = id(dimmer).turn_on();
+          call.set_brightness(new_val);
+          call.perform();
+
+  - id: execute_power_cycle
+    then:
+      - repeat:
+          count: !lambda "return id(cycle_count).state;"
+          then:
+            - light.turn_off: dimmer
+            - delay: 2s
+            - light.turn_on:
+                id: dimmer
+                brightness: 1.0
+            - delay: 2s
+      - switch.template.publish:
+          id: cycle_enable
+          state: OFF
+
+#########################################################
+##        Light Outputs                                ##
+#########################################################
+light:
+  - platform: status_led
+    id: ledred
+    pin:
+      number: GPIO4
+      inverted: True
+
+  - platform: monochromatic
+    name: "${friendly_name}"
+    id: dimmer
+    output: pwm
+    default_transition_length: ${no_delay}
+    gamma_correct: "${gamma_correct}"
+    on_state:
+      then:
+        - script.execute: update_indicator_leds
+
+#########################################################
+##        Physical Button Logic                        ##
+#########################################################
+binary_sensor:
+  ###########################################
+  ##              Main Button              ##
+  ###########################################
+  - platform: gpio
+    pin:
+      number: GPIO15
+      inverted: False
+      mode: INPUT_PULLUP
+    name: ${friendly_name} Main Button
+    id: main_button_internal
+    internal: True
+    filters:
+      - delayed_on: 15ms
+      - delayed_off: 15ms
+
+    on_multi_click:
+      # SINGLE CLICK
+      - timing:
+          - OFF for at most 500ms
+          - ON for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: main
+                      action: click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - light.toggle: dimmer
+              else:
+                - light.toggle: dimmer
+
+      # DOUBLE CLICK
+      - timing:
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: main
+                      action: double_click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - light.turn_on:
+                          id: dimmer
+                          brightness: 1.0
+              else:
+                - light.turn_on:
+                    id: dimmer
+                    brightness: 1.0
+
+      # TRIPLE CLICK
+      - timing:
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: main
+                      action: triple_click
+
+  ###########################################
+  ##              Down Button              ##
+  ###########################################
+  - platform: gpio
+    pin:
+      number: GPIO1
+      inverted: True
+      mode: INPUT_PULLUP
+    name: ${friendly_name} Down Button
+    id: down_button_internal
+    internal: True
+    filters:
+      - delayed_on: 15ms
+      - delayed_off: 15ms
+
+    on_multi_click:
+      # SINGLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: down
+                      action: click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - script.execute:
+                          id: adjust_dimmer
+                          step: -0.1
+              else:
+                - script.execute:
+                    id: adjust_dimmer
+                    step: -0.1
+
+      # DOUBLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: down
+                      action: double_click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - light.turn_on:
+                          id: dimmer
+                          brightness: 0.01
+              else:
+                - light.turn_on:
+                    id: dimmer
+                    brightness: 0.01
+
+      # TRIPLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: down
+                      action: triple_click
+
+    # HOLD TO DIM
+    on_press:
+      then:
+        - delay: 500ms
+        - while:
+            condition:
+              - binary_sensor.is_on: down_button_internal
+            then:
+              - if:
+                  condition:
+                    - lambda: |-
+                        return id(ha_is_connected);
+                  then:
+                    - homeassistant.event:
+                        event: esphome.mj_sd01_button_event
+                        data:
+                          device: ${device_name}
+                          button: down
+                          action: hold
+                    - if:
+                        condition:
+                          - switch.is_off: smart_mode
+                        then:
+                          - script.execute:
+                              id: adjust_dimmer
+                              step: -0.05
+                  else:
+                    - script.execute:
+                        id: adjust_dimmer
+                        step: -0.05
+              - delay: 200ms
+
+  ###########################################
+  ##                Up Button              ##
+  ###########################################
+  - platform: gpio
+    pin:
+      number: GPIO0
+      inverted: True
+      mode: INPUT_PULLUP
+    name: ${friendly_name} Up Button
+    id: up_button_internal
+    internal: True
+    filters:
+      - delayed_on: 15ms
+      - delayed_off: 15ms
+
+    on_multi_click:
+      # SINGLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: up
+                      action: click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - script.execute:
+                          id: adjust_dimmer
+                          step: 0.1
+              else:
+                - script.execute:
+                    id: adjust_dimmer
+                    step: 0.1
+
+      # DOUBLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: up
+                      action: double_click
+                - if:
+                    condition:
+                      - switch.is_off: smart_mode
+                    then:
+                      - light.turn_on:
+                          id: dimmer
+                          brightness: 1.0
+              else:
+                - light.turn_on:
+                    id: dimmer
+                    brightness: 1.0
+
+      # TRIPLE CLICK
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 250ms
+        then:
+          - if:
+              condition:
+                - lambda: |-
+                    return id(ha_is_connected);
+              then:
+                - homeassistant.event:
+                    event: esphome.mj_sd01_button_event
+                    data:
+                      device: ${device_name}
+                      button: up
+                      action: triple_click
+
+    # HOLD TO DIM
+    on_press:
+      then:
+        - delay: 500ms
+        - while:
+            condition:
+              - binary_sensor.is_on: up_button_internal
+            then:
+              - if:
+                  condition:
+                    - lambda: |-
+                        return id(ha_is_connected);
+                  then:
+                    - homeassistant.event:
+                        event: esphome.mj_sd01_button_event
+                        data:
+                          device: ${device_name}
+                          button: up
+                          action: hold
+                    - if:
+                        condition:
+                          - switch.is_off: smart_mode
+                        then:
+                          - script.execute:
+                              id: adjust_dimmer
+                              step: 0.05
+                  else:
+                    - script.execute:
+                        id: adjust_dimmer
+                        step: 0.05
+              - delay: 200ms
