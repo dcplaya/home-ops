@@ -36,7 +36,7 @@ esphome:
   comment: ${device_description} (${friendly_name})
   project:
     name: "dcplaya.mj_sd01_advanced"
-    version: "1.4.0"
+    version: "1.4.1"
 
 #########################################################
 ##        Networking & Services                        ##
@@ -253,13 +253,13 @@ light:
 ##        Physical Button Logic                        ##
 #########################################################
 binary_sensor:
-  ###########################################
+###########################################
   ##              Main Button              ##
   ###########################################
   - platform: gpio
     pin:
       number: GPIO15
-      inverted: False
+      inverted: True
       mode: INPUT_PULLUP
     name: ${friendly_name} Main Button
     id: main_button_internal
@@ -271,8 +271,8 @@ binary_sensor:
     on_multi_click:
       # SINGLE CLICK
       - timing:
-          - OFF for at most 500ms
-          - ON for at least 250ms
+          - ON for at most 500ms
+          - OFF for at least 250ms
         then:
           - if:
               condition:
