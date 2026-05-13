@@ -14,16 +14,13 @@ spec:
       nodeSelector:
         kubernetes.io/arch: amd64
         kubernetes.io/os: linux
-        automountServiceAccountToken: "true"
     controllers:
       multus:
         type: daemonset
 
         pod:
           hostNetwork: true
-
-        serviceAccount:
-          identifier: multus
+          automountServiceAccountToken: true
 
         initContainers:
           cni-plugins:
