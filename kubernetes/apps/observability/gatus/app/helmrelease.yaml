@@ -10,6 +10,8 @@ spec:
     name: gatus
   interval: 1h
   values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
     controllers:
       gatus:
         type: statefulset
