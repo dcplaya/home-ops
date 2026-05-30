@@ -71,7 +71,7 @@ spec:
           app:
             image:
               repository: ghcr.io/coder/code-server
-              tag: "4.118.0@sha256:4aff9947c113487113201da811564fade1af5f23038b4d683998d024eebbac92"
+              tag: "4.122.0@sha256:dbe5b1cf5c1f0edf47da6363fdadb89c456fb14b3d7e2a1545cabe20f5d7402a"
               pullPolicy: IfNotPresent
             # command: [ "dumb-init", "/bin/bash", "-c" ]
             # args: [ "/home/linuxbrew/.linuxbrew/sbin/sshd -p 2222 || true; /usr/bin/code-server --auth none --disable-telemetry --user-data-dir /home/coder/.vscode --extensions-dir /home/coder/.vscode --bind-addr 0.0.0.0:8080 --port 8080 /home/coder" ]
