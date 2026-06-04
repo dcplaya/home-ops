@@ -53,7 +53,8 @@ spec:
           app:
             image:
               repository: esphome/esphome
-              tag: 2026.5
+              #tag: 2026.5
+              tag: dev
               pullPolicy: IfNotPresent
             env:
               TZ: America/Los_Angeles
