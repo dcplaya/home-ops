@@ -155,10 +155,10 @@ spec:
         - name: n100-04
           devices:
           # HDDs
-          - name: "/dev/disk/by-id/usb-ST16000N_M000J-2TW103_00000000006E-0:1"
+          - name: "/dev/disk/by-id/ata-ST16000NM000J-2TW103_WRS05H5H"
             config:
               metadataDevice: "/dev/disk/by-id/nvme-ADATA_SX8200PNP_2K1020024662"
-          - name: "/dev/disk/by-id/usb-ST16000N_M001G-2KK103_00000000006E-0:0"
+          - name: "/dev/disk/by-id/ata-ST16000NM001G-2KK103_ZL2N7HNZ"
             config:
               metadataDevice: "/dev/disk/by-id/nvme-ADATA_SX8200PNP_2K1020024662"
           # NVMe
