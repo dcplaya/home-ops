@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: docker.io/danonline/autopulse
-              tag: v1.7.0
+              tag: v2.0.0
             env:
               TZ: America/Los_Angeles
               # PUID: 1000
