@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/prowlarr
-              tag: 2.3.7
+              tag: 2.5.0
               pullPolicy: IfNotPresent
             env:
               TZ: America/Los_Angeles
