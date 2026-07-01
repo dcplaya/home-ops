@@ -138,30 +138,30 @@ spec:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-backups
         advancedMounts:
-          plex:
-            app:
+          jellyfin:
+            jellyfin:
             - path: /config/Backups
-              subPath: ./Kubernetes/${CLUSTER_NAME}/Applications/plex
+              subPath: ./Kubernetes/${CLUSTER_NAME}/Applications/jellyfin
       music:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-music
         advancedMounts:
-          plex:
-            app:
+          jellyfin:
+            jellyfin:
             - path: /mnt/unionfs/Media/Music/
       movies:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-movies
         advancedMounts:
-          plex:
-            app:
+          jellyfin:
+            jellyfin:
             - path: /mnt/unionfs/Media/Movies/
       tv:
         enabled: true
         existingClaim: ceph-filesystem-${APP}-tv
         advancedMounts:
-          plex:
-            app:
+          jellyfin:
+            jellyfin:
             - path: /mnt/unionfs/Media/TV
       run:
         type: emptyDir
