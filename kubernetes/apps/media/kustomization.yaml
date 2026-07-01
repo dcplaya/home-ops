@@ -14,3 +14,4 @@ resources:
 - ./plex/ks.yaml
 - ./plex-auto-languages/ks.yaml
 - ./tautulli/ks.yaml
+- ./jellyfin/ks.yaml

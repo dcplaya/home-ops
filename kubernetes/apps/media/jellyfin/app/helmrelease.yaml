@@ -1,0 +1,224 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: uninstall
+  rollback:
+    recreate: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      jellyfin:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          jellyfin:
+            image:
+              repository: ghcr.io/jellyfin/jellyfin
+              tag: 10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112
+            env:
+              JELLYFIN_AutoDiscovery: "false"
+              TZ: America/Los_Angeles
+            ports:
+              - containerPort: 8096
+                name: http
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: http
+                  failureThreshold: 30
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: http
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+            resources:
+              requests:
+                gpu.intel.com/i915: 1
+              limits:
+                gpu.intel.com/i915: 1
+      vue:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          vue:
+            image:
+              repository: ghcr.io/jellyfin/jellyfin-vue
+              tag: unstable.2026-06-30.773e222@sha256:e510b876c8401e126b78cbf237fb9964ca5baab5e168d2c15a1baf12e1e2d2fb
+            command: ["nginx"]
+            args: ["-g", "daemon off;"]
+            env:
+              TZ: America/Los_Angeles
+            ports:
+              - containerPort: 80
+                name: http
+            probes:
+              liveness: &vue-probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: http
+              readiness: *vue-probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [44, 4000]
+    persistence:
+      cache:
+        type: persistentVolumeClaim
+        suffix: cache
+        accessMode: ReadWriteOnce
+        size: 100Gi
+        storageClass: ceph-blockpool-nvme
+        advancedMounts:
+          jellyfin:
+            jellyfin:
+              - path: /cache
+                subPath: cache
+              - path: /config/metadata
+                subPath: metadata
+              - path: /config/data/trickplay
+                subPath: data/trickplay
+      config:
+        existingClaim: ${VOLSYNC_CLAIM}
+        advancedMounts:
+          jellyfin:
+            jellyfin:
+              - path: /config
+      config-vue:
+        type: configMap
+        name: jellyfin-vue-config
+        advancedMounts:
+          vue:
+            vue:
+              - path: /usr/share/nginx/html/config.json
+                subPath: config.json
+                readOnly: true
+      backup:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-backups
+        advancedMounts:
+          plex:
+            app:
+            - path: /config/Backups
+              subPath: ./Kubernetes/${CLUSTER_NAME}/Applications/plex
+      music:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-music
+        advancedMounts:
+          plex:
+            app:
+            - path: /mnt/unionfs/Media/Music/
+      movies:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-movies
+        advancedMounts:
+          plex:
+            app:
+            - path: /mnt/unionfs/Media/Movies/
+      tv:
+        enabled: true
+        existingClaim: ceph-filesystem-${APP}-tv
+        advancedMounts:
+          plex:
+            app:
+            - path: /mnt/unionfs/Media/TV
+      run:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Mi
+      tmp:
+        type: emptyDir
+        sizeLimit: 1Gi
+        advancedMounts:
+          jellyfin:
+            jellyfin:
+              - path: /tmp
+                subPath: jellyfin
+          vue:
+            vue:
+              - path: /tmp
+                subPath: vue
+              - path: /var/cache/nginx
+                subPath: nginx
+    route:
+      jellyfin:
+        hostnames:
+          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        parentRefs:
+        - name: envoy-external
+          namespace: network
+          sectionName: https
+        rules:
+          - backendRefs:
+              - name: jellyfin
+                port: 8096
+      vue:
+        hostnames:
+          - "jellyvue.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: jellyfin-vue
+                port: 80
+    service:
+      jellyfin:
+        controller: jellyfin
+        ports:
+          http:
+            port: 8096
+      vue:
+        controller: vue
+        ports:
+          http:
+            port: 80
+    # TODO: enable metrics after upstream PR is merged and released
+    # https://github.com/jellyfin/jellyfin/pull/14052
+    # serviceMonitor:
+    #   jellyfin:
+    #     serviceName: jellyfin
+    #     endpoints:
+    #       - port: http
+    #         path: /metrics

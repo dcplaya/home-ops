@@ -1,0 +1,5 @@
+{
+    "defaultServerURLs": ["https://jellyfin.elcarpenter.com"],
+    "allowServerSelection": false,
+    "routerMode": "history"
+  }
