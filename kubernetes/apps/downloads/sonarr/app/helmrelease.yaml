@@ -51,9 +51,9 @@ spec:
               SONARR__LOG_LEVEL: info
               SONARR__UPDATE__BRANCH: develop
               SONARR__LOG__DBENABLED: "False"
-            envFrom:
-            - secretRef:
-                name: sonarr-secret
+            envFrom: &envFrom
+              - secretRef:
+                  name: sonarr
             probes:
               liveness: &probes
                 enabled: false
