@@ -42,7 +42,7 @@ spec:
               TZ: America/Los_Angeles
               # PUID: "1000"
               # PGID: "100"
-              ADVERTISE_IP: "https://plex.${INGRESS_DOMAIN}:443,https://plex.${INGRESS_DOMAIN},https://${LB_PLEX}:32400"
+              ADVERTISE_IP: "https://plex.elcarpenter.com:443,https://plex.elcarpenter.com,https://${LB_PLEX}:32400"
               PLEX_NO_AUTH_NETWORKS: 10.0.0.0/8
               # PLEX_PREFERENCE_1: "FriendlyName=plex-kubernetes"
               # PLEX_PREFERENCE_2: "EnableIPv6=0"

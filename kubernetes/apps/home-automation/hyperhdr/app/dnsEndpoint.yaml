@@ -4,7 +4,7 @@ metadata:
   name: hypderhdr
 spec:
   endpoints:
-  - dnsName: "hyperhdr.iot.${INGRESS_DOMAIN}"
+  - dnsName: "hyperhdr.iot.elcarpenter.com"
     recordTTL: 180
     recordType: A
     targets:
