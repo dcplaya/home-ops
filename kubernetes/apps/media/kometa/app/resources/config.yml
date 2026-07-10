@@ -50,7 +50,7 @@ playlist_files:
   - file: config/50-playlists.yml
   - default: playlist
     template_variables:
-      libraries: 
+      libraries:
       - "Movies"
       - "TV - Shows"
 settings:
@@ -90,7 +90,6 @@ settings:
     - collections
     - overlays
 plex:
-  # url: https://plex.${INGRESS_DOMAIN}
   url: http://plex.media.svc.cluster.local:32400
   token: ${PLEX_TOKEN}
   timeout: 120
@@ -105,13 +104,13 @@ tmdb:
   cache_expiration: 60
   region:
 tautulli:
-  url: https://tautulli.${INGRESS_DOMAIN}
+  url: https://tautulli.elcarpenter.com
   apikey: ${TAUTULLI_API_KEY}
 # omdb:
 #   apikey: "{{ .OMDB_API_KEY }}"
 #   cache_expiration: 60
 radarr:
-  url: https://radarr.${INGRESS_DOMAIN}
+  url: https://radarr.elcarpenter.com
   token: ${RADARR_API_KEY}
   add_missing: false
   root_folder_path: /mnt/unionfs/Media/Movies
@@ -122,7 +121,7 @@ radarr:
   add_existing: false
   search: true
 sonarr:
-  url: https://sonarr.${INGRESS_DOMAIN}
+  url: https://sonarr.elcarpenter.com
   token: ${SONARR_API_KEY}
   add_missing: false
   add_existing: false

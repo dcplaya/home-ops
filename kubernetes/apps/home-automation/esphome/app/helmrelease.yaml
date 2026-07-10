@@ -60,7 +60,7 @@ spec:
               ESPHOME_DASHBOARD_USE_PING: true
               ESPHOME__INSTANCE_NAME: ESPHome
               ESPHOME__PORT: &port 6052
-              ESPHOME__APPLICATION_URL: &host "esphome.${INGRESS_DOMAIN}"
+              ESPHOME__APPLICATION_URL: &host "esphome.elcarpenter.com"
               ESPHOME__LOG_LEVEL: info
             probes:
               liveness:

@@ -54,7 +54,7 @@ spec:
               TZ: America/Los_Angeles
               HASS__INSTANCE_NAME: Home-Assistant
               HASS__PORT: &port 8123
-              HASS__APPLICATION_URL: &host "home.${INGRESS_DOMAIN}"
+              HASS__APPLICATION_URL: &host "home.elcarpenter.com"
               HASS__LOG_LEVEL: info
               HASS_HTTP_TRUSTED_PROXY_1: 10.0.0.0/8
               # HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
