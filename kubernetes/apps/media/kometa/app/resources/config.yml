@@ -91,7 +91,7 @@ settings:
     - overlays
 plex:
   url: http://plex.media.svc.cluster.local:32400
-  token: <<PLEX_API_KEY>>
+  token: <<PLEX-API-KEY>>
   timeout: 120
   clean_bundles: false
   empty_trash: false
@@ -99,19 +99,19 @@ plex:
   db_cache:
   verify_ssl: false
 tmdb:
-  apikey: <<TMDB_API_KEY>>
+  apikey: <<TMDB-API-KEY>>
   language: en
   cache_expiration: 60
   region:
 tautulli:
   url: https://tautulli.elcarpenter.com
-  apikey: <<TAUTULLI_API_KEY>>
+  apikey: <<TAUTULLI-API-KEY>>
 # omdb:
 #   apikey: "{{ .OMDB_API_KEY }}"
 #   cache_expiration: 60
 radarr:
   url: https://radarr.elcarpenter.com
-  token: <<RADARR_API_KEY>>
+  token: <<RADARR-API-KEY>>
   add_missing: false
   root_folder_path: /mnt/unionfs/Media/Movies
   monitor: true
@@ -122,7 +122,7 @@ radarr:
   search: true
 sonarr:
   url: https://sonarr.elcarpenter.com
-  token: <<SONARR_API_KEY>>
+  token: <<SONARR-API-KEY>>
   add_missing: false
   add_existing: false
   root_folder_path: /mnt/unionfs/Media/TV/TV Shows
@@ -135,13 +135,13 @@ sonarr:
   search: true
   cutoff_search: false
 trakt:
-  client_id: <<TRAKT_ID>>
-  client_secret: <<TRAKT_SECRET>>
+  client_id: <<TRAKT-ID>>
+  client_secret: <<TRAKT-SECRET>>
   authorization:
-    access_token: <<TRAKT_ACCESS_TOKEN>>
+    access_token: <<TRAKT-ACCESS-TOKEN>>
     token_type: Bearer
     expires_in: 7889238
-    refresh_token: <<TRAKT_REFRESH_TOKEN>>
+    refresh_token: <<TRAKT-REFRESH-TOKEN>>
     scope: public
     created_at: 1734397894
   pin:
