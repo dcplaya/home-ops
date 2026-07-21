@@ -9,7 +9,7 @@ idna==3.18
 kubernetes==36.0.2
 oauthlib==3.3.1
 packaging==26.2
-pipx==1.15.0
+pipx==1.16.2
 platformdirs==4.10.0
 pyasn1==0.6.3
 pyasn1_modules==0.4.2
