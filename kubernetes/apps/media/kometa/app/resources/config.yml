@@ -2,7 +2,7 @@ libraries:
   Movies:
     library_type: movie
     operations:
-      - schedule: daily
+        schedule: daily
         delete_collections:
           managed: false
           configured: false
