@@ -11,7 +11,7 @@ oauthlib==3.3.1
 packaging==26.2
 pipx==1.15.0
 platformdirs==4.10.0
-pyasn1==0.6.3
+pyasn1==0.6.4
 pyasn1_modules==0.4.2
 python-dateutil==2.9.0.post0
 PyYAML==6.0.3
