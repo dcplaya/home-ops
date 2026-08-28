@@ -134,14 +134,14 @@ sonarr:
   tag: pmm
   search: true
   cutoff_search: false
-trakt:
-  client_id: <<TRAKT-ID>>
-  client_secret: <<TRAKT-SECRET>>
-  authorization:
-    access_token: <<TRAKT-ACCESS-TOKEN>>
-    token_type: Bearer
-    expires_in: 7889238
-    refresh_token: <<TRAKT-REFRESH-TOKEN>>
-    scope: public
-    created_at: 1734397894
-  pin:
+# trakt:
+#   client_id: <<TRAKT-ID>>
+#   client_secret: <<TRAKT-SECRET>>
+#   authorization:
+#     access_token: <<TRAKT-ACCESS-TOKEN>>
+#     token_type: Bearer
+#     expires_in: 7889238
+#     refresh_token: <<TRAKT-REFRESH-TOKEN>>
+#     scope: public
+#     created_at: 1734397894
+#   pin:
