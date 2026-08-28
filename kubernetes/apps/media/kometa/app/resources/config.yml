@@ -134,6 +134,9 @@ sonarr:
   tag: pmm
   search: true
   cutoff_search: false
+mdblist:
+  apikey: <<MDBLIST-API-KEY>>
+  cache_expiration: 60
 # trakt:
 #   client_id: <<TRAKT-ID>>
 #   client_secret: <<TRAKT-SECRET>>
