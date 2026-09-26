@@ -1,0 +1,232 @@
+substitutions:
+  device_name: ceilingfan01
+  device_description: Sonoff iFan04-L
+  friendly_name: Living Room Fan/Light
+
+globals:
+  - id: target_fan_speed
+    type: int
+  - id: start_time_offset
+    type: int
+
+esphome:
+  name: ${device_name}
+  comment: ${device_description}
+  friendly_name: ${friendly_name}
+  on_boot:
+    priority: 225
+    then:
+      - light.turn_off: fan_light
+  on_loop:
+    lambda: |-
+      if (id(start_time_offset) && (millis() > id(start_time_offset))) {
+        ESP_LOGD("IFAN04", "Setting target speed: %d", id(target_fan_speed));
+        auto call = id(the_fan).turn_on();
+        call.set_speed(id(target_fan_speed));
+        call.perform();
+        id(start_time_offset) = 0;
+      }
+
+esp8266:
+  board: esp01_1m
+
+# Disable logging on serial as it is used by the remote
+logger:
+  baud_rate: 0
+
+wifi:
+  ssid: !secret wifissid
+  password: !secret wifipass
+  domain: !secret domain
+  min_auth_mode: WPA2
+  ap:
+    ssid: "${device_name} Fallback"
+    password: "FallbackPassword"
+
+captive_portal:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret devicepass
+
+web_server:
+  port: 80
+  version: 3
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/ssieb/custom_components
+    components: [ ifan04 ]
+    refresh: 1d
+
+uart:
+  tx_pin: GPIO01
+  rx_pin: GPIO03
+  baud_rate: 9600
+
+ifan04:
+  on_fan:
+    - lambda: |-
+        if (speed) {
+          auto call = id(the_fan).turn_on();
+          call.set_speed(speed);
+          call.perform();
+          if (id(buzzer_dummy).state) {
+            switch(id(target_fan_speed)) {
+              case 3:
+                id(buzzer_pin).turn_on();
+                delay(50);
+                id(buzzer_pin).turn_off();
+                delay(50);
+              case 2:
+                id(buzzer_pin).turn_on();
+                delay(50);
+                id(buzzer_pin).turn_off();
+                delay(50);
+              case 1:
+                id(buzzer_pin).turn_on();
+                delay(50);
+                id(buzzer_pin).turn_off();
+            }
+          }
+        } else {
+          id(target_fan_speed) = 0;
+          id(start_time_offset) = 0;
+          auto call = id(the_fan).turn_off();
+          call.perform();
+        }
+  on_light:
+    - light.toggle: fan_light
+  on_buzzer:
+    - switch.toggle: buzzer_dummy
+
+binary_sensor:
+  - platform: gpio
+    id: button
+    pin: GPIO0
+    on_press:
+      then:
+        - light.toggle: fan_light
+
+interval:
+  - interval: 500ms
+    then:
+      - if:
+          condition:
+            not:
+              wifi.connected:
+          then:
+            - light.turn_on:
+                id: led1
+                brightness: 100%
+                transition_length: 0s
+            - delay: 250ms
+            - light.turn_off:
+                id: led1
+                transition_length: 250ms
+
+output:
+  - platform: template
+    id: fanoutput
+    type: float
+    write_action:
+      - lambda: |-
+          if (state) {
+            int speed = int(state / 0.33);
+            if (!id(target_fan_speed) && (speed < 3)) {
+              ESP_LOGD("IFAN04", "Fan currently off, boosting speed");
+              id(target_fan_speed) = speed;
+              state = 1.0;
+              id(start_time_offset) = millis() + 5000; // 5 second delay
+            } else {
+              id(start_time_offset) = 0;
+              id(target_fan_speed) = speed;
+            }
+          }
+          if (state < 0.3) {
+            // OFF
+            id(target_fan_speed) = 0;
+            id(start_time_offset) = 0;
+            id(fan_relay1).turn_off();
+            id(fan_relay2).turn_off();
+            id(fan_relay3).turn_off();
+          } else if (state < 0.6) {
+            // low speed
+            id(fan_relay1).turn_on();
+            id(fan_relay2).turn_off();
+            id(fan_relay3).turn_off();
+          } else if (state < 0.9) {
+            // medium speed
+            id(fan_relay1).turn_off();
+            id(fan_relay2).turn_on();
+            id(fan_relay3).turn_off();
+          } else {
+            // high speed
+            id(fan_relay1).turn_off();
+            id(fan_relay2).turn_off();
+            id(fan_relay3).turn_on();
+          }
+
+  - platform: gpio
+    id: light_relay
+    pin: GPIO9
+    inverted: true
+
+  - platform: gpio
+    id: buzzer_pin
+    pin: GPIO10
+    inverted: true
+
+  - platform: esp8266_pwm
+    id: led_pin
+    pin: GPIO13
+    inverted: true
+
+light:
+  - platform: binary
+    id: fan_light
+    name: "Light"
+    output: light_relay
+
+  - platform: monochromatic
+    id: led1
+    output: led_pin
+    default_transition_length: 0s
+    restore_mode: always off
+
+switch:
+  - platform: restart
+    name: "Restart"
+
+  - platform: template
+    id: buzzer_dummy
+    name: "Buzzer"
+    optimistic: true
+
+  - platform: gpio
+    id: fan_relay1
+    pin: GPIO14
+
+  - platform: gpio
+    id: fan_relay2
+    pin: GPIO12
+
+  - platform: gpio
+    id: fan_relay3
+    pin: GPIO15
+
+fan:
+  - platform: speed
+    id: the_fan
+    name: "Fan"
+    output: fanoutput
+    speed_count: 3
