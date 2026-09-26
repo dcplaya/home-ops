@@ -1,31 +1,7 @@
 # ##################################################################
 # Martin Jerry Dimmer MJ-SD01 - Advanced Smart/Dumb Dimmer
-# Description: This ESPHome package transforms the MJ-SD01 into
-# a highly versatile smart switch. It features a toggleable "Smart
-# Bulb Mode" to decouple the physical buttons and keep smart bulbs
-# constantly powered. It utilizes native connection tracking to
-# provide a bulletproof local-control failsafe if Home Assistant
-# goes offline. It also features advanced physical button actions
-# (single, double, triple click, and hold) using strict multi-click
-# timing to prevent ghost events, emitting native Home Assistant
-# events for flexible automation.
-#
-# Hardware Pinout:
-# D3 GPIO0: up button (inverted, input_pullup)
-# TX GPIO1: down button (inverted, input_pullup)
-# RX GPIO3: led5 (inverted)
-# D2 GPIO4: red led (inverted)
-# D1 GPIO5: led4 (inverted)
-# D6 GPIO12: led3 (inverted)
-# D7 GPIO13: pwm
-# D5 GPIO14: led2 (inverted)
-# D8 GPIO15: main button (input_pullup)
-# D0 GPIO16: blue led + relay + led1 (inverted)
 # ##################################################################
 
-#########################################################
-##        Core & Base Configuration                    ##
-#########################################################
 esp8266:
   board: esp01_1m
   framework:
@@ -33,14 +9,12 @@ esp8266:
 
 esphome:
   name: ${device_name}
-  comment: ${device_description} (${friendly_name})
+  friendly_name: ${friendly_name}
+  comment: ${device_description}
   project:
     name: "dcplaya.mj_sd01_advanced"
     version: "1.4.3"
 
-#########################################################
-##        Networking & Services                        ##
-#########################################################
 wifi:
   ssid: ${wifi_ssid}
   password: ${wifi_password}
@@ -55,28 +29,16 @@ captive_portal:
 logger:
 
 ota:
-  platform: esphome
-  password: ${ota_password}
+  - platform: esphome
+    password: ${ota_password}
 
 web_server:
   port: 80
+  version: 3
 
 api:
   encryption:
     key: ${api_encryption_key}
-
-  on_client_connected:
-    - lambda: |-
-        if (client_info.find("Home Assistant") != std::string::npos) {
-          id(ha_is_connected) = true;
-          ESP_LOGI("api_tracker", "Home Assistant connected!");
-        }
-  on_client_disconnected:
-    - lambda: |-
-        if (client_info.find("Home Assistant") != std::string::npos) {
-          id(ha_is_connected) = false;
-          ESP_LOGI("api_tracker", "Home Assistant disconnected!");
-        }
 
   services:
     - service: sync_smart_brightness
@@ -95,9 +57,6 @@ api:
                   if (is_on && val > 0.59) { id(led4).turn_on(); } else { id(led4).turn_off(); }
                   if (is_on && val > 0.79) { id(led5).turn_on(); } else { id(led5).turn_off(); }
 
-#########################################################
-##        Hardware Outputs                             ##
-#########################################################
 output:
   - platform: gpio
     pin: GPIO3
@@ -126,21 +85,10 @@ power_supply:
   - id: relay
     pin:
       number: GPIO16
-      inverted: True
+      inverted: true
     enable_time: ${no_delay}
     keep_on_time: ${no_delay}
 
-#########################################################
-##        Global Variables                             ##
-#########################################################
-globals:
-  - id: ha_is_connected
-    type: bool
-    initial_value: 'false'
-
-#########################################################
-##        Configuration Numbers                        ##
-#########################################################
 number:
   - platform: template
     name: "Power Cycle Count"
@@ -152,9 +100,6 @@ number:
     initial_value: 5
     entity_category: config
 
-#########################################################
-##        Configuration Switches                       ##
-#########################################################
 switch:
   - platform: template
     name: "Smart Bulb Mode"
@@ -182,9 +127,6 @@ switch:
           id: dimmer
           brightness: 1.0
 
-#########################################################
-##        Scripts                                      ##
-#########################################################
 script:
   - id: update_indicator_leds
     then:
@@ -193,7 +135,7 @@ script:
             or:
               - switch.is_off: smart_mode
               - lambda: |-
-                  return !id(ha_is_connected);
+                  return !id(ha_is_connected).state;
           then:
             - lambda: |-
                 float val = id(dimmer).remote_values.get_brightness();
@@ -229,18 +171,15 @@ script:
           id: cycle_enable
           state: OFF
 
-#########################################################
-##        Light Outputs                                ##
-#########################################################
 light:
   - platform: status_led
     id: ledred
     pin:
       number: GPIO4
-      inverted: True
+      inverted: true
 
   - platform: monochromatic
-    name: "${friendly_name}"
+    name: "Dimmer"
     id: dimmer
     output: pwm
     default_transition_length: ${no_delay}
@@ -249,27 +188,26 @@ light:
       then:
         - script.execute: update_indicator_leds
 
-#########################################################
-##        Physical Button Logic                        ##
-#########################################################
 binary_sensor:
+  - platform: api
+    id: ha_is_connected
+    internal: true
+
   ###########################################
   ##              Main Button              ##
   ###########################################
   - platform: gpio
     pin:
       number: GPIO15
-      inverted: False
-      mode: INPUT_PULLUP
-    name: ${friendly_name} Main Button
+      inverted: false
+    mode: INPUT_PULLUP
+    name: "Main Button"
     id: main_button_internal
-    internal: True
+    internal: true
     filters:
       - delayed_on: 15ms
       - delayed_off: 15ms
-
     on_multi_click:
-      # SINGLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at least 250ms
@@ -277,7 +215,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -293,7 +231,6 @@ binary_sensor:
               else:
                 - light.toggle: dimmer
 
-      # DOUBLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -303,7 +240,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -323,7 +260,6 @@ binary_sensor:
                     id: dimmer
                     brightness: 1.0
 
-      # TRIPLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -335,7 +271,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -350,17 +286,15 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO1
-      inverted: True
-      mode: INPUT_PULLUP
-    name: ${friendly_name} Down Button
+      inverted: true
+    mode: INPUT_PULLUP
+    name: "Down Button"
     id: down_button_internal
-    internal: True
+    internal: true
     filters:
       - delayed_on: 15ms
       - delayed_off: 15ms
-
     on_multi_click:
-      # SINGLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at least 250ms
@@ -368,7 +302,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -388,7 +322,6 @@ binary_sensor:
                     id: adjust_dimmer
                     step: -0.1
 
-      # DOUBLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -398,7 +331,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -418,7 +351,6 @@ binary_sensor:
                     id: dimmer
                     brightness: 0.01
 
-      # TRIPLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -430,7 +362,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -439,7 +371,6 @@ binary_sensor:
                       button: down
                       action: triple_click
 
-    # HOLD TO DIM
     on_press:
       then:
         - delay: 500ms
@@ -450,7 +381,7 @@ binary_sensor:
               - if:
                   condition:
                     - lambda: |-
-                        return id(ha_is_connected);
+                        return id(ha_is_connected).state;
                   then:
                     - homeassistant.event:
                         event: esphome.mj_sd01_button_event
@@ -472,22 +403,20 @@ binary_sensor:
               - delay: 200ms
 
   ###########################################
-  ##                Up Button              ##
+  ##               Up Button               ##
   ###########################################
   - platform: gpio
     pin:
       number: GPIO0
-      inverted: True
-      mode: INPUT_PULLUP
-    name: ${friendly_name} Up Button
+      inverted: true
+    mode: INPUT_PULLUP
+    name: "Up Button"
     id: up_button_internal
-    internal: True
+    internal: true
     filters:
       - delayed_on: 15ms
       - delayed_off: 15ms
-
     on_multi_click:
-      # SINGLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at least 250ms
@@ -495,7 +424,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -515,7 +444,6 @@ binary_sensor:
                     id: adjust_dimmer
                     step: 0.1
 
-      # DOUBLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -525,7 +453,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -545,7 +473,6 @@ binary_sensor:
                     id: dimmer
                     brightness: 1.0
 
-      # TRIPLE CLICK
       - timing:
           - ON for at most 500ms
           - OFF for at most 500ms
@@ -557,7 +484,7 @@ binary_sensor:
           - if:
               condition:
                 - lambda: |-
-                    return id(ha_is_connected);
+                    return id(ha_is_connected).state;
               then:
                 - homeassistant.event:
                     event: esphome.mj_sd01_button_event
@@ -566,7 +493,6 @@ binary_sensor:
                       button: up
                       action: triple_click
 
-    # HOLD TO DIM
     on_press:
       then:
         - delay: 500ms
@@ -577,7 +503,7 @@ binary_sensor:
               - if:
                   condition:
                     - lambda: |-
-                        return id(ha_is_connected);
+                        return id(ha_is_connected).state;
                   then:
                     - homeassistant.event:
                         event: esphome.mj_sd01_button_event
