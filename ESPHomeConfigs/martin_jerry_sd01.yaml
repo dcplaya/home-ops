@@ -189,7 +189,7 @@ light:
         - script.execute: update_indicator_leds
 
 binary_sensor:
-  - platform: api
+  - platform: status
     id: ha_is_connected
     internal: true
 
