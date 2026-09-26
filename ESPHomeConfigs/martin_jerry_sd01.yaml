@@ -200,7 +200,7 @@ binary_sensor:
     pin:
       number: GPIO15
       inverted: false
-    mode: INPUT_PULLUP
+      mode: INPUT_PULLUP
     name: "Main Button"
     id: main_button_internal
     internal: true
@@ -287,7 +287,7 @@ binary_sensor:
     pin:
       number: GPIO1
       inverted: true
-    mode: INPUT_PULLUP
+      mode: INPUT_PULLUP
     name: "Down Button"
     id: down_button_internal
     internal: true
@@ -409,7 +409,7 @@ binary_sensor:
     pin:
       number: GPIO0
       inverted: true
-    mode: INPUT_PULLUP
+      mode: INPUT_PULLUP
     name: "Up Button"
     id: up_button_internal
     internal: true
