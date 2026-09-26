@@ -1,7 +1,13 @@
-substitutions:
-  device_name: ceilingfan01
-  device_description: Sonoff iFan04-L
-  friendly_name: Living Room Fan/Light
+# ##################################################################
+# Sonoff iFan04-L - Ceiling Fan & Light Controller
+# Description: This ESPHome package provides complete control for the
+# Sonoff iFan04-L module. It manages a 3-speed ceiling fan and an
+# attached light relay. It utilizes the ssieb custom external
+# component for UART communication with the onboard MCU. The config
+# includes virtual buzzer state management, offline fallback network
+# indicators, and automatic speed-boosting logic when starting the
+# fan from a dead stop to overcome initial motor inertia.
+# ##################################################################
 
 globals:
   - id: target_fan_speed
