@@ -30,8 +30,7 @@ logger:
 
 ota:
   - platform: esphome
-   # encryption:
-    password: ${ota_password}
+    encryption:
 
 web_server:
   port: 80
