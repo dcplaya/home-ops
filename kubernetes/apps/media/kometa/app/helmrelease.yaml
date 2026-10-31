@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: docker.io/kometateam/kometa
-              tag: v2.4.8@sha256:c58f6d4af511613f218b6dafbfc84078af4e5a6089790c1fdba58fd7c5dad70a
+              tag: v2.5.4@sha256:e3f509c3044ac011e1938dae2f7e80ea3cfe9663720a9f98683d1ea28c127e64
             env:
               TZ: America/Los_Angeles
               PMM_READ_ONLY_CONFIG: true
