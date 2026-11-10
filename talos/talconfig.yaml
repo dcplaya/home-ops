@@ -36,8 +36,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: r8169
-        hardwareAddr: 00:e0:4c:08:07:*
+      - permanentAddr: 00:e0:4c:08:07:30
+        driver: r8169
+      - permanentAddr: 00:e0:4c:08:07:31
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.11/24"
@@ -70,8 +72,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: r8169
-        hardwareAddr: 00:e0:4c:08:06:*
+      - permanentAddr: 00:e0:4c:08:06:34
+        driver: r8169
+      - permanentAddr: 00:e0:4c:08:06:35
+        driver: r8169
     dhcp: false
     addresses:
     - "10.200.2.12/24"
@@ -100,8 +104,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:04:fa:*
+      - permanentAddr: a8:b8:e0:04:fa:95
+        driver: igc
+      - permanentAddr: a8:b8:e0:04:fa:96
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.13/24"
@@ -130,8 +136,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:04:f5:*
+      - permanentAddr: a8:b8:e0:04:f5:db
+        driver: igc
+      - permanentAddr: a8:b8:e0:04:f5:dc
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.14/24"
@@ -158,8 +166,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:04:fa:*
+      - permanentAddr: a8:b8:e0:04:fa:a9
+        driver: igc
+      - permanentAddr: a8:b8:e0:04:fa:aa
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.15/24"
@@ -186,8 +196,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:04:fa:*
+      - permanentAddr: a8:b8:e0:04:fa:99
+        driver: igc
+      - permanentAddr: a8:b8:e0:04:fa:9a
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.16/24"
@@ -214,8 +226,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:08:2b:*
+      - permanentAddr: a8:b8:e0:08:2b:18
+        driver: igc
+      - permanentAddr: a8:b8:e0:08:2b:19
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.17/24"
@@ -242,8 +256,10 @@ nodes:
       updelay: 200
       downdelay: 200
       deviceSelectors:
-      - driver: igc
-        hardwareAddr: a8:b8:e0:04:fa:*
+      - permanentAddr: a8:b8:e0:04:fa:8d
+        driver: igc
+      - permanentAddr: a8:b8:e0:04:fa:8e
+        driver: igc
     dhcp: false
     addresses:
     - "10.200.2.18/24"
