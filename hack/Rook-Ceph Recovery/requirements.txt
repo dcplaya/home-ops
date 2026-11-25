@@ -1,5 +1,5 @@
 argcomplete==3.7.2
-cachetools==8.0.0
+cachetools==8.0.3
 certifi==2026.10.18
 charset-normalizer==3.5.1
 click==8.5.1
